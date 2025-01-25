@@ -1,0 +1,7 @@
+User
+    ( user ) n --> m ( Work experience )
+    ( user ) n --> m ( Languages )
+    ( user ) n --> m ( Languages )
+    ( user ) n --> m ( Skills )
+    ( user ) n --> m ( Direction )
+    ( user ) n --> m ( Expertness )

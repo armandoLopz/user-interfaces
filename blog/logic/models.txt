@@ -1,0 +1,54 @@
+User 
+    name
+    lastname
+    email
+    cellphone
+    password
+    description
+    personal site? 
+    
+    career --> Possibly another table  
+
+Address
+    country
+    city
+    street
+
+Work Experience
+    name of company
+    description of the job
+
+    Dates
+        start date 
+        end date
+
+Education
+
+    name of the university
+    Degree studied
+
+    Dates
+        start date 
+        end date
+    
+    Note: Can have the option "current" if the person is currently studying
+
+Languages:
+
+    name of the Language
+
+Skills
+    
+    name of the skill
+    level of proficiency in the skill (rate 1-5) --> Represent this level with circles or stars? 
+
+Competencies (Expertise)
+
+    name of the competency
+    level of proficiency in the competency (rate 1 - 10) --> Represent this level in a progress bar
+
+Áreas de mejora potencial:
+
+- Podrías considerar añadir un campo para el nivel de educación en la entidad Studies (por ejemplo, grado, máster, doctorado).
+- Para Languages, podrías incluir un campo de nivel de dominio (básico, intermedio, avanzado, nativo).
+- En Work Experience, podrías añadir un campo para indicar si es el trabajo actual.
