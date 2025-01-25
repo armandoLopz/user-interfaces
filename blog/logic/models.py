@@ -11,6 +11,9 @@ class User(models.Model):
     personal_description = models.CharField(max_length=500)
     personal_site = models.CharField(max_length=70)
 
+    class Meta:
+        db_table = "user"
+
     #Add picture field
     def __str__(self):
         return self.name + ' ' + self.lastname + ' ' + self.email
@@ -21,6 +24,9 @@ class Address(models.Model):
     street = models.CharField(max_length=125)
 
     user = models.ManyToManyField(User)
+
+    class Meta:
+        db_table = "address"
 
     def __str__(self):
         return self.country + ', ' + self.city + ', ' + self.street
@@ -35,6 +41,9 @@ class Work_experience(models.Model):
 
     user = models.ManyToManyField(User)
 
+    class Meta:
+        db_table = "work_experience"
+
     def __str__(self):
         return self.name_company + ': ' + self.description_of_the_job
 
@@ -48,6 +57,9 @@ class Education(models.Model):
 
     user = models.ManyToManyField(User)
 
+    class Meta:
+        db_table = "education"
+
     def __str__(self):
         return self.name_institution
     
@@ -57,14 +69,20 @@ class Languages(models.Model):
 
     user = models.ManyToManyField(User)
 
+    class Meta:
+        db_table = "languages"
+
     def __str__(self):
         return self.name
     
-class Skils(models.Model):
+class Skills(models.Model):
 
     skill_name = models.CharField(max_length=30)
     skill_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-
+    
+    class Meta:
+        db_table = "skills"
+        
     def __str__(self):
         return self.skill_name
     
@@ -73,5 +91,8 @@ class Competencies(models.Model):
     name_competencies = models.CharField(max_length=30)
     name_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
+    class Meta:
+        db_table = "competencies"
+        
     def __str__(self):
         return self.name_competencies
