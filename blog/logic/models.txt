@@ -49,6 +49,4 @@ Competencies (Expertise)
 
 Áreas de mejora potencial:
 
-- Podrías considerar añadir un campo para el nivel de educación en la entidad Studies (por ejemplo, grado, máster, doctorado).
-- Para Languages, podrías incluir un campo de nivel de dominio (básico, intermedio, avanzado, nativo).
 - En Work Experience, podrías añadir un campo para indicar si es el trabajo actual.

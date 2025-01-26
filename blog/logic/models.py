@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -57,6 +58,24 @@ class Education(models.Model):
 
     user = models.ManyToManyField(User)
 
+    class DegreeLevel(models.TextChoices):
+
+        HIGH_SCHOOL = 'HS', _('High School')
+        ASSOCIATE = 'AS', _('Associate\'s degree')
+        BACHELOR = 'BA', _("Bachelor's degree")
+        MASTER = 'MA', _("Master's degree")
+        DOCTORATE = 'PhD', _('PhD')
+        OTHER = 'OT', _('Other')
+
+    #Specify the level if the degree level dont match whith the default values
+    degree_level_other = models.CharField(max_length=20, blank=True, null=True, default="N/A")
+    
+    degree_level = models.CharField(
+        max_length=3,
+        choices=DegreeLevel,
+        default=DegreeLevel.HIGH_SCHOOL,
+    )
+    
     class Meta:
         db_table = "education"
 
@@ -68,6 +87,19 @@ class Languages(models.Model):
     name = models.CharField(max_length=20)
 
     user = models.ManyToManyField(User)
+
+    class languageLevel(models.TextChoices):
+
+        BEGINNER = "BE", _("Beginner")
+        INTERMEDIATE = "IN", _("Intermediate")
+        ADVANCED = "AD", _("Advanced")
+        NATIVE = "NA", _("Native")
+
+    language_level = models.CharField(
+        max_length=2,
+        choices=languageLevel,
+        default=languageLevel.BEGINNER,
+    )
 
     class Meta:
         db_table = "languages"
