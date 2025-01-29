@@ -1,0 +1,83 @@
+<div class="container mt-4 mb-5">
+    <!-- Información Personal -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-4 text-primary">Información Personal</h5>
+        <form>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control custom-input" id="nombre">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="apellido" class="form-label">Apellido</label>
+              <input type="text" class="form-control custom-input" id="apellido">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control custom-input" id="email">
+          </div>
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea class="form-control custom-textarea" id="descripcion" rows="4"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="sitioPersonal" class="form-label">Sitio personal</label>
+            <input type="url" class="form-control custom-input" id="sitioPersonal">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="idiomas" class="form-label">Idiomas</label>
+            <input type="text" class="form-control custom-input" id="idiomas">
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Habilidades y Competencias -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-4 text-primary">Habilidades y Competencias</h5>
+        <form>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="habilidades" class="form-label">Habilidades</label>
+              <input type="text" class="form-control custom-input" id="habilidades">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="nivelHabilidad" class="form-label">Nivel de habilidad</label>
+              <select class="form-select custom-select" id="nivelHabilidad">
+                <option value="">Seleccione nivel</option>
+                <option value="1">1 - Básico</option>
+                <option value="2">2 - Intermedio</option>
+                <option value="3">3 - Avanzado</option>
+                <option value="4">4 - Experto</option>
+                <option value="5">5 - Maestro</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="competencias" class="form-label">Competencias</label>
+              <input type="text" class="form-control custom-input" id="competencias">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="nivelCompetencia" class="form-label">Nivel de competencia</label>
+              <select class="form-select custom-select" id="nivelCompetencia">
+                <option value="">Seleccione nivel</option>
+                <option value="1">1 - Básico</option>
+                <option value="2">2 - Intermedio</option>
+                <option value="3">3 - Avanzado</option>
+                <option value="4">4 - Experto</option>
+                <option value="5">5 - Maestro</option>
+              </select>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary custom-button">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

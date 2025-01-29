@@ -1,0 +1,13 @@
+#grid{
+
+    display: grid;
+    align-items: center;
+    justify-content: center;
+
+    border: 3px solid black;
+
+    width: 30vw;
+    border-radius: 1rem;
+    padding: 1rem;
+
+}
