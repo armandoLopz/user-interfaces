@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PERSONAL_INFO_FORM_ROUTE } from '../../../../app.routes.constans';
 import { LOGIN_ROUTE } from '../../../../app.routes.constans';
+import { DateFieldsComponent } from '../../../date-fields/date-fields.component';
 
 @Component({
   selector: 'app-skills',
-  imports: [RouterLink],
+  imports: [RouterLink, DateFieldsComponent],
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.css'
 })
