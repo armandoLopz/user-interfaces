@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MapComponent } from '../../../map/map/map.component';
-import { LOGIN_ROUTE } from '../../../../app.routes.constans';
+import { LOGIN_ROUTE, SKILLS_FORM_ROUTE } from '../../../../app.routes.constans';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -12,4 +12,5 @@ import { RouterLink } from '@angular/router';
 export class PersonalInfoComponent {
 
   LOGIN_ROUTE = LOGIN_ROUTE
+  SKILLS_FORM = SKILLS_FORM_ROUTE
 }
