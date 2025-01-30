@@ -53,8 +53,8 @@ class Education(models.Model):
     name_institution = models.CharField(max_length=80)
     degree_studied = models.CharField(max_length=50)
 
-    start_work_date = models.DateField()
-    end_work_date = models.DateField()
+    start_studied_date = models.DateField()
+    end_studied_date = models.DateField()
 
     user = models.ManyToManyField(User)
 
