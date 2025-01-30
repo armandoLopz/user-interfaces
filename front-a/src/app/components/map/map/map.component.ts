@@ -1,6 +1,14 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 
+interface LocationData {
+  lat: number;
+  lon: number;
+  country: string;
+  city: string;
+  street: string;
+}
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -9,17 +17,28 @@ import * as L from 'leaflet';
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapContainer', { static: false }) mapContainer!: ElementRef;
   private map!: L.Map;
+  private marker!: L.Marker;
+  private geocodeUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
+
+  // Datos de la ubicación
+  locationData: LocationData = {
+    lat: 0,
+    lon: 0,
+    country: '',
+    city: '',
+    street: ''
+  };
 
   // Coordenadas y zoom inicial
   private initialCoordinates: L.LatLngExpression = [51.505, -0.09];
   private initialZoom = 13;
 
   ngOnInit(): void {
-    this.addLeafletCss(); // Añadir CSS dinámicamente
+    this.addLeafletCss();
   }
 
   ngAfterViewInit(): void {
-    this.initializeMap();
+    setTimeout(() => this.initializeMap(), 0);
   }
 
   ngOnDestroy(): void {
@@ -27,36 +46,72 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private addLeafletCss(): void {
-    // Añadir CSS de Leaflet dinámicamente
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-    link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
-    link.crossOrigin = '';
-    document.head.appendChild(link);
+    const leafletCssId = 'leaflet-css';
+    if (!document.getElementById(leafletCssId)) {
+      const link = document.createElement('link');
+      link.id = leafletCssId;
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
+      link.crossOrigin = '';
+      document.head.appendChild(link);
+    }
   }
 
   private initializeMap(): void {
-    if (!this.map && this.mapContainer) {
-      // Crear mapa
-      this.map = L.map(this.mapContainer.nativeElement).setView(
-        this.initialCoordinates,
-        this.initialZoom
-      );
+    if (!this.map && this.mapContainer?.nativeElement) {
+      this.map = L.map(this.mapContainer.nativeElement).setView(this.initialCoordinates, this.initialZoom);
 
-      // Añadir capa de mosaicos
+      // Añadir capa de mosaico
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
       }).addTo(this.map);
 
-      // Añadir marcador
-      L.marker(this.initialCoordinates)
-        .addTo(this.map)
-        .openPopup();
+      // Agregar evento de clic en el mapa
+      this.map.on('click', (e: L.LeafletMouseEvent) => {
+        this.updateMarker(e.latlng);
+        this.reverseGeocode(e.latlng.lat, e.latlng.lng);
+      });
 
-      // Forzar actualización del tamaño
-      setTimeout(() => this.map.invalidateSize(), 0);
+      // Crear marcador inicial
+      this.marker = L.marker(this.initialCoordinates, { draggable: false }).addTo(this.map);
+      //this.marker.bindPopup('Ubicación inicial').openPopup();
+
+      // Ajustar tamaño del mapa
+      setTimeout(() => this.map.invalidateSize(), 500);
     }
+  }
+
+  private updateMarker(latlng: L.LatLng): void {
+    if (this.marker) {
+      this.marker.setLatLng(latlng).openPopup();
+    } else {
+      this.marker = L.marker(latlng).addTo(this.map).openPopup();
+    }
+  }
+
+  private reverseGeocode(lat: number, lon: number): void {
+    fetch(`${this.geocodeUrl}&lat=${lat}&lon=${lon}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.address) {
+          const { country, city, road } = data.address;
+
+          // Guardar datos en el objeto
+          this.locationData = {
+            lat: lat,
+            lon: lon,
+            country: country || 'Desconocido',
+            city: city || 'Desconocida',
+            street: road || 'Desconocida'
+          };
+
+          // Mostrar datos en el marcador
+          const locationInfo = `Country: ${this.locationData.country}, City: ${this.locationData.city}, Street: ${this.locationData.street}`;
+          this.marker.bindPopup(locationInfo).openPopup();
+        }
+      })
+      .catch(error => console.error('Error obteniendo datos de ubicación:', error));
   }
 
   private destroyMap(): void {
