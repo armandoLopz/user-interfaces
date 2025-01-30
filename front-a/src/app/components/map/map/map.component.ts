@@ -33,6 +33,16 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   private initialCoordinates: L.LatLngExpression = [51.505, -0.09];
   private initialZoom = 13;
 
+  private customIcon = L.icon({
+    iconUrl: '/assets/icons/marker-icon.png', // Ruta a la imagen del marcador
+    shadowUrl: 'assets/icons/marker-shadow.png', // Ruta a la sombra del marcador
+    iconSize: [25, 41], // Tamaño del icono
+    iconAnchor: [12, 41], // Punto donde se "ancla" el icono en el mapa
+    popupAnchor: [1, -34], // Punto donde aparece el popup
+    shadowSize: [41, 41] // Tamaño de la sombra
+  });
+
+  
   ngOnInit(): void {
     this.addLeafletCss();
   }
