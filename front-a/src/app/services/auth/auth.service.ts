@@ -7,13 +7,14 @@ import { userAuth } from '../../interfaces/interfaces.models';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
 
   constructor(private http: HttpClient) { }
 
   private url: string = url
 
-  getToken(userData: userAuth): Observable<string>{
+  login(userData: userAuth): Observable<string>{
 
     const apiAuthUrl = `${this.url}/api/token/`;
     
