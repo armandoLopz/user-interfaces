@@ -5,23 +5,28 @@
         <div class="px-6 py-6 border-b border-indigo-500 text-center">
             <h2 class="text-2xl font-bold tracking-tight text-white"> {{ mainTitle }} </h2>
         </div>
-        
 
         <!-- Navigation Menu -->
         <nav class="mt-6 flex-1">
             <ul class="space-y-4 px-4">
                 <li>
-                    <a href="#"
-                        class="flex items-center px-6 py-4 text-base font-medium hover:bg-indigo-500 transition rounded-lg">
+                    <a [routerLink]="['/', PROFILE_PAGE]" class="flex flex-col items-center px-6 py-4 text-base font-medium hover:bg-indigo-500 transition rounded-lg">
+                        <app-avatar />
+                        <span class="mt-4">Profile</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#" class="flex items-center px-6 py-4 text-base font-medium hover:bg-indigo-500 transition rounded-lg">
                         <span>Home</span>
                     </a>
                 </li>
-                <li>
+                <!-- <li>
                     <a [routerLink]="['/', PROFILE_PAGE]"
                         class="flex items-center px-6 py-4 text-base font-medium hover:bg-indigo-500 transition rounded-lg">
                         <span>Profile</span>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a href="#"
                         class="flex items-center px-6 py-4 text-base font-medium hover:bg-indigo-500 transition rounded-lg">
@@ -45,9 +50,4 @@
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 p-6">
-        <h1 class="text-2xl font-bold text-gray-900">Welcome</h1>
-        <p class="mt-2 text-gray-600">This is the main content of the application.</p>
-    </div>
 </div>

@@ -3,7 +3,7 @@
     <div class="flex gap-4">
         <!-- Campo de fecha de inicio -->
         <div class="flex-1">
-            <label for="startDate" class="block text-sm/6 font-medium text-gray-900">Start Date</label>
+            <label for="startDate" class="block text-sm/6 font-medium text-gray-900">{{nameStartDate}}</label>
             <div class="mt-2">
                 <input type="date" [(ngModel)]="startDate" (change)="validateDates()" id="startDate" name="startDate"
                     required
@@ -13,7 +13,7 @@
 
         <!-- Campo de fecha de finalización -->
         <div class="flex-1">
-            <label for="endDate" class="block text-sm/6 font-medium text-gray-900">End Date</label>
+            <label for="endDate" class="block text-sm/6 font-medium text-gray-900">{{nameEndDate}}</label>
             <div class="mt-2">
                 <input type="date" [(ngModel)]="endDate" (change)="validateDates()" id="endDate" name="endDate"
                     [disabled]="isCurrent" required

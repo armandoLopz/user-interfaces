@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule para usar ngModel
 import { NgIf } from '@angular/common';
 
@@ -14,6 +14,9 @@ export class DateFieldsComponent {
   endDate: string = ''; // Fecha de finalización
   isCurrent: boolean = false; // Indica si la actividad está en curso
   validationError: string | null = null; // Mensaje de error de validación
+
+  @Input() nameStartDate: string = "";
+  @Input() nameEndDate: string = "";
 
   // Valida las fechas
   validateDates(): void {

@@ -1,1 +1,96 @@
-<p>profile-page works!</p>
+<div class="flex min-h-screen bg-indigo-50">
+    <!-- Sidebar: asegúrate que app-side-bar tenga un ancho fijo (por ejemplo, w-64) -->
+    <app-side-bar></app-side-bar>
+  
+    <!-- Contenido Principal -->
+    <div class="flex-1 p-6">
+      <!-- Sección: Personal Information & Address -->
+      <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-indigo-700">
+            <i class="fas fa-user text-indigo-500 mr-2"></i>Personal Information & Address
+          </h2>
+          <button class="text-indigo-500 hover:text-indigo-600">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Información Personal -->
+          <div>
+            <p><strong>Name:</strong> John Doe</p>
+            <p><strong>Email:</strong> john.doeexample.com</p>
+            <p><strong>Cellphone:</strong> +1234567890</p>
+            <p>
+              <strong>Personal Site:</strong>
+              <a href="https://myportfolio.com" class="text-indigo-600 hover:underline">https://myportfolio.com</a>
+            </p>
+          </div>
+          <!-- Dirección -->
+          <div>
+            <p><strong>Country:</strong> USA</p>
+            <p><strong>City:</strong> New York</p>
+            <p><strong>Street:</strong> 123 Main St.</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Sección: Education & Work Experience -->
+      <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-indigo-700">
+            <i class="fas fa-graduation-cap text-indigo-500 mr-2"></i>Education & Work Experience
+          </h2>
+          <button class="text-indigo-500 hover:text-indigo-600">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <!-- Agrupación en dos columnas para mantener el tamaño -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p><strong>Institute:</strong> Harvard University</p>
+            <p><strong>Degree:</strong> Bachelor's Degree</p>
+            <p><strong>Education Level:</strong> University</p>
+          </div>
+          <div>
+            <p><strong>Company:</strong> Google</p>
+            <p><strong>Job Title:</strong> Software Engineer</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Sección: Skills, Languages & Competencies -->
+      <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-indigo-700">
+            <i class="fas fa-tools text-indigo-500 mr-2"></i>Skills, Languages & Competencies
+          </h2>
+          <button class="text-indigo-500 hover:text-indigo-600">
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+        <!-- Distribución en dos columnas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p><strong>Skills:</strong> Python, Project Management</p>
+            <p><strong>Skill Level:</strong> Intermediate</p>
+          </div>
+          <div>
+            <p><strong>Languages:</strong> English, Spanish</p>
+            <p><strong>Language Levels:</strong> English - Native, Spanish - Intermediate</p>
+            <p><strong>Competencies:</strong> Team Leadership, Public Speaking</p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Sección de Botones -->
+      <div class="flex justify-end space-x-4">
+        <button class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition">
+          <i class="fas fa-edit mr-2"></i>Edit
+        </button>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition">
+          <i class="fas fa-print mr-2"></i>Print CV
+        </button>
+      </div>
+    </div>
+  </div>
+  
