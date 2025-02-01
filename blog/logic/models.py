@@ -14,6 +14,7 @@ class User(models.Model):
     personal_description = models.CharField(max_length=500)
     personal_site = models.CharField(max_length=70)
 
+    password = models.CharField(max_length=100)
     class Meta:
         db_table = "user"
 
