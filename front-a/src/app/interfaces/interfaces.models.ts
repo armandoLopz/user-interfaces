@@ -7,3 +7,9 @@ export interface userInterface {
     "personalDescription": string,
     "personalSite": string
 }
+
+export interface userAuth {
+
+    "username": string,
+    "password": string
+}

@@ -24,15 +24,38 @@
                 </div>
             </div>
 
-            <!-- Email and Cellphone Fields -->
+            <!-- Email and username Fields -->
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
                     <div class="mt-2">
-                        <input type="email" name="email" id="email" autocomplete="email" required placeholder="e.g. john.doe@example.com"
+                        <input type="email" name="email" id="email" autocomplete="email" required
+                            placeholder="e.g. john.doe@example.com"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
+
+                <div>
+                    <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
+                    <div class="mt-2">
+                        <input type="text" name="username" id="username" required placeholder="e.g. johndoe"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Personal Site and Cellphone Fields -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="personal_site" class="block text-sm/6 font-medium text-gray-900">Personal Site</label>
+                    <div class="mt-2">
+                        <input type="url" name="personal_site" id="personal_site"
+                            placeholder="e.g. https://myportfolio.com"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                    </div>
+                </div>
+                
                 <div>
                     <label for="cellphone" class="block text-sm/6 font-medium text-gray-900">Cellphone</label>
                     <div class="mt-2">
@@ -40,16 +63,9 @@
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
+
             </div>
 
-            <!-- Personal Site Field -->
-            <div>
-                <label for="personal_site" class="block text-sm/6 font-medium text-gray-900">Personal Site</label>
-                <div class="mt-2">
-                    <input type="url" name="personal_site" id="personal_site" placeholder="e.g. https://myportfolio.com"
-                        class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                </div>
-            </div>
 
             <!-- Languages and Language Level Fields -->
             <div class="grid grid-cols-2 gap-4">
@@ -81,14 +97,16 @@
             <!-- Mapa de Leaflet dentro del formulario -->
             <div>
                 <label for="map" class="block text-sm/6 font-medium text-gray-900">Enter your address</label>
-                <app-map/>
+                <app-map />
             </div>
 
             <!-- Personal Description Field -->
             <div>
-                <label for="personal_description" class="block text-sm/6 font-medium text-gray-900">Personal Description</label>
+                <label for="personal_description" class="block text-sm/6 font-medium text-gray-900">Personal
+                    Description</label>
                 <div class="mt-2">
-                    <textarea name="personal_description" id="personal_description" rows="4" required placeholder="Write a brief description about yourself..."
+                    <textarea name="personal_description" id="personal_description" rows="4" required
+                        placeholder="Write a brief description about yourself..."
                         class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
                 </div>
             </div>
