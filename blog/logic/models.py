@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 class User(models.Model):
+
+    #Add password
     name = models.CharField(max_length=30)
     lastname = models.CharField(max_length=45)
     email = models.EmailField(max_length=50)
@@ -112,6 +114,8 @@ class Skills(models.Model):
     skill_name = models.CharField(max_length=30)
     skill_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
+    user = models.ManyToManyField(User)
+
     class Meta:
         db_table = "skills"
         
@@ -123,6 +127,7 @@ class Competencies(models.Model):
     name_competencies = models.CharField(max_length=30)
     name_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
+    user = models.ManyToManyField(User)
     class Meta:
         db_table = "competencies"
         
