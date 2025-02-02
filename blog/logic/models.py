@@ -57,6 +57,8 @@ class Work_experience(models.Model):
 
     user = models.ManyToManyField(User)
 
+    currently_working = models.BooleanField(default=False)
+
     class Meta:
         db_table = "work_experience"
 
@@ -70,6 +72,8 @@ class Education(models.Model):
 
     start_studied_date = models.DateField()
     end_studied_date = models.DateField()
+
+    currently_studying = models.BooleanField(default= "False")
 
     user = models.ManyToManyField(User)
 
