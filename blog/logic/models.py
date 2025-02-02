@@ -142,7 +142,7 @@ class Skills(models.Model):
 class Competencies(models.Model):
 
     name_competencies = models.CharField(max_length=30)
-    name_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    competencies_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
     user = models.ManyToManyField(User)
     class Meta:
