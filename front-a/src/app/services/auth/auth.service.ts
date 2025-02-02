@@ -3,6 +3,7 @@ import { url } from '../../utils/constants';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { userAuth } from '../../interfaces/interfaces.models';
+import { tokenRequest } from '../../interfaces/interfaces.models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,10 @@ export class AuthService {
 
   private url: string = url
 
-  login(userData: userAuth): Observable<string>{
+  login(userData: userAuth): Observable<tokenRequest>{
 
     const apiAuthUrl = `${this.url}/api/token/`;
     
-    return this.http.post<string>(apiAuthUrl, userData);
-
+    return this.http.post<tokenRequest>( apiAuthUrl, userData);
   }
 }
