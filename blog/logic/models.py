@@ -1,26 +1,38 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
+class User(AbstractUser):
+
+    email = models.EmailField(unique=True)
+    cellphone = models.IntegerField()
+    personal_description = models.CharField(max_length=500)
+    personal_site = models.CharField(max_length=70)
+    
+
+"""        
 class User(models.Model):
 
     #Add password
     name = models.CharField(max_length=30)
     lastname = models.CharField(max_length=45)
-    email = models.EmailField(max_length=50)
+    email = models.EmailField(max_length=50, unique=True)
     cellphone = models.IntegerField()
     personal_description = models.CharField(max_length=500)
     personal_site = models.CharField(max_length=70)
-
+    
     password = models.CharField(max_length=100)
+    username = models.CharField(unique= True, max_length= 35)
+
     class Meta:
         db_table = "user"
 
     #Add picture field
     def __str__(self):
-        return self.name + ' ' + self.lastname + ' ' + self.email
+        return self.name + ' ' + self.lastname + ' ' + self.email 
+"""
 
 class Address(models.Model):
     country = models.CharField(max_length=25)

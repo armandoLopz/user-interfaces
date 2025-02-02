@@ -8,7 +8,7 @@ class User_serializer(serializers.ModelSerializer):
         
         model = User
         fields = ('__all__')
-    
+            
     def create(self, validated_data):
         
         #Hash password before create the user
