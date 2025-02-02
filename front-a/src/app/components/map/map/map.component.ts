@@ -1,5 +1,6 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
+import { addressInterface } from '../../../interfaces/interfaces.models';
 
 interface LocationData {
   lat: number;
@@ -19,6 +20,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   private map!: L.Map;
   private marker!: L.Marker;
   private geocodeUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
+
+  @Output() addressSelected: EventEmitter<addressInterface> = new EventEmitter();
 
   // Datos de la ubicación
   locationData: LocationData = {
@@ -42,7 +45,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     shadowSize: [41, 41] // Tamaño de la sombra
   });
 
-  
   ngOnInit(): void {
     this.addLeafletCss();
   }
@@ -119,6 +121,15 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
           // Mostrar datos en el marcador
           const locationInfo = `Country: ${this.locationData.country}, City: ${this.locationData.city}, Street: ${this.locationData.street}`;
           this.marker.bindPopup(locationInfo).openPopup();
+
+          // Emitir los datos al componente padre
+          const address: addressInterface = {
+            country: this.locationData.country,
+            city: this.locationData.city,
+            street: this.locationData.street
+          };
+
+          this.addressSelected.emit(address); // Emitir la dirección seleccionada
         }
       })
       .catch(error => console.error('Error obteniendo datos de ubicación:', error));
