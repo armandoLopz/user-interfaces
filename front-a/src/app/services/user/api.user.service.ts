@@ -11,7 +11,7 @@ export class ApiUserService {
 
   constructor(private http: HttpClient) { }
 
-  private url: string = url
+  private url: string = url+"/users/"
 
   getDataUser(): Observable<userInterface[]> {
 
@@ -33,6 +33,5 @@ export class ApiUserService {
 
     return this.http.put<userInterface>(`${this.url}/${updateUserData.id}`, updateUserData)
   }
-
 
 }
