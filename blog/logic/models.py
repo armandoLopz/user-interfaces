@@ -6,10 +6,10 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
 
-    email = models.EmailField(unique=True)
-    cellphone = models.IntegerField()
+    email = models.EmailField(unique=True, blank= False)
+    cellphone = models.IntegerField(max_length=11, blank= False)
     personal_description = models.CharField(max_length=500)
-    personal_site = models.CharField(max_length=70)
+    personal_site = models.CharField(max_length=70, blank= False)
     
 
 """        
@@ -51,7 +51,7 @@ class Work_experience(models.Model):
 
     name_company = models.CharField(max_length=40)
     description_of_the_job = models.CharField(max_length=700)
-
+    job_title = models.CharField(max_length=700)
     start_work_date = models.DateField()
     end_work_date = models.DateField()
 
@@ -103,7 +103,7 @@ class Education(models.Model):
     
 class Languages(models.Model): 
 
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, blank= False)
 
     user = models.ManyToManyField(User)
 
