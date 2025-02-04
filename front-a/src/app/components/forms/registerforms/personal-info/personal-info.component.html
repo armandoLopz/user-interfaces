@@ -5,21 +5,29 @@
                 Introduce your personal information
             </h2>
         </div>
-        <form (ngSubmit)="handleFormSubmit()" class="space-y-6">
+        <form [formGroup]="registrationForm" (ngSubmit)="handleFormSubmit()" class="space-y-6">
             <!-- Name and Lastname Fields -->
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label for="name" class="block text-sm/6 font-medium text-gray-900">Name</label>
                     <div class="mt-2">
-                        <input type="text" name="name" id="name" required placeholder="e.g. John"
-                            [(ngModel)]="userData.Name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <input type="text" name="name" id="name" formControlName="name" placeholder="e.g. John"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            Name is required.
+                        </div>
                     </div>
                 </div>
                 <div>
                     <label for="lastname" class="block text-sm/6 font-medium text-gray-900">Lastname</label>
                     <div class="mt-2">
-                        <input type="text" name="lastname" id="lastname" required placeholder="e.g. Doe"
-                            [(ngModel)]="userData.Lastname" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <input type="text" name="lastname" id="lastname" formControlName="lastname" placeholder="e.g. Doe"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <div *ngIf="registrationForm.get('lastname')?.invalid && registrationForm.get('lastname')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            Lastname is required.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -29,20 +37,28 @@
                 <div>
                     <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
                     <div class="mt-2">
-                        <input type="email" name="email" id="email" autocomplete="email" required
+                        <input type="email" name="email" id="email" formControlName="email" autocomplete="email"
                             placeholder="e.g. john.doe@example.com"
-                            [(ngModel)]="userData.email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            <span *ngIf="registrationForm.get('email')?.errors?.['required']">Email is required.</span>
+                            <span *ngIf="registrationForm.get('email')?.errors?.['email']">Please enter a valid email.</span>
+                        </div>
                     </div>
                 </div>
 
                 <div>
                     <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
                     <div class="mt-2">
-                        <input type="text" name="username" id="username" required placeholder="e.g. johndoe"
-                            [(ngModel)]="userData.username" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <input type="text" name="username" id="username" formControlName="username" placeholder="e.g. johndoe"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <div *ngIf="registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            Username is required.
+                        </div>
                     </div>
                 </div>
-                
             </div>
 
             <!-- Personal Site and Cellphone Fields -->
@@ -50,20 +66,62 @@
                 <div>
                     <label for="personal_site" class="block text-sm/6 font-medium text-gray-900">Personal Site</label>
                     <div class="mt-2">
-                        <input type="url" name="personal_site" id="personal_site"
-                            [(ngModel)]="userData.personalSite" placeholder="e.g. https://myportfolio.com"
+                        <input type="url" name="personal_site" id="personal_site" formControlName="personal_site"
+                            placeholder="e.g. https://myportfolio.com"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                    </div>
-                </div>
-                
-                <div>
-                    <label for="cellphone" class="block text-sm/6 font-medium text-gray-900">Cellphone</label>
-                    <div class="mt-2">
-                        <input type="number" name="cellphone" id="cellphone" required placeholder="e.g. +1 555 123 4567"
-                            [(ngModel)]="userData.cellphone" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <div *ngIf="registrationForm.get('personal_site')?.invalid && registrationForm.get('personal_site')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            Personal site is required.
+                        </div>
                     </div>
                 </div>
 
+                <div>
+                    <label for="cellphone" class="block text-sm/6 font-medium text-gray-900">Cellphone</label>
+                    <div class="mt-2">
+                        <input type="number" name="cellphone" id="cellphone" formControlName="cellphone"
+                            placeholder="e.g. +1 555 123 4567"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <div *ngIf="registrationForm.get('cellphone')?.invalid && registrationForm.get('cellphone')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            <span *ngIf="registrationForm.get('cellphone')?.errors?.['required']">Cellphone is required.</span>
+                            <span *ngIf="registrationForm.get('cellphone')?.errors?.['pattern']">Please enter a valid number.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
+                <div class="mt-2 relative">
+                    <input [type]="showPassword ? 'text' : 'password'" name="password" id="password" formControlName="password"
+                        placeholder="Enter a strong password"
+                        class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                    <button type="button" (click)="togglePasswordVisibility()"
+                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                        <!-- Font Awesome Icon: Eye -->
+                        <i *ngIf="!showPassword"
+                            class="fas fa-eye text-gray-500 hover:text-gray-700 cursor-pointer"></i>
+                        <!-- Font Awesome Icon: Eye Slash -->
+                        <i *ngIf="showPassword"
+                            class="fas fa-eye-slash text-gray-500 hover:text-gray-700 cursor-pointer"></i>
+                    </button>
+                </div>
+                <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+                    class="text-red-500 text-sm mt-1">
+                    <span *ngIf="registrationForm.get('password')?.errors?.['required']">Password is required.</span>
+                    <span *ngIf="registrationForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters.</span>
+                </div>
+                <!-- Password Validation Feedback -->
+                <div class="mt-2 text-sm text-gray-600">
+                    <ul class="list-disc pl-5">
+                        <li [class.text-green-500]="passwordValidLength" [class.text-red-500]="!passwordValidLength">At least 8 characters</li>
+                        <li [class.text-green-500]="passwordHasUppercase" [class.text-red-500]="!passwordHasUppercase">One uppercase letter</li>
+                        <li [class.text-green-500]="passwordHasLowercase" [class.text-red-500]="!passwordHasLowercase">One lowercase letter</li>
+                        <li [class.text-green-500]="passwordHasNumber" [class.text-red-500]="!passwordHasNumber">One number</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Languages and Language Level Fields -->
@@ -71,24 +129,32 @@
                 <div>
                     <label for="languages" class="block text-sm/6 font-medium text-gray-900">Languages</label>
                     <div class="mt-2">
-                        <select name="languages" id="languages" [(ngModel)]="languageData.name"
+                        <select name="languages" id="languages" formControlName="languages"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                             <option value="English">English</option>
                             <option value="Spanish">Spanish</option>
                             <option value="French">French</option>
                         </select>
+                        <div *ngIf="registrationForm.get('languages')?.invalid && registrationForm.get('languages')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            Language is required.
+                        </div>
                     </div>
                 </div>
                 <div>
                     <label for="language_level" class="block text-sm/6 font-medium text-gray-900">Language Level</label>
                     <div class="mt-2">
-                        <select name="language_level" id="language_level" [(ngModel)]="languageData.language_level"
+                        <select name="language_level" id="language_level" formControlName="language_level"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                             <option value="BE">Beginner</option>
                             <option value="IN">Intermediate</option>
                             <option value="AD">Advanced</option>
                             <option value="NA">Native</option>
                         </select>
+                        <div *ngIf="registrationForm.get('language_level')?.invalid && registrationForm.get('language_level')?.touched"
+                            class="text-red-500 text-sm mt-1">
+                            Language level is required.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -96,17 +162,20 @@
             <!-- Mapa de Leaflet dentro del formulario -->
             <div>
                 <label for="map" class="block text-sm/6 font-medium text-gray-900">Enter your address</label>
-                <app-map (addressSelected)="onAddressSelected($event)"/>
+                <app-map (addressSelected)="onAddressSelected($event)" />
             </div>
 
             <!-- Personal Description Field -->
             <div>
                 <label for="personal_description" class="block text-sm/6 font-medium text-gray-900">Personal Description</label>
                 <div class="mt-2">
-                    <textarea name="personal_description" id="personal_description" rows="4" required
+                    <textarea name="personal_description" id="personal_description" rows="4" formControlName="personal_description"
                         placeholder="Write a brief description about yourself..."
-                        [(ngModel)]="userData.personalDescription"
                         class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
+                    <div *ngIf="registrationForm.get('personal_description')?.invalid && registrationForm.get('personal_description')?.touched"
+                        class="text-red-500 text-sm mt-1">
+                        Personal description is required.
+                    </div>
                 </div>
             </div>
 
@@ -114,7 +183,7 @@
             <div>
                 <button type="submit"
                     class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    Advance
+                    Submit
                 </button>
             </div>
         </form>

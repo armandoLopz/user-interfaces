@@ -2,18 +2,20 @@
     <div class="sm:mx-auto sm:w-full sm:max-w-lg border-2 border-gray-200 rounded-lg shadow-sm p-6">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm mb-6">
             <h2 class="text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-              Introduce your Skills and Competencies
+                Introduce your Skills and Competencies
             </h2>
-          </div>
+        </div>
 
-        <form class="space-y-6" action="#" method="POST">
+        <form class="space-y-6" #skillsForm="ngForm" (ngSubmit)="onSubmit(skillsForm.value)">
 
             <!-- Education fields -->
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label for="institute_name" class="block text-sm/6 font-medium text-gray-900">Name of institute</label>
+                    <label for="institute_name" class="block text-sm/6 font-medium text-gray-900">Name of
+                        institute</label>
                     <div class="mt-2">
-                        <input type="text" name="institute_name" id="institute_name" required placeholder="e.g. Harvard University"
+                        <input type="text" name="institute_name" id="institute_name" required
+                            placeholder="e.g. Harvard University"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
@@ -32,14 +34,17 @@
                 </div>
 
                 <!-- Studied dates -->
-                <app-date-fields [nameStartDate]="'Employment start date'" [nameEndDate]="'Employment end date:'"/>
-                
+                <app-date-fields [nameStartDate]="'Studies start date'" [nameEndDate]="'Studies end date'"
+                    (datesChanged)="handleDatesChanged($event, 'education')">
+                </app-date-fields>
+
             </div>
 
             <!-- Work experience fields -->
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label for="company_name" class="block text-sm/6 font-medium text-gray-900">Name of the Company</label>
+                    <label for="company_name" class="block text-sm/6 font-medium text-gray-900">Name of the
+                        Company</label>
                     <div class="mt-2">
                         <input type="text" name="company_name" id="company_name" required placeholder="e.g. Google"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
@@ -52,12 +57,17 @@
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
-                
+
                 <!-- work dates -->
-                <app-date-fields [nameStartDate]="'Studies start date'" [nameEndDate]="'Studies end date'"/>
+
+                <!-- Employment dates -->
+                <app-date-fields [nameStartDate]="'Employment start date'" [nameEndDate]="'Employment end date'"
+                    (datesChanged)="handleDatesChanged($event, 'work')">
+                </app-date-fields>
 
                 <div class="col-span-2">
-                    <label for="job_description" class="block text-sm/6 font-medium text-gray-900">Job Description</label>
+                    <label for="job_description" class="block text-sm/6 font-medium text-gray-900">Job
+                        Description</label>
                     <div class="mt-2">
                         <textarea name="job_description" id="job_description" rows="4" required
                             placeholder="Describe your responsibilities and achievements..."
@@ -71,20 +81,16 @@
                 <div>
                     <label for="skills" class="block text-sm/6 font-medium text-gray-900">Skills</label>
                     <div class="mt-2">
-                        <input type="text" name="skills" id="skills" required placeholder="e.g. Python, Project Management"
+                        <input type="text" name="skills" id="skills" required
+                            placeholder="e.g. Python, Project Management"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
                 <div>
-                    <label for="skill_level" class="block text-sm/6 font-medium text-gray-900">Skill Level</label>
-                    <div class="mt-2">
-                        <select name="skill_level" id="skill_level"
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                            <option value="BE">Beginner</option>
-                            <option value="IN">Intermediate</option>
-                            <option value="AD">Advanced</option>
-                            <option value="NA">Native</option>
-                        </select>
+                    <label for="skill_level" class="block text-sm/6 font-medium text-gray-900">Skill Level (1-5)</label>
+                    <div class="mt-5 flex items-center gap-2">
+                        <input type="range" name="skill_level" id="skill_level" min="1" max="5" [(ngModel)]="skillLevel"
+                            class="w-50 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer ">
                     </div>
                 </div>
             </div>
@@ -94,22 +100,28 @@
                 <div>
                     <label for="competencies" class="block text-sm/6 font-medium text-gray-900">Competencies</label>
                     <div class="mt-2">
-                        <input type="text" name="competencies" id="competencies" required placeholder="e.g. Team Leadership, Public Speaking"
+                        <input type="text" name="competencies" id="competencies" required
+                            placeholder="e.g. Team Leadership, Public Speaking"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
                 <div>
-                    <label for="competencies_level" class="block text-sm/6 font-medium text-gray-900">Competencies Level</label>
-                    <div class="mt-2">
-                        <select name="competencies_level" id="competencies_level"
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                            <option value="BE">Beginner</option>
-                            <option value="IN">Intermediate</option>
-                            <option value="AD">Advanced</option>
-                            <option value="NA">Native</option>
-                        </select>
+                    <label class="block text-sm/6 font-medium text-gray-900">Competencies Level (1-5)</label>
+                    <div class="mt-5 flex items-center gap-2">
+                        <div class="flex gap-3">
+                            <ng-container *ngFor="let level of [1, 2, 3, 4, 5]">
+                                <div 
+                                    (click)="competencyLevel = level" 
+                                    [class]="level <= competencyLevel ? 
+                                        'w-4 h-4 rounded-full bg-blue-500 cursor-pointer transition duration-200 hover:bg-blue-600' : 
+                                        'w-4 h-4 rounded-full bg-gray-300 cursor-pointer transition duration-200 hover:bg-gray-300'">
+                                </div>
+                            </ng-container>
+                        </div>
                     </div>
                 </div>
+                
+
             </div>
 
             <!-- Submit Button -->
@@ -122,7 +134,8 @@
 
             <!-- Back Button -->
             <div>
-                <a [routerLink]="['/', PERSONAL_INFO_FORM]" class="flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-gray-700 shadow-xs hover:bg-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <a [routerLink]="['/', PERSONAL_INFO_FORM]"
+                    class="flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-gray-700 shadow-xs hover:bg-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     Back
                 </a>
             </div>

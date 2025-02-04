@@ -19,6 +19,10 @@ export class ShareDataService {
 
   // Métodos para establecer los datos
   setUserData(user: userInterface): void {
+    console.log("DATOS EN EL SHARE");
+    console.log(user);
+    
+    
     this.userDataSource.next(user);
   }
 
@@ -37,5 +41,6 @@ export class ShareDataService {
       address: this.addressDataSource.value,
       language: this.languageDataSource.value
     };
+    
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule para usar ngModel
 import { NgIf } from '@angular/common';
 
@@ -17,6 +17,8 @@ export class DateFieldsComponent {
 
   @Input() nameStartDate: string = "";
   @Input() nameEndDate: string = "";
+
+  @Output() datesChanged = new EventEmitter<{ startDate: string, endDate: string, isCurrent: boolean }>();
 
   // Valida las fechas
   validateDates(): void {
@@ -38,6 +40,9 @@ export class DateFieldsComponent {
     } else {
       this.validationError = null; // No hay error
     }
+
+    // Emitir evento con los datos de las fechas
+    this.datesChanged.emit({ startDate: this.startDate, endDate: this.endDate, isCurrent: this.isCurrent });
   }
 
   // Maneja el cambio en el checkbox "Currently"
@@ -46,5 +51,6 @@ export class DateFieldsComponent {
       this.endDate = ''; // Limpia la fecha de finalización si está en curso
     }
     this.validateDates(); // Valida las fechas
+    this.datesChanged.emit({ startDate: this.startDate, endDate: this.endDate, isCurrent: this.isCurrent });
   }
 }
