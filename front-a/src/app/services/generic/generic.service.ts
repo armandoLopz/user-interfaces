@@ -22,7 +22,7 @@ export class GenericService<T> {
 
     this.urlComplete= this.url+urlArgument
 
-    return this.http.get<T>(`${this.urlComplete}/${id}`);
+    return this.http.get<T>(`${this.urlComplete}/${id}/`);
   }
 
   create(urlArgument: string, data: T): Observable<T> {

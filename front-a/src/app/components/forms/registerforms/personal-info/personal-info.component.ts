@@ -11,10 +11,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { GenericService } from '../../../../services/generic/generic.service';
 import { forkJoin, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { LoadingComponent } from '../../../loading/loading.component';
+import { AuthService } from '../../../../services/auth/auth.service';
+import { loadingFuntion } from '../../../../utils/funtions';
+import { userAuth } from '../../../../interfaces/interfaces.models';
 
 @Component({
   selector: 'app-personal-info',
-  imports: [MapComponent, RouterLink, FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [MapComponent, RouterLink, FormsModule, CommonModule, ReactiveFormsModule, LoadingComponent],
   templateUrl: './personal-info.component.html',
   styleUrls: ['./personal-info.component.css']
 })
@@ -26,7 +30,8 @@ export class PersonalInfoComponent {
     private router: Router,
     private shareDataService: ShareDataService,
     private fb: FormBuilder,
-    private genericService: GenericService<any>
+    private genericService: GenericService<any>,
+    private authService: AuthService
   ) {
     this.registrationForm = this.fb.group({
       name: ['', Validators.required],
@@ -42,13 +47,15 @@ export class PersonalInfoComponent {
     })
   }
 
+  loading = false;
+
   LOGIN_ROUTE = LOGIN_ROUTE;
   SKILLS_FORM = SKILLS_FORM_ROUTE;
 
   // Definir el objeto de usuario
   userData: userInterface = {
-    name: '',
-    lastname: '',
+    first_name: '',
+    last_name: '',
     email: '',
     cellphone: '',
     personal_description: '',
@@ -57,6 +64,13 @@ export class PersonalInfoComponent {
     username: '',
   };
 
+  //For Login funtion
+  userAuth: userAuth = {
+
+    username: '',
+    password: ''
+  }
+  
   // Para almacenar la dirección recibida
   addressData: addressInterface = {
     country: '',
@@ -77,6 +91,12 @@ export class PersonalInfoComponent {
 
   // Para mostrar u ocultar la contraseña
   showPassword: boolean = false;
+
+  onLogin() {
+    loadingFuntion(this.authService, this.userAuth, (loading: boolean) => {
+      this.loading = loading;
+    });
+  }
 
   // Función que valida los requisitos de la contraseña
   validatePassword(): void {
@@ -110,8 +130,8 @@ export class PersonalInfoComponent {
       // Actualizar userData con los valores del formulario
       this.userData = {
         ...this.userData,
-        name: this.registrationForm.value.name,
-        lastname: this.registrationForm.value.lastname,
+        first_name: this.registrationForm.value.name,
+        last_name: this.registrationForm.value.lastname,
         email: this.registrationForm.value.email,
         username: this.registrationForm.value.username,
         personal_site: this.registrationForm.value.personal_site,
@@ -137,10 +157,15 @@ export class PersonalInfoComponent {
           // Asignamos el ID del usuario a las demás entidades
           this.addressData.user = [userId];
           this.languageData.user = [userId];
+          
+          //servicio
+          console.log("enviado");
+          this.shareDataService.setUserData(userId)
 
           return forkJoin({
             address: this.genericService.create("/addresses/", this.addressData),
-            languages: this.genericService.create("/languages/", this.languageData)
+            languages: this.genericService.create("/languages/", this.languageData),
+            
           }).pipe(
             catchError(error => {
               console.error("Error en la creación de entidades:", error);
@@ -158,7 +183,7 @@ export class PersonalInfoComponent {
         })
       ).subscribe({
         next: () => {
-          
+
           this.router.navigate([this.SKILLS_FORM]);
         },
         error: err => {

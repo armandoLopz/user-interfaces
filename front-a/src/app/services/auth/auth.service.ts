@@ -17,7 +17,7 @@ export class AuthService {
 
   login(userData: userAuth): Observable<tokenRequest>{
 
-    const apiAuthUrl = `${this.url}/api/token/`;
+    const apiAuthUrl = `${this.url}/token/`;
     
     return this.http.post<tokenRequest>( apiAuthUrl, userData);
   }

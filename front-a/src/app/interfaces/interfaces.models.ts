@@ -1,7 +1,7 @@
 export interface userInterface {
 
-    name: string,
-    lastname: string,
+    first_name: string,
+    last_name: string,
     email: string,
     cellphone: string,
     personal_description: string,
@@ -58,6 +58,7 @@ export interface WorkExperienceInterface {
     start_work_date:        Date;
     end_work_date:          Date;
     currently_working:      boolean;
+    job_title:              string;
     user?:                   number[];
 }
 

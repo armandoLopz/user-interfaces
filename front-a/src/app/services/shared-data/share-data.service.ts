@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { userInterface, addressInterface, LanguageInterface } from '../../interfaces/interfaces.models';
 
 @Injectable({
   providedIn: 'root'
@@ -8,38 +7,22 @@ import { userInterface, addressInterface, LanguageInterface } from '../../interf
 
 export class ShareDataService {
 
-  private userDataSource = new BehaviorSubject<userInterface | null>(null);
-  private addressDataSource = new BehaviorSubject<addressInterface | null>(null);
-  private languageDataSource = new BehaviorSubject<LanguageInterface | null>(null);
+  private userIdSource = new BehaviorSubject<number | null>(null);
+
 
   // Observables para suscripción
-  userData$ = this.userDataSource.asObservable();
-  addressData$ = this.addressDataSource.asObservable();
-  languageData$ = this.languageDataSource.asObservable();
+  userData$ = this.userIdSource.asObservable();
 
   // Métodos para establecer los datos
-  setUserData(user: userInterface): void {
-    console.log("DATOS EN EL SHARE");
-    console.log(user);
+  setUserData(user: number): void {
     
-    
-    this.userDataSource.next(user);
-  }
-
-  setAddressData(address: addressInterface): void {
-    this.addressDataSource.next(address);
-  }
-
-  setLanguageData(language: LanguageInterface): void {
-    this.languageDataSource.next(language);
+    this.userIdSource.next(user);
   }
 
   // Método para obtener todos los datos cuando se necesiten en el componente final
   getAllData() {
     return {
-      user: this.userDataSource.value,
-      address: this.addressDataSource.value,
-      language: this.languageDataSource.value
+      user: this.userIdSource.value
     };
     
   }
