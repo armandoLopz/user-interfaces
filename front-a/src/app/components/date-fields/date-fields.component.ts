@@ -18,7 +18,7 @@ export class DateFieldsComponent {
   @Input() nameStartDate: string = "";
   @Input() nameEndDate: string = "";
 
-  @Output() datesChanged = new EventEmitter<{ startDate: string, endDate: string, isCurrent: boolean }>();
+  @Output() datesChanged = new EventEmitter<{ startDate: string, endDate: string, isCurrent: boolean  }>();
 
   // Valida las fechas
   validateDates(): void {

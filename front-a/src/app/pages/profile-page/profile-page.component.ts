@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { GenericService } from '../../services/generic/generic.service';
+import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { forkJoin, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SideBarComponent } from '../../components/side-bar/side-bar.component';
-type DegreeLevelKey = 'HS' | 'AS' | 'BA' | 'MA' | 'PhD' | 'OT';
-type LanguageLevelKey = 'BE' | 'IN' | 'AD' | 'NA';
 
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
   standalone: true,
-  imports: [CommonModule,SideBarComponent]
+  imports: [CommonModule, SideBarComponent]
 })
 export class ProfilePageComponent implements OnInit {
+  // Main Data
   user: any = {};
   mainAddress: any = {};
   latestEducation: any = {};
@@ -24,16 +23,17 @@ export class ProfilePageComponent implements OnInit {
   skills: any[] = [];
   competencies: any[] = [];
 
-  degreeLevels: Record<DegreeLevelKey, string> = {
+  // Mappings for levels (typed as Record<string, string>)
+  degreeLevels: Record<string, string> = {
     'HS': 'High School',
-    'AS': 'Associate\'s degree',
-    'BA': 'Bachelor\'s degree',
-    'MA': 'Master\'s degree',
+    'AS': 'Associate\'s Degree',
+    'BA': 'Bachelor\'s Degree',
+    'MA': 'Master\'s Degree',
     'PhD': 'PhD',
     'OT': 'Other'
   };
 
-  languageLevels: Record<LanguageLevelKey, string> = {
+  languageLevels: Record<string, string> = {
     'BE': 'Beginner',
     'IN': 'Intermediate',
     'AD': 'Advanced',
@@ -73,12 +73,12 @@ export class ProfilePageComponent implements OnInit {
     ).subscribe({
       next: (data) => {
         this.user = data.user || {};
-        this.mainAddress = data.addresses?.[0] || {};
-        this.latestEducation = data.educations?.[0] || {};
-        this.latestWork = data.workExperiences?.[0] || {};
-        this.languages = data.languages || [];
-        this.skills = data.skills || [];
-        this.competencies = data.competencies || [];
+        this.mainAddress = (data.addresses || []).filter((address: any) => address.user == userId)[0] || {};
+        this.latestEducation = (data.educations || []).filter((edu: any) => edu.user == userId)[0] || {};
+        this.latestWork = (data.workExperiences || []).filter((work: any) => work.user == userId)[0] || {};
+        this.languages = (data.languages || []).filter((lang: any) => lang.user == userId);
+        this.skills = (data.skills || []).filter((skill: any) => skill.user == userId);
+        this.competencies = (data.competencies || []).filter((comp: any) => comp.user == userId);
       }
     });
   }
@@ -98,18 +98,26 @@ export class ProfilePageComponent implements OnInit {
   formatDate(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES');
-  }
-
-  getDegreeLevel(level: string): string {
-    return this.degreeLevels[level as DegreeLevelKey] || level;
-  }
-
-  getLanguageLevel(level: string): string {
-    return this.languageLevels[level as LanguageLevelKey] || level;
+    return date.toLocaleDateString('en-US');
   }
 
   getCurrentPosition(currentlyWorking: boolean): string {
-    return currentlyWorking ? 'Presente' : 'Finalizado';
+    return currentlyWorking ? 'Present' : 'Past Position';
+  }
+
+  // Método helper para obtener el nivel de grado sin argumentos
+  getDegreeLevel(): string {
+    if (this.latestEducation && this.latestEducation.degree_level) {
+      return this.degreeLevels[this.latestEducation.degree_level] || this.latestEducation.degree_level;
+    }
+    return '';
+  }
+
+  // Método helper para obtener el nivel de idioma para cada registro
+  getLanguageLevel(lang: any): string {
+    if (lang && lang.language_level) {
+      return this.languageLevels[lang.language_level] || lang.language_level;
+    }
+    return '';
   }
 }

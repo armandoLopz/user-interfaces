@@ -24,11 +24,11 @@
 
     <!-- Checkbox para indicar que la actividad está en curso -->
     <div class="flex items-center gap-4 mt-3">
-        <div class="flex items-center flex-shrink-0">
+        <!-- <div class="flex items-center flex-shrink-0">
           <input type="checkbox" [(ngModel)]="isCurrent" (change)="onCurrentChange()"
             class="h-4 w-4 text-indigo-600 rounded border-gray-300">
           <span class="ml-2 text-sm text-gray-900 whitespace-nowrap">I am currently doing this</span>
-        </div>
+        </div> -->
         
         <span *ngIf="validationError" class="text-sm text-red-600 flex-shrink-0 ml-4">
           {{ validationError }}
