@@ -6,8 +6,18 @@
   
       <div class="flex gap-6">
         <!-- Section: Settings Configuration -->
+         
         <div class="flex-1 bg-white shadow-md rounded-lg p-6">
+
           <section>
+            <h3 class="text-xl font-semibold"><strong>Personal color palette</strong></h3>
+            <ol>
+              <ul>My color palette ( predeterminada )</ul>
+              <ul>My color palette</ul>
+            </ol>
+          </section> 
+
+          <section class="mt-4"> 
             <h3 class="text-xl font-semibold"><strong>Colors configuration</strong></h3>
             <label for="color-primary-input" class="block mt-2">Primary Color
               <input type="color" name="color-primary-input" class="ml-2" (change)="onColorChange($event, 'primary')">
@@ -43,10 +53,10 @@
       
           <section class="mt-4">
             <h3 class="text-xl font-semibold"><strong>Typography configuration</strong></h3>
-            <label for="primary-font" class="block mt-2">Primary Typography:
+            <label for="primary-font" class="block mt-2">Primary Typography
               <input type="file" id="primary-font" name="primary-font" accept=".ttf" class="ml-2 p-2 border border-gray-400 rounded bg-gray-200 cursor-pointer hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300" (change)="onFontChange($event, 'primary')" />
             </label>
-            <label for="secondary-font" class="block mt-2">Secondary Typography:
+            <label for="secondary-font" class="block mt-2">Secondary Typography
               <input type="file" id="secondary-font" name="secondary-font" accept=".ttf" class="ml-2 p-2 border border-gray-400 rounded bg-gray-200 cursor-pointer hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-300" (change)="onFontChange($event, 'secondary')" />
             </label>
           </section>
@@ -58,7 +68,7 @@
                 Restore
             </button>
             <!-- Save Button -->
-            <button class="w-32 bg-blue-500 text-white rounded p-3 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+            <button (click)="saveConfiguration()" class="w-32 bg-blue-500 text-white rounded p-3 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-300">
                 Save
             </button>
           </section>
@@ -66,7 +76,7 @@
   
         <!-- Section: Preview Card -->
         <div class="flex-1 bg-white shadow-md rounded-lg p-6">
-          <h3 class="text-2xl font-bold text-indigo-700 text-center mb-4">Preview of the configuration</h3>
+          <h3 class="text-2xl font-bold text-indigo-700 text-center mb-4">Configuration preview</h3>
           <div class="border p-4 rounded-lg min-h-[300px]" [style.backgroundColor]="extraColor1">
             <!-- Título con la fuente primaria -->
             <h1 [style.color]="primaryColor" [style.fontSize]="sizeTitle" [style.fontFamily]="primaryFont" [style.borderColor]="extraColor2" class="text-2xl font-bold text-center">

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
+import { GenericService } from '../../services/generic/generic.service';
 
 @Component({
   selector: 'app-settings-page',
@@ -9,6 +10,8 @@ import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 })
 export class SettingsPageComponent {
 
+  constructor(private genericService: GenericService<any>){}
+  
   primaryColor: string = '#000000';
   secondaryColor: string = '#000000';
   accentColor: string = '#000000';
@@ -23,7 +26,7 @@ export class SettingsPageComponent {
 
   primaryFontTitle = "Title"
   secondaryFontTitle = "Subtitle"
-
+  
   // Función para restaurar los valores por defecto
   restoreDefaults() {
     this.primaryColor = '#000000';
@@ -78,6 +81,40 @@ export class SettingsPageComponent {
           break;
       }
     }
+  }
+
+  saveConfiguration() {
+    // Obtener el ID del usuario desde el JWT (si está disponible)
+    const accessToken = localStorage.getItem('access_token');
+    const userId: string | null = accessToken ? JSON.parse(atob(accessToken.split('.')[1])).user_id : null;
+    
+    const configData = {
+      name: 'First config',
+      determinated: true,
+      primary_color: this.primaryColor,
+      secondary_color: this.secondaryColor,
+      accent_color: this.accentColor,
+      extra_color_1: this.extraColor1,
+      extra_color_2: this.extraColor2,
+      paragraph_size: this.sizeParagraph,
+      title_size: this.sizeTitle,
+      subtitle_size: this.sizeSubtitle,
+      primary_tipography: this.primaryFont,
+      secondary_tipography: this.secondaryFont,
+      user: [userId],
+    };
+
+    // Usar el servicio genérico para crear la configuración
+    this.genericService.create('/configurations/', configData).subscribe(
+      (response) => {
+        console.log('Configuration saved:', response);
+        // Aquí puedes agregar lógica para manejar la respuesta del servidor
+      },
+      (error) => {
+        console.error('Error saving configuration:', error);
+        // Aquí puedes manejar errores si ocurren
+      }
+    );
   }
 
   // Función para manejar el cambio de fuente
