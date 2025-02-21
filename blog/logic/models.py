@@ -14,7 +14,8 @@ class User(AbstractUser):
 class Configuration(models.Model):
     
     name = models.CharField(max_length=50)
-
+    determinated = models.BooleanField(default=False)
+    
     primary_color = models.CharField(max_length=50)
     secondary_color = models.CharField(max_length=50)
     accent_color = models.CharField(max_length=50)
