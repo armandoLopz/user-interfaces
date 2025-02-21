@@ -8,6 +8,10 @@ class User_view(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = User_serializer
 
+class Configuration_view(viewsets.ModelViewSet):
+    queryset = Configuration.objects.all()
+    serializer_class = Configuration_serializer
+
 class Address_view(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = Address_serializer

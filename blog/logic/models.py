@@ -10,7 +10,31 @@ class User(AbstractUser):
     cellphone = models.IntegerField(max_length=11, blank= False)
     personal_description = models.CharField(max_length=500)
     personal_site = models.CharField(max_length=70, blank= False)
+
+class Configuration(models.Model):
     
+    name = models.CharField(max_length=50)
+
+    primary_color = models.CharField(max_length=50)
+    secondary_color = models.CharField(max_length=50)
+    accent_color = models.CharField(max_length=50)
+    extra_color_1 = models.CharField(max_length=50)
+    extra_color_2 = models.CharField(max_length=50)
+
+    paragraph_size = models.CharField(max_length=50)
+    title_size = models.CharField(max_length=50)
+    subtitle_size = models.CharField(max_length=50)
+
+    primary_tipography = models.CharField(max_length=50)
+    secondary_tipography = models.CharField(max_length=50)
+    
+    user = models.ManyToManyField(User)
+
+    class Meta:
+        db_table = "configuration"
+
+    def __str__(self):
+        return self.name
 
 """        
 class User(models.Model):

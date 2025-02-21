@@ -16,6 +16,13 @@ class User_serializer(serializers.ModelSerializer):
         
         return super().create(validated_data)
 
+class Configuration_serializer(serializers.ModelSerializer):
+
+    class Meta:
+        
+        model = Configuration
+        fields = ('__all__')
+
 class Address_serializer(serializers.ModelSerializer):
 
     class Meta:
