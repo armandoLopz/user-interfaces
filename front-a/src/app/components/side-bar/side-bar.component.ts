@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { PROFILE_PAGE_ROUTE } from '../../app.routes.constans';
+import { PROFILE_PAGE_ROUTE, SETTING_PAGE_ROUTE } from '../../app.routes.constans';
 import { RouterLink } from '@angular/router';
 import { AvatarComponent } from '../avatar/avatar.component';
 
@@ -12,5 +12,6 @@ import { AvatarComponent } from '../avatar/avatar.component';
 export class SideBarComponent {
 
   @Input() mainTitle: string = "";
-  PROFILE_PAGE = PROFILE_PAGE_ROUTE 
+  PROFILE_PAGE = PROFILE_PAGE_ROUTE
+  SETTING_PAGE = SETTING_PAGE_ROUTE  
 }
