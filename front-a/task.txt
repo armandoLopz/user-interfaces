@@ -1,0 +1,5 @@
+modal que indique que fue guardada con exito la config
+traer configuraciones
+CRUD configuraciones
+Photo daltonismo
+

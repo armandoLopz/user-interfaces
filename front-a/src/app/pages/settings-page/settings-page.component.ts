@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { GenericService } from '../../services/generic/generic.service';
+import { AlertModalComponent } from '../../components/modals/alert-modal/alert-modal.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-settings-page',
-  imports: [SideBarComponent],
+  imports: [SideBarComponent, AlertModalComponent, CommonModule],
   templateUrl: './settings-page.component.html',
   styleUrl: './settings-page.component.css'
 })
-export class SettingsPageComponent {
+export class SettingsPageComponent implements OnInit {
 
   constructor(private genericService: GenericService<any>){}
   
+  // Variables de configuración
+  nameConfig: string = "";
   primaryColor: string = '#000000';
   secondaryColor: string = '#000000';
   accentColor: string = '#000000';
@@ -20,14 +24,42 @@ export class SettingsPageComponent {
   sizeSubtitle: string = '20px';
   primaryFont: string = 'None';
   secondaryFont: string = 'None';
-
   extraColor1: string = '#ffffff';
   extraColor2: string = '#000000';
 
-  primaryFontTitle = "Title"
-  secondaryFontTitle = "Subtitle"
+  primaryFontTitle = "Title";
+  secondaryFontTitle = "Subtitle";
+
+  // Variable para almacenar las configuraciones asociadas al usuario
+  configurations: any[] = [];
+
+  // Ciclo de vida OnInit para obtener la configuración del usuario
+  ngOnInit(): void {
+    this.getUserConfigurations();
+  }
   
-  // Función para restaurar los valores por defecto
+  // Función para obtener el ID del usuario y solicitar las configuraciones filtradas
+  getUserConfigurations() {
+    const accessToken = localStorage.getItem('access_token');
+    const userId: number | null = accessToken ? JSON.parse(atob(accessToken.split('.')[1])).user_id : null;
+    if (!userId) {
+      console.error('No se pudo obtener el ID del usuario.');
+      return;
+    }
+     
+    this.genericService.getByUserId("/configurations", userId).subscribe(
+      (response: any) => {
+        // Se asume que la respuesta es un arreglo de configuraciones asociadas al usuario
+        this.configurations = response;
+        console.log('Configuraciones obtenidas:', this.configurations);
+      },
+      (error) => {
+        console.error("Error al obtener las configuraciones:", error);
+      }
+    );
+  }
+
+  // Función para restaurar valores por defecto
   restoreDefaults() {
     this.primaryColor = '#000000';
     this.secondaryColor = '#000000';
@@ -68,7 +100,10 @@ export class SettingsPageComponent {
   onSizeChange(event: Event, sizeType: string) {
     const input = event.target as HTMLInputElement;
     if (input) {
-      const value = input.value || '16px'; // Default size
+      let value = parseInt(input.value, 10) || 16;
+      if (value < 1) {  // Aseguramos que el tamaño mínimo sea 1
+        value = 1;
+      }
       switch (sizeType) {
         case 'paragraph':
           this.sizeParagraph = value + 'px';
@@ -83,13 +118,30 @@ export class SettingsPageComponent {
     }
   }
 
+  onNameConfigChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input) {
+      // Limitar a 25 caracteres
+      if (input.value.length > 25) {
+        this.nameConfig = input.value.substring(0, 25);
+      } else {
+        this.nameConfig = input.value;
+      }
+    }
+  }
+
   saveConfiguration() {
-    // Obtener el ID del usuario desde el JWT (si está disponible)
+    // Validar que se ingrese un nombre para la configuración
+    if (!this.nameConfig.trim()) {
+      alert('El nombre de la configuración es obligatorio.');
+      return;
+    }
+    
     const accessToken = localStorage.getItem('access_token');
     const userId: string | null = accessToken ? JSON.parse(atob(accessToken.split('.')[1])).user_id : null;
     
     const configData = {
-      name: 'First config',
+      name: this.nameConfig,  // Valor ingresado por el usuario
       determinated: true,
       primary_color: this.primaryColor,
       secondary_color: this.secondaryColor,
@@ -104,34 +156,29 @@ export class SettingsPageComponent {
       user: [userId],
     };
 
-    // Usar el servicio genérico para crear la configuración
+    // Realizar la solicitud POST a la URL actualizada
     this.genericService.create('/configurations/', configData).subscribe(
       (response) => {
         console.log('Configuration saved:', response);
-        // Aquí puedes agregar lógica para manejar la respuesta del servidor
+        alert("Configuration saved")
+        // Aquí puedes agregar lógica adicional para manejar la respuesta
       },
       (error) => {
         console.error('Error saving configuration:', error);
-        // Aquí puedes manejar errores si ocurren
+        alert("Error saving configuration");
       }
     );
   }
 
-  // Función para manejar el cambio de fuente
   onFontChange(event: Event, fontType: string) {
     const input = event.target as HTMLInputElement;
     if (input && input.files && input.files.length > 0) {
       const file = input.files[0];
-
-      // Crear un objeto FileReader para leer el archivo
       const reader = new FileReader();
       
-      // Cuando el archivo se haya leído, aplicamos la fuente
       reader.onload = (e: any) => {
-        const fontUrl = e.target.result;  // Obtenemos la URL de datos del archivo
-
-        // Creamos un nuevo estilo CSS para la fuente
-        const fontName = file.name.split('.')[0];  // Nombre de la fuente (sin la extensión)
+        const fontUrl = e.target.result;
+        const fontName = file.name.split('.')[0];
         const style = document.createElement('style');
         style.innerHTML = `
           @font-face {
@@ -139,9 +186,7 @@ export class SettingsPageComponent {
             src: url('${fontUrl}') format('truetype');
           }
         `;
-        document.head.appendChild(style);  // Añadimos el estilo al documento
-
-        // Actualizamos la fuente seleccionada en el estado del componente
+        document.head.appendChild(style);
         if (fontType === 'primary') {
           this.primaryFont = fontName;
         } else if (fontType === 'secondary') {
@@ -149,9 +194,7 @@ export class SettingsPageComponent {
         }
       };
 
-      // Leemos el archivo como URL de datos
       reader.readAsDataURL(file);
     }
   }
-
 }

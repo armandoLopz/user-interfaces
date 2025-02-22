@@ -25,6 +25,13 @@ export class GenericService<T> {
     return this.http.get<T>(`${this.urlComplete}/${id}/`);
   }
 
+  getByUserId(urlArgument: string, id: number): Observable<T> {
+
+    this.urlComplete= this.url+urlArgument
+
+    return this.http.get<T>(`${this.urlComplete}/?user=${id}`);
+  }
+
   create(urlArgument: string, data: T): Observable<T> {
     
     this.urlComplete= this.url+urlArgument
