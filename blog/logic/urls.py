@@ -4,7 +4,7 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register('users', User_view)
-router.register('configurations', Configuration_view) 
+router.register('configurations', Configuration_View) 
 router.register('addresses', Address_view) 
 router.register('work_experiences', Work_experience_view) 
 router.register('educations', Education_view) 

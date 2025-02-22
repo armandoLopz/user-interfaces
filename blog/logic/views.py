@@ -8,9 +8,17 @@ class User_view(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = User_serializer
 
-class Configuration_view(viewsets.ModelViewSet):
+class Configuration_View(viewsets.ModelViewSet):
     queryset = Configuration.objects.all()
     serializer_class = Configuration_serializer
+
+    def get_queryset(self):
+        user_id = self.request.query_params.get('user', None)
+        if user_id is not None:
+            # Filtra las configuraciones cuyo campo 'user' tenga el ID especificado
+            return Configuration.objects.filter(user__id=user_id)
+        else:
+            return super().get_queryset()
 
 class Address_view(viewsets.ModelViewSet):
     queryset = Address.objects.all()

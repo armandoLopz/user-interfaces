@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth.hashers import make_password
 
 class User_serializer(serializers.ModelSerializer):
-
+    
     class Meta:
         
         model = User
@@ -22,7 +22,7 @@ class Configuration_serializer(serializers.ModelSerializer):
         
         model = Configuration
         fields = ('__all__')
-
+        
 class Address_serializer(serializers.ModelSerializer):
 
     class Meta:
