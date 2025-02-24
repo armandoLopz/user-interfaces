@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { GenericService } from '../../services/generic/generic.service';
 import { AlertModalComponent } from '../../components/modals/alert-modal/alert-modal.component';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './settings-page.component.css',
 })
 export class SettingsPageComponent implements OnInit {
-  constructor(private genericService: GenericService<any>) {}
+  constructor(private renderer:Renderer2 ,private genericService: GenericService<any>) {}
 
   //Delete variables
   showAlertModal = false;
@@ -64,15 +64,44 @@ export class SettingsPageComponent implements OnInit {
   }
 
   // Función para seleccionar la configuración predeterminada
-  selectDefault(config: string) {
+  selectDefault(config: any) {
     this.defaultConfig = config;
+
+    // Si es 'secondary' usa el tema predefinido, de lo contrario aplica custom-theme
     if (config === 'secondary') {
-      document.body.classList.add('secondary-theme');
-    } else {
-      document.body.classList.remove('secondary-theme');
+      this.renderer.removeClass(document.body, 'custom-theme');
+      this.renderer.addClass(document.body, 'secondary-theme');
+    
+    } else if (config === "main") {
+      this.renderer.removeClass(document.body, 'custom-theme');
+      this.renderer.removeClass(document.body, 'secondary-theme');
+    }else {
+      this.renderer.removeClass(document.body, 'secondary-theme');
+      this.renderer.addClass(document.body, 'custom-theme');
+
+      // Aplicar los estilos dinámicamente
+      this.applyConfigStyles(config);
     }
   }
   
+  // Modificar variables CSS dinámicamente
+  applyConfigStyles(config: any) {
+    document.documentElement.style.setProperty('--primary-color', config.primary_color);
+    document.documentElement.style.setProperty('--secondary-color', config.secondary_color);
+    document.documentElement.style.setProperty('--accent-color', config.accent_color);
+    document.documentElement.style.setProperty('--extra-color-1', config.extra_color_1);
+    document.documentElement.style.setProperty('--extra-color-2', config.extra_color_2);
+    document.documentElement.style.setProperty('--paragraph-size', config.paragraph_size);
+    document.documentElement.style.setProperty('--title-size', config.title_size);
+    document.documentElement.style.setProperty('--subtitle-size', config.subtitle_size);
+    
+    if (config.primary_tipography !== 'None') {
+      document.documentElement.style.setProperty('--primary-font', config.primary_tipography);
+    }
+    if (config.secondary_tipography !== 'None') {
+      document.documentElement.style.setProperty('--secondary-font', config.secondary_tipography);
+    }
+  }
 
   // Función para editar una configuración
   editConfig(config: any) {
