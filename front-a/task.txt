@@ -1,5 +1,7 @@
 modal que indique que fue guardada con exito la config
-traer configuraciones
-CRUD configuraciones
-Photo daltonismo
+traer configuraciones HECHO
 
+DEFINIR COMO MANEJAR LOS ICONOS ( COMPONENTES? ) Y ACCIONES DENTRO DE ELLOS 
+CRUD configuraciones
+APLICAR CONFIGURACIONES A LA PLANTILLA 
+Photo daltonismo

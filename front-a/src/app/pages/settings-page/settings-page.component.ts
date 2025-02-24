@@ -8,14 +8,17 @@ import { CommonModule } from '@angular/common';
   selector: 'app-settings-page',
   imports: [SideBarComponent, AlertModalComponent, CommonModule],
   templateUrl: './settings-page.component.html',
-  styleUrl: './settings-page.component.css'
+  styleUrl: './settings-page.component.css',
 })
 export class SettingsPageComponent implements OnInit {
+  constructor(private genericService: GenericService<any>) {}
 
-  constructor(private genericService: GenericService<any>){}
-  
+  //Delete variables
+  showAlertModal = false;
+  configToDelete: any = null;
+
   // Variables de configuración
-  nameConfig: string = "";
+  nameConfig: string = '';
   primaryColor: string = '#000000';
   secondaryColor: string = '#000000';
   accentColor: string = '#000000';
@@ -27,34 +30,81 @@ export class SettingsPageComponent implements OnInit {
   extraColor1: string = '#ffffff';
   extraColor2: string = '#000000';
 
-  primaryFontTitle = "Title";
-  secondaryFontTitle = "Subtitle";
+  primaryFontTitle = 'Title';
+  secondaryFontTitle = 'Subtitle';
 
   // Variable para almacenar las configuraciones asociadas al usuario
   configurations: any[] = [];
+
+  // Variable para identificar la configuración predeterminada
+  defaultDefaultId: any = null;
+  defaultConfig: any = null;
 
   // Ciclo de vida OnInit para obtener la configuración del usuario
   ngOnInit(): void {
     this.getUserConfigurations();
   }
+
+  // Método que se ejecuta cuando se confirma la eliminación
+  confirmDelete() {
+    // Aquí llamas a la lógica de eliminación, por ejemplo:
+    this.deleteConfig(this.configToDelete);
+    this.resetModal();
+  }
+
+  // Método para cancelar la eliminación
+  cancelDelete() {
+    this.resetModal();
+  }
+
+  // Resetea las variables del modal
+  resetModal() {
+    this.showAlertModal = false;
+    this.configToDelete = null;
+  }
+
+  // Función para seleccionar la configuración predeterminada
+  selectDefault(config: string) {
+    this.defaultConfig = config;
+    if (config === 'secondary') {
+      document.body.classList.add('secondary-theme');
+    } else {
+      document.body.classList.remove('secondary-theme');
+    }
+  }
   
+
+  // Función para editar una configuración
+  editConfig(config: any) {
+    console.log('Editar configuración:', config);
+    // Implementa la lógica de edición aquí
+  }
+
+  // Función para eliminar una configuración
+  deleteConfig(config: any) {
+    console.log('Eliminar configuración:', config);
+    // Implementa la lógica de eliminación aquí
+  }
+
   // Función para obtener el ID del usuario y solicitar las configuraciones filtradas
   getUserConfigurations() {
     const accessToken = localStorage.getItem('access_token');
-    const userId: number | null = accessToken ? JSON.parse(atob(accessToken.split('.')[1])).user_id : null;
+    const userId: number | null = accessToken
+      ? JSON.parse(atob(accessToken.split('.')[1])).user_id
+      : null;
     if (!userId) {
       console.error('No se pudo obtener el ID del usuario.');
       return;
     }
-     
-    this.genericService.getByUserId("/configurations", userId).subscribe(
+
+    this.genericService.getByUserId('/configurations', userId).subscribe(
       (response: any) => {
         // Se asume que la respuesta es un arreglo de configuraciones asociadas al usuario
         this.configurations = response;
         console.log('Configuraciones obtenidas:', this.configurations);
       },
       (error) => {
-        console.error("Error al obtener las configuraciones:", error);
+        console.error('Error al obtener las configuraciones:', error);
       }
     );
   }
@@ -72,7 +122,7 @@ export class SettingsPageComponent implements OnInit {
     this.extraColor1 = '#ffffff';
     this.extraColor2 = '#000000';
   }
-  
+
   onColorChange(event: Event, colorType: string) {
     const input = event.target as HTMLInputElement;
     if (input) {
@@ -101,7 +151,8 @@ export class SettingsPageComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input) {
       let value = parseInt(input.value, 10) || 16;
-      if (value < 1) {  // Aseguramos que el tamaño mínimo sea 1
+      if (value < 1) {
+        // Aseguramos que el tamaño mínimo sea 1
         value = 1;
       }
       switch (sizeType) {
@@ -136,12 +187,14 @@ export class SettingsPageComponent implements OnInit {
       alert('El nombre de la configuración es obligatorio.');
       return;
     }
-    
+
     const accessToken = localStorage.getItem('access_token');
-    const userId: string | null = accessToken ? JSON.parse(atob(accessToken.split('.')[1])).user_id : null;
-    
+    const userId: string | null = accessToken
+      ? JSON.parse(atob(accessToken.split('.')[1])).user_id
+      : null;
+
     const configData = {
-      name: this.nameConfig,  // Valor ingresado por el usuario
+      name: this.nameConfig, // Valor ingresado por el usuario
       determinated: true,
       primary_color: this.primaryColor,
       secondary_color: this.secondaryColor,
@@ -160,12 +213,12 @@ export class SettingsPageComponent implements OnInit {
     this.genericService.create('/configurations/', configData).subscribe(
       (response) => {
         console.log('Configuration saved:', response);
-        alert("Configuration saved")
+        alert('Configuration saved');
         // Aquí puedes agregar lógica adicional para manejar la respuesta
       },
       (error) => {
         console.error('Error saving configuration:', error);
-        alert("Error saving configuration");
+        alert('Error saving configuration');
       }
     );
   }
@@ -175,7 +228,7 @@ export class SettingsPageComponent implements OnInit {
     if (input && input.files && input.files.length > 0) {
       const file = input.files[0];
       const reader = new FileReader();
-      
+
       reader.onload = (e: any) => {
         const fontUrl = e.target.result;
         const fontName = file.name.split('.')[0];
