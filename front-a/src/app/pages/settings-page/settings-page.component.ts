@@ -19,13 +19,38 @@ export class SettingsPageComponent implements OnInit {
   configToEdit: any = {};
 
   updateConfig(editedConfig: any) {
-    console.log('Configuración editada:', editedConfig);
-    // Aquí deberías llamar a tu servicio para actualizar la configuración en la base de datos
-    // Ejemplo: this.genericService.update('/configurations/', editedConfig.id, editedConfig).subscribe(...)
 
-    // Cierra el modal
+    const updatedConfig = this.addPixelValues(editedConfig);
+    console.log("PRE");
+    
+    console.log(updatedConfig);
+    
+    this.genericService.update('/configurations', updatedConfig, updatedConfig.id).subscribe(
+      (response) => {
+        console.log('Configuration edite:', response);
+        alert('Configuration edited');
+
+      },
+      (error) => {
+        console.error('Error saving configuration:', error);
+        //alert('Error saving configuration');
+      }
+    );
+
+    //this.getUserConfigurations();
     this.showEditModal = false;
+    window.location.reload();
+
   }
+
+  addPixelValues(config: any) {
+    return {
+        ...config,
+        paragraph_size: `${config.paragraph_size}px`,
+        title_size: `${config.title_size}px`,
+        subtitle_size: `${config.subtitle_size}px`,
+    };
+}
 
   cancelEdit() {
     this.showEditModal = false;
@@ -61,6 +86,13 @@ export class SettingsPageComponent implements OnInit {
   // Ciclo de vida OnInit para obtener la configuración del usuario
   ngOnInit(): void {
     this.getUserConfigurations();
+    const storedConfig = localStorage.getItem('selectedConfig');
+    if (storedConfig) {
+        this.defaultConfig = storedConfig; // Carga la selección desde localStorage
+        this.selectDefault(this.defaultConfig)
+    } else {
+        this.defaultConfig = 'main'; // Valor por defecto si no hay nada guardado
+    }
   }
 
   // Método para cancelar la eliminación
@@ -71,6 +103,7 @@ export class SettingsPageComponent implements OnInit {
   // Función para seleccionar la configuración predeterminada
   selectDefault(config: any) {
     this.defaultConfig = config;
+    localStorage.setItem('selectedConfig', config); // Guarda la selección en localStorage
 
     // Si es 'secondary' usa el tema predefinido, de lo contrario aplica custom-theme
     if (config === 'secondary') {
@@ -135,9 +168,9 @@ export class SettingsPageComponent implements OnInit {
           console.error('Error eliminando la configuración:', error);
         }
       );
-    } else {
-      alert("No se puede eliminar esta configuración predeterminada.");
-    }
+    } //else {
+      //alert("No se puede eliminar esta configuración predeterminada.");
+    //}
   }
 
   resetModal() {
@@ -171,7 +204,7 @@ export class SettingsPageComponent implements OnInit {
       console.error('No se pudo obtener el ID del usuario.');
       return;
     }
-
+    
     this.genericService.getByUserId('/configurations', userId).subscribe(
       (response: any) => {
         // Se asume que la respuesta es un arreglo de configuraciones asociadas al usuario
@@ -179,6 +212,7 @@ export class SettingsPageComponent implements OnInit {
         console.log('Configuraciones obtenidas:', this.configurations);
       },
       (error) => {
+        
         console.error('Error al obtener las configuraciones:', error);
       }
     );
@@ -259,7 +293,7 @@ export class SettingsPageComponent implements OnInit {
   saveConfiguration() {
     // Validar que se ingrese un nombre para la configuración
     if (!this.nameConfig.trim()) {
-      alert('El nombre de la configuración es obligatorio.');
+      alert('The configuration name is obligatory.');
       return;
     }
 
@@ -283,7 +317,7 @@ export class SettingsPageComponent implements OnInit {
       secondary_tipography: this.secondaryFont,
       user: [userId],
     };
-
+    
     // Realizar la solicitud POST a la URL actualizada
     this.genericService.create('/configurations/', configData).subscribe(
       (response) => {

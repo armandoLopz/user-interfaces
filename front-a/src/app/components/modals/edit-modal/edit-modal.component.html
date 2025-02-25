@@ -1,10 +1,8 @@
-<div *ngIf="isVisible" class="fixed top-0 left-0 right-0 bottom-0 bg-gray-500 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+<div *ngIf="isVisible" class="fixed top-0 left-0 right-0 bottom-0 backdrop-blur-xl flex items-center justify-center z-50">
+  <div class="rounded-lg shadow-lg p-6 max-w-md w-full bg-white">
     <h2 class="text-xl font-semibold text-gray-800 mb-4">
       Edit Configuration
     </h2>
-  
-    <!-- Formulario de edición -->
     <form (ngSubmit)="saveEditedConfig()">
       <!-- Nombre de la Configuración -->
       <div class="mb-4">
@@ -20,7 +18,7 @@
           required
         />
       </div>
-  
+
       <!-- Primary Color -->
       <div class="mb-4">
         <label for="primaryColor" class="block text-sm font-medium text-gray-700">
@@ -35,7 +33,7 @@
           required
         />
       </div>
-  
+
       <!-- Secondary Color -->
       <div class="mb-4">
         <label for="secondaryColor" class="block text-sm font-medium text-gray-700">
@@ -50,7 +48,7 @@
           required
         />
       </div>
-  
+
       <!-- Accent Color -->
       <div class="mb-4">
         <label for="accentColor" class="block text-sm font-medium text-gray-700">
@@ -65,7 +63,7 @@
           required
         />
       </div>
-  
+
       <!-- Paragraph Font Size -->
       <div class="mb-4">
         <label for="paragraphSize" class="block text-sm font-medium text-gray-700">
@@ -80,7 +78,7 @@
           required
         />
       </div>
-  
+
       <!-- Title Font Size -->
       <div class="mb-4">
         <label for="titleSize" class="block text-sm font-medium text-gray-700">
@@ -95,7 +93,7 @@
           required
         />
       </div>
-  
+
       <!-- Subtitle Font Size -->
       <div class="mb-4">
         <label for="subtitleSize" class="block text-sm font-medium text-gray-700">
@@ -110,7 +108,7 @@
           required
         />
       </div>
-  
+
       <!-- Primary Font (Tipografía Primaria) -->
       <div class="mb-4">
         <label for="primaryFont" class="block text-sm font-medium text-gray-700">
@@ -125,7 +123,7 @@
           accept=".ttf, .otf, .woff, .woff2"
         />
       </div>
-  
+
       <!-- Secondary Font (Tipografía Secundaria) -->
       <div class="mb-4">
         <label for="secondaryFont" class="block text-sm font-medium text-gray-700">
@@ -140,21 +138,16 @@
           accept=".ttf, .otf, .woff, .woff2"
         />
       </div>
-  
+
       <!-- Botones de Acción -->
-      <div class="flex justify-end gap-4 mt-4">
-        <button
-          type="button"
-          (click)="closeEditModal()"
-          class="w-24 bg-gray-300 text-gray-800 rounded-lg py-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-        >
+      <div class="flex justify-between gap-4 mt-6">
+        <button type="button" (click)="closeEditModal()"
+          class="w-full bg-gray-300 text-gray-800 rounded-lg py-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300">
           Cancel
         </button>
-        <button
-          type="submit"
-          class="w-24 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-        >
-          Save
+        <button type="submit"
+          class="w-full bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+          Edit
         </button>
       </div>
     </form>

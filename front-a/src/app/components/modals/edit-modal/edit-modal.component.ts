@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./edit-modal.component.css']
 })
 export class EditModalComponent {
-
+  
   @Input() isVisible: boolean = false;
   
   // Propiedad para recibir la configuración a editar

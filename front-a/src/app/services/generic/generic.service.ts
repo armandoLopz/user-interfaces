@@ -50,6 +50,6 @@ export class GenericService<T> {
 
     this.url = this.url+urlArgument
   
-    return this.http.put<T>(`${this.url}/${updateObjectId}`, updateObjectData)
+    return this.http.put<T>(`${this.url}/${updateObjectId}/`, updateObjectData)
   }
 }
