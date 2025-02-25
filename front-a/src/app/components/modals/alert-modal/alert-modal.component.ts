@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,14 +9,15 @@ import { CommonModule } from '@angular/common';
 })
 export class AlertModalComponent {
 
-  @Input() isVisible: boolean = false;  // Propiedad para controlar si el modal está visible
-  
+  @Input() isVisible: boolean = false;
+  @Output() confirmAction = new EventEmitter<void>();
+  @Output() cancelAction = new EventEmitter<void>();
+
   closeModal() {
-    this.isVisible = false;
+    this.cancelAction.emit();
   }
 
   confirmDelete() {
-    console.log('Deleted!');
-    this.isVisible = false;  // Cierra el modal después de confirmar
+    this.confirmAction.emit();
   }
 }

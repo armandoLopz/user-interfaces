@@ -23,12 +23,15 @@
               <input type="radio" name="defaultConfig" (change)="selectDefault('main')"
                 [checked]="defaultConfig === 'main'" />
               <span>Main configuration</span>
+
+              <!-- 
               <button type="button" (click)="editConfig('main')" class="ml-auto text-blue-500 hover:text-blue-700">
                 <i class="fas fa-edit"></i>
               </button>
               <button type="button" (click)="deleteConfig('main')" class="text-red-500 hover:text-red-700">
                 <i class="fas fa-trash-alt"></i>
               </button>
+              -->
             </li>
 
             <!-- Elemento fijo: Secondary configuration -->
@@ -36,12 +39,14 @@
               <input type="radio" name="defaultConfig" (change)="selectDefault('secondary')"
                 [checked]="defaultConfig === 'secondary'" />
               <span>Secondary configuration</span>
+              <!--
               <button type="button" (click)="editConfig('secondary')" class="ml-auto text-blue-500 hover:text-blue-700">
                 <i class="fas fa-edit"></i>
               </button>
               <button type="button" (click)="deleteConfig('secondary')" class="text-red-500 hover:text-red-700">
                 <i class="fas fa-trash-alt"></i>
               </button>
+              -->
             </li>
 
             <!-- Configuraciones obtenidas de la API -->
@@ -52,7 +57,7 @@
               <button type="button" (click)="editConfig(config)" class="ml-auto text-blue-500 hover:text-blue-700">
                 <i class="fas fa-edit"></i>
               </button>
-              <button type="button" (click)="deleteConfig(config)" class="text-red-500 hover:text-red-700">
+              <button type="button" (click)="openDeleteModal(config)" class="text-red-500 hover:text-red-700">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </li>

@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './settings-page.component.css',
 })
 export class SettingsPageComponent implements OnInit {
-  constructor(private renderer:Renderer2 ,private genericService: GenericService<any>) {}
+  constructor(private renderer: Renderer2, private genericService: GenericService<any>) { }
 
   //Delete variables
   showAlertModal = false;
@@ -45,22 +45,9 @@ export class SettingsPageComponent implements OnInit {
     this.getUserConfigurations();
   }
 
-  // Método que se ejecuta cuando se confirma la eliminación
-  confirmDelete() {
-    // Aquí llamas a la lógica de eliminación, por ejemplo:
-    this.deleteConfig(this.configToDelete);
-    this.resetModal();
-  }
-
   // Método para cancelar la eliminación
   cancelDelete() {
     this.resetModal();
-  }
-
-  // Resetea las variables del modal
-  resetModal() {
-    this.showAlertModal = false;
-    this.configToDelete = null;
   }
 
   // Función para seleccionar la configuración predeterminada
@@ -71,19 +58,20 @@ export class SettingsPageComponent implements OnInit {
     if (config === 'secondary') {
       this.renderer.removeClass(document.body, 'custom-theme');
       this.renderer.addClass(document.body, 'secondary-theme');
-    
+
     } else if (config === "main") {
       this.renderer.removeClass(document.body, 'custom-theme');
       this.renderer.removeClass(document.body, 'secondary-theme');
-    }else {
+    } else {
       this.renderer.removeClass(document.body, 'secondary-theme');
-      this.renderer.addClass(document.body, 'custom-theme');
-
       // Aplicar los estilos dinámicamente
       this.applyConfigStyles(config);
+
+      this.renderer.addClass(document.body, 'custom-theme');
+
     }
   }
-  
+
   // Modificar variables CSS dinámicamente
   applyConfigStyles(config: any) {
     document.documentElement.style.setProperty('--primary-color', config.primary_color);
@@ -94,13 +82,14 @@ export class SettingsPageComponent implements OnInit {
     document.documentElement.style.setProperty('--paragraph-size', config.paragraph_size);
     document.documentElement.style.setProperty('--title-size', config.title_size);
     document.documentElement.style.setProperty('--subtitle-size', config.subtitle_size);
-    
+
     if (config.primary_tipography !== 'None') {
       document.documentElement.style.setProperty('--primary-font', config.primary_tipography);
     }
     if (config.secondary_tipography !== 'None') {
       document.documentElement.style.setProperty('--secondary-font', config.secondary_tipography);
     }
+
   }
 
   // Función para editar una configuración
@@ -109,11 +98,44 @@ export class SettingsPageComponent implements OnInit {
     // Implementa la lógica de edición aquí
   }
 
-  // Función para eliminar una configuración
   deleteConfig(config: any) {
     console.log('Eliminar configuración:', config);
-    // Implementa la lógica de eliminación aquí
+    // Asegúrate de que la configuración tiene un id y no se trata de configuraciones predeterminadas
+    if (typeof config === 'object' && config.id) {
+      this.genericService.delete('/configurations/', config.id).subscribe(
+        (response: any) => {
+          console.log('Configuración eliminada:', response);
+          this.getUserConfigurations();  // Actualiza la lista de configuraciones después de la eliminación
+        },
+        (error: any) => {
+          console.error('Error eliminando la configuración:', error);
+        }
+      );
+    } else {
+      alert("No se puede eliminar esta configuración predeterminada.");
+    }
+  }  
+
+  resetModal() {
+    this.showAlertModal = false;
+    this.configToDelete = null;
   }
+
+  // Abre el modal y asigna la configuración a borrar
+  openDeleteModal(config: any) {
+    console.log('Abriendo modal para borrar la configuración:', config);
+    this.showAlertModal = true;
+    this.configToDelete = config; // Asigna la configuración seleccionada al modal
+  }
+  
+  // Se ejecuta al confirmar la eliminación desde el modal
+  confirmDelete() {
+    console.log('Confirmar eliminación de la configuración:', this.configToDelete);
+    if (this.configToDelete) {
+      this.deleteConfig(this.configToDelete);  // Elimina la configuración
+    }
+    this.resetModal();  // Cierra el modal después de confirmar
+  }  
 
   // Función para obtener el ID del usuario y solicitar las configuraciones filtradas
   getUserConfigurations() {
@@ -242,6 +264,7 @@ export class SettingsPageComponent implements OnInit {
     this.genericService.create('/configurations/', configData).subscribe(
       (response) => {
         console.log('Configuration saved:', response);
+        this.getUserConfigurations();
         alert('Configuration saved');
         // Aquí puedes agregar lógica adicional para manejar la respuesta
       },

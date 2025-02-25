@@ -3,16 +3,6 @@
 
 /* Estilos base para la clase custom-theme */
 body.custom-theme {
-    --primary-color: #000000;
-    --secondary-color: #000000;
-    --accent-color: #000000;
-    --extra-color-1: #ffffff;
-    --extra-color-2: #000000;
-    --primary-font: 'Arial', sans-serif;
-    --secondary-font: 'Verdana', sans-serif;
-    --paragraph-size: 16px;
-    --title-size: 24px;
-    --subtitle-size: 20px;
 
     background-color: var(--extra-color-1);
     color: var(--secondary-color);
@@ -56,11 +46,15 @@ body.custom-theme button:hover {
 }
 
 /* Titulares */
-body.custom-theme h1, 
-body.custom-theme h2, 
-body.custom-theme h3 {
+body.custom-theme h1{
     color: var(--primary-color);
     font-family: var(--primary-font);
+}
+
+body.custom-theme h2, 
+body.custom-theme h3 {
+    font-size: var(--subtitle-size);
+    color: var(--secondary-color);
 }
 
 /* Párrafos */
