@@ -17,12 +17,12 @@ export class SettingsPageComponent implements OnInit {
   // Configuraciónes para editar
   showEditModal: boolean = false;
   configToEdit: any = {};
-  
+
   updateConfig(editedConfig: any) {
     console.log('Configuración editada:', editedConfig);
     // Aquí deberías llamar a tu servicio para actualizar la configuración en la base de datos
     // Ejemplo: this.genericService.update('/configurations/', editedConfig.id, editedConfig).subscribe(...)
-    
+
     // Cierra el modal
     this.showEditModal = false;
   }
@@ -114,7 +114,12 @@ export class SettingsPageComponent implements OnInit {
   editConfig(config: any) {
     console.log('Editar configuración:', config);
     this.configToEdit = config
-    this.showEditModal = true; 
+
+    this.configToEdit.paragraph_size = parseInt(this.configToEdit.paragraph_size, 10);
+    this.configToEdit.title_size = parseInt(this.configToEdit.title_size, 10);
+    this.configToEdit.subtitle_size = parseInt(this.configToEdit.subtitle_size, 10);
+    
+    this.showEditModal = true;
   }
 
   deleteConfig(config: any) {
@@ -133,7 +138,7 @@ export class SettingsPageComponent implements OnInit {
     } else {
       alert("No se puede eliminar esta configuración predeterminada.");
     }
-  }  
+  }
 
   resetModal() {
     this.showAlertModal = false;
@@ -146,7 +151,7 @@ export class SettingsPageComponent implements OnInit {
     this.showAlertModal = true;
     this.configToDelete = config; // Asigna la configuración seleccionada al modal
   }
-  
+
   // Se ejecuta al confirmar la eliminación desde el modal
   confirmDelete() {
     console.log('Confirmar eliminación de la configuración:', this.configToDelete);
@@ -154,7 +159,7 @@ export class SettingsPageComponent implements OnInit {
       this.deleteConfig(this.configToDelete);  // Elimina la configuración
     }
     this.resetModal();  // Cierra el modal después de confirmar
-  }  
+  }
 
   // Función para obtener el ID del usuario y solicitar las configuraciones filtradas
   getUserConfigurations() {
