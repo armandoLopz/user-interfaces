@@ -1,0 +1,162 @@
+<div *ngIf="isVisible" class="fixed top-0 left-0 right-0 bottom-0 bg-gray-500 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">
+      Edit Configuration
+    </h2>
+  
+    <!-- Formulario de edición -->
+    <form (ngSubmit)="saveEditedConfig()">
+      <!-- Nombre de la Configuración -->
+      <div class="mb-4">
+        <label for="nameConfig" class="block text-sm font-medium text-gray-700">
+          Configuration Name
+        </label>
+        <input
+          id="nameConfig"
+          type="text"
+          [(ngModel)]="configToEdit.name"
+          name="nameConfig"
+          class="mt-2 p-2 w-full border rounded-md"
+          required
+        />
+      </div>
+  
+      <!-- Primary Color -->
+      <div class="mb-4">
+        <label for="primaryColor" class="block text-sm font-medium text-gray-700">
+          Primary Color
+        </label>
+        <input
+          id="primaryColor"
+          type="color"
+          [(ngModel)]="configToEdit.primary_color"
+          name="primaryColor"
+          class="mt-2 w-full border rounded-md"
+          required
+        />
+      </div>
+  
+      <!-- Secondary Color -->
+      <div class="mb-4">
+        <label for="secondaryColor" class="block text-sm font-medium text-gray-700">
+          Secondary Color
+        </label>
+        <input
+          id="secondaryColor"
+          type="color"
+          [(ngModel)]="configToEdit.secondary_color"
+          name="secondaryColor"
+          class="mt-2 w-full border rounded-md"
+          required
+        />
+      </div>
+  
+      <!-- Accent Color -->
+      <div class="mb-4">
+        <label for="accentColor" class="block text-sm font-medium text-gray-700">
+          Accent Color
+        </label>
+        <input
+          id="accentColor"
+          type="color"
+          [(ngModel)]="configToEdit.accent_color"
+          name="accentColor"
+          class="mt-2 w-full border rounded-md"
+          required
+        />
+      </div>
+  
+      <!-- Paragraph Font Size -->
+      <div class="mb-4">
+        <label for="paragraphSize" class="block text-sm font-medium text-gray-700">
+          Paragraph Font Size
+        </label>
+        <input
+          id="paragraphSize"
+          type="number"
+          [(ngModel)]="configToEdit.paragraph_size"
+          name="paragraphSize"
+          class="mt-2 p-2 w-full border rounded-md"
+          required
+        />
+      </div>
+  
+      <!-- Title Font Size -->
+      <div class="mb-4">
+        <label for="titleSize" class="block text-sm font-medium text-gray-700">
+          Title Font Size
+        </label>
+        <input
+          id="titleSize"
+          type="number"
+          [(ngModel)]="configToEdit.title_size"
+          name="titleSize"
+          class="mt-2 p-2 w-full border rounded-md"
+          required
+        />
+      </div>
+  
+      <!-- Subtitle Font Size -->
+      <div class="mb-4">
+        <label for="subtitleSize" class="block text-sm font-medium text-gray-700">
+          Subtitle Font Size
+        </label>
+        <input
+          id="subtitleSize"
+          type="number"
+          [(ngModel)]="configToEdit.subtitle_size"
+          name="subtitleSize"
+          class="mt-2 p-2 w-full border rounded-md"
+          required
+        />
+      </div>
+  
+      <!-- Primary Font (Tipografía Primaria) -->
+      <div class="mb-4">
+        <label for="primaryFont" class="block text-sm font-medium text-gray-700">
+          Primary Font
+        </label>
+        <input
+          id="primaryFont"
+          type="file"
+          (change)="onFontChange($event, 'primary')"
+          name="primaryFont"
+          class="mt-2 w-full border rounded-md"
+          accept=".ttf, .otf, .woff, .woff2"
+        />
+      </div>
+  
+      <!-- Secondary Font (Tipografía Secundaria) -->
+      <div class="mb-4">
+        <label for="secondaryFont" class="block text-sm font-medium text-gray-700">
+          Secondary Font
+        </label>
+        <input
+          id="secondaryFont"
+          type="file"
+          (change)="onFontChange($event, 'secondary')"
+          name="secondaryFont"
+          class="mt-2 w-full border rounded-md"
+          accept=".ttf, .otf, .woff, .woff2"
+        />
+      </div>
+  
+      <!-- Botones de Acción -->
+      <div class="flex justify-end gap-4 mt-4">
+        <button
+          type="button"
+          (click)="closeEditModal()"
+          class="w-24 bg-gray-300 text-gray-800 rounded-lg py-2 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="w-24 bg-blue-500 text-white rounded-lg py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

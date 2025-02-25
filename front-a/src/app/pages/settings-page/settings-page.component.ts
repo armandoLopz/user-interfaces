@@ -3,15 +3,33 @@ import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { GenericService } from '../../services/generic/generic.service';
 import { AlertModalComponent } from '../../components/modals/alert-modal/alert-modal.component';
 import { CommonModule } from '@angular/common';
+import { EditModalComponent } from '../../components/modals/edit-modal/edit-modal.component';
 
 @Component({
   selector: 'app-settings-page',
-  imports: [SideBarComponent, AlertModalComponent, CommonModule],
+  imports: [SideBarComponent, AlertModalComponent, CommonModule, EditModalComponent],
   templateUrl: './settings-page.component.html',
   styleUrl: './settings-page.component.css',
 })
 export class SettingsPageComponent implements OnInit {
   constructor(private renderer: Renderer2, private genericService: GenericService<any>) { }
+
+  // Configuraciónes para editar
+  showEditModal: boolean = false;
+  configToEdit: any = {};
+  
+  updateConfig(editedConfig: any) {
+    console.log('Configuración editada:', editedConfig);
+    // Aquí deberías llamar a tu servicio para actualizar la configuración en la base de datos
+    // Ejemplo: this.genericService.update('/configurations/', editedConfig.id, editedConfig).subscribe(...)
+    
+    // Cierra el modal
+    this.showEditModal = false;
+  }
+
+  cancelEdit() {
+    this.showEditModal = false;
+  }
 
   //Delete variables
   showAlertModal = false;
@@ -95,7 +113,8 @@ export class SettingsPageComponent implements OnInit {
   // Función para editar una configuración
   editConfig(config: any) {
     console.log('Editar configuración:', config);
-    // Implementa la lógica de edición aquí
+    this.configToEdit = config
+    this.showEditModal = true; 
   }
 
   deleteConfig(config: any) {

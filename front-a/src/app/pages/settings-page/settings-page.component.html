@@ -3,6 +3,13 @@
 
   <app-alert-modal [isVisible]="showAlertModal" (confirmAction)="confirmDelete()" (cancelAction)="cancelDelete()">
   </app-alert-modal>
+  
+  <app-edit-modal 
+    [isVisible]="showEditModal" 
+    [configToEdit]="configToEdit" 
+    (saveAction)="updateConfig($event)" 
+    (cancelAction)="cancelEdit()">
+  </app-edit-modal>
 
   <div class="flex-1 p-6">
     <h2 class="text-2xl font-bold text-indigo-700 mb-4">
