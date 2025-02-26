@@ -21,9 +21,12 @@ export class SettingsPageComponent implements OnInit {
   updateConfig(editedConfig: any) {
 
     const updatedConfig = this.addPixelValues(editedConfig);
-    console.log("PRE");
-    
-    console.log(updatedConfig);
+
+    if (!this.nameConfig.trim()) {
+      alert('The configuration name is obligatory.');
+      this.getUserConfigurations()
+      return;
+    }
     
     this.genericService.update('/configurations', updatedConfig, updatedConfig.id).subscribe(
       (response) => {
@@ -90,6 +93,7 @@ export class SettingsPageComponent implements OnInit {
     if (storedConfig) {
         this.defaultConfig = storedConfig; // Carga la selección desde localStorage
         this.selectDefault(this.defaultConfig)
+        
     } else {
         this.defaultConfig = 'main'; // Valor por defecto si no hay nada guardado
     }
@@ -335,6 +339,21 @@ export class SettingsPageComponent implements OnInit {
 
   onFontChange(event: Event, fontType: string) {
     const input = event.target as HTMLInputElement;
+    const inputElement = event.target as HTMLInputElement;
+    
+    if (!inputElement || !inputElement.files || inputElement.files.length === 0) {
+      return; // Si no hay archivo seleccionado, no hace nada
+    }
+  
+    const file = inputElement.files[0];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+  
+    if (fileExtension !== 'ttf') {
+      alert('Only .ttf files are allowed.');
+      inputElement.value = ''; // Resetea el input para evitar archivos inválidos
+      return;
+    }
+
     if (input && input.files && input.files.length > 0) {
       const file = input.files[0];
       const reader = new FileReader();

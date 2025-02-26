@@ -1,19 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
 
-@font-face {
-    font-family: 'Monomakh-Regular';
-    src: url('assets/fonts/Monomakh-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
 
-@font-face {
-    font-family: 'NotoSerifTodhri-Regular';
-    src: url('assets/fonts/NotoSerifTodhri-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
 
 /* Estilos base para la clase custom-theme */
 body.custom-theme {
@@ -58,20 +46,19 @@ body.custom-theme button {
 body.custom-theme button:hover {
     background-color: var(--extra-color-2);
 }
-
-body.custom-theme .fontCont {
+body.custom-theme .fontCont{
 
     background-color: var(--extra-color-1);
 }
 
 /* Titulares */
 body.custom-theme h1,
-body.custom-theme h2 {
+body.custom-theme h2{
     color: var(--primary-color);
     font-family: var(--primary-font);
     font-size: var(--title-size);
 }
-
+ 
 body.custom-theme h3,
 body.custom-theme span,
 body.custom-theme label {
@@ -87,29 +74,22 @@ body.custom-theme p {
 
 /* Estilos solo aplicados cuando se activa la clase secondary-theme */
 body.secondary-theme {
-    --primary-color: #D97706;
-    /* Naranja oscuro */
-    --secondary-color: #10B981;
-    /* Verde esmeralda */
-    --accent-color: #EC4899;
-    /* Rosa vibrante */
-    --extra-color-1: #1E293B;
-    /* Azul oscuro (Fondo de la app) */
-    --extra-color-2: #9333EA;
-    /* Morado intenso */
+    --primary-color: #D97706; /* Naranja oscuro */
+    --secondary-color: #10B981; /* Verde esmeralda */
+    --accent-color: #EC4899; /* Rosa vibrante */
+    --extra-color-1: #1E293B; /* Azul oscuro (Fondo de la app) */
+    --extra-color-2: #9333EA; /* Morado intenso */
     --primary-font: 'Poppins', sans-serif;
     --secondary-font: 'Roboto Mono', monospace;
 
-    background-color: var(--extra-color-1) !important;
-    /* Fondo de la app */
+    background-color: var(--extra-color-1) !important; /* Fondo de la app */
     color: var(--secondary-color);
     font-family: var(--primary-font);
 }
 
 /* Sidebar */
 body.secondary-theme .sidebar {
-    background-color: var(--primary-color) !important;
-    /* Fondo de la sidebar */
+    background-color: var(--primary-color) !important; /* Fondo de la sidebar */
     color: white;
     min-height: 100vh;
     display: flex;
@@ -117,8 +97,8 @@ body.secondary-theme .sidebar {
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.sidebar {
-
+.sidebar{
+    
     @apply bg-indigo-600 p-4;
 }
 
@@ -147,6 +127,8 @@ body.secondary-theme .sidebar a:hover {
 
 /* Botón y elementos interactivos */
 body.secondary-theme button {
+    background-color: var(--accent-color);
+    color: white;
     font-size: var(--font-size-paragraph);
     border: none;
     cursor: pointer;
@@ -158,8 +140,8 @@ body.secondary-theme button:hover {
 }
 
 /* Titulares */
-body.secondary-theme h1,
-body.secondary-theme h2,
+body.secondary-theme h1, 
+body.secondary-theme h2, 
 body.secondary-theme h3 {
     color: var(--primary-color);
     font-family: var(--primary-font);
