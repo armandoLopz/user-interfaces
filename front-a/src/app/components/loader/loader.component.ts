@@ -200,7 +200,7 @@ export class LoaderComponent {
     };
 
     // Mantenemos C y D igual, pues esos vértices se definen con base en A
-    const C = { x: offsetRight + 4, y: headBottomY + 2.88 * eighth };
+    const C = { x: offsetRight + 3.25, y: headBottomY + 2.88 * eighth };
     const D = {
       x: offsetRight + 59,
       y: headBottomY + 2.75 * eighth + (19 + eighth)
@@ -212,15 +212,15 @@ export class LoaderComponent {
 
     // --- Cálculo de los vértices para el nuevo triángulo ---
 
-    // Vértice 1: es el vértice 2 del triángulo original.
+    // Vértice 1: es el vértice 2 del triángulo original. CURPO MEDIO
     const T1 = {
-      x: offsetRight - eighth - 20,
-      y: headBottomY + 5 + (19 + eighth)
+      x: offsetRight - eighth - 19.2,
+      y: headBottomY + 4.5 + (19 + eighth)
     };
 
     // Vértice 2: es el vértice D del romboide.
     const T2 = {
-      x: offsetRight + 55,
+      x: offsetRight + 57,
       y: headBottomY + 2.8 * eighth + (19 + eighth)
     };
 
@@ -235,47 +235,76 @@ export class LoaderComponent {
 
     // --- Cálculo de los vértices para el nuevo triángulo Simulando los pies ---
 
-    // --- Cálculo de los vértices para el nuevo triángulo Simulando los pies ---
+    // Vértice 1 (nV1): parte de la posición del vértice 2 del triángulo original, bajado un poco.
+    const nV1 = {
+      x: offsetRight - eighth + 95,
+      y: -headBottomY + (- 55 + eighth)  // Se baja 5 unidades adicionales
+    };
 
-// Vértice 1 (nV1): parte de la posición del vértice 2 del triángulo original, bajado un poco.
-const nV1 = {
-  x: offsetRight - eighth + 95,
-  y: -headBottomY + (- 55 + eighth)  // Se baja 5 unidades adicionales
-};
+    // Vértice 2 (nV2): se toma como el vértice D del romboide.
+    const nV2 = {
+      x: offsetRight + 58,
+      y: headBottomY + 2.88 * eighth + (19 + eighth)
+    };
 
-// Vértice 2 (nV2): se toma como el vértice D del romboide.
-const nV2 = {
-  x: offsetRight + 58,
-  y: headBottomY + 2.88 * eighth + (19 + eighth)
-};
+    // Vértice 3 (nV3) ajustado para que la punta sea menos larga.
+    const nV3 = {
+      x: nV1.x - 160,  // Reducimos la distancia horizontal para hacer la punta más corta.
+      y: nV2.y + 130   // Reducimos la caída vertical.
+    };
 
-// Vértice 3 (nV3) ajustado para que la punta sea menos larga.
-const nV3 = {
-  x: nV1.x - 160,  // Reducimos la distancia horizontal para hacer la punta más corta.
-  y: nV2.y + 130   // Reducimos la caída vertical.
-};
+    // --- Dibujo del nuevo triángulo ---
+    this.drawTriangle(nV1.x, nV1.y, nV2.x, nV2.y, nV3.x, nV3.y, this.colors.yellow);
 
-// --- Dibujo del nuevo triángulo ---
-this.drawTriangle(nV1.x, nV1.y, nV2.x, nV2.y, nV3.x, nV3.y, this.colors.yellow);
+    // Simulacion de brazo con triangulo : 
 
-    //this.drawRotatedSquare(-quarter / 2, -half - quarter, quarter, 45, this.colors.blue);
+    // --- Cálculo de los vértices para el nuevo triángulo hacia la izquierda con la punta libre ---
 
-    // Pieza 2: Torso (paralelogramo)
-    //this.drawParallelogram(-quarter, -half + eighth, quarter, quarter, this.colors.orange);
+    // Vértice 1 (nT1): Se mantiene en la posición de T1 del cuerpo medio.
+    const nT1 = {
+      x: offsetRight - eighth - 22.8,
+      y: headBottomY + 5 + (19 + eighth)
+    };
 
-    // Pieza 3: Brazo izquierdo (triángulo pequeño)
+    // Vértice 2 (nT2) - Punta libre del triángulo: Se mueve más a la izquierda y ligeramente arriba.
+    const nT2 = {
+      x: nT1.x,  // 90 unidades a la izquierda.
+      y: nT1.y + 100   // Se sube para formar la punta.
+    };
 
-    // Pieza 4: Brazo derecho (triángulo pequeño)
-    //this.drawTriangle(0, -half + eighth, eighth, -half + quarter, 0, -half + quarter + eighth, this.colors.purple);
+    // Vértice 3 (nT3): Base del triángulo, alineado en la misma altura que nT1, pero más a la izquierda.
+    const nT3 = {
+      x: nT1.x - 110, // Más a la izquierda.
+      y: nT1.y        // Misma altura que nT1.
+    };
 
-    // Pieza 5: Pierna izquierda (triángulo grande)
-    //this.drawTriangle(-quarter, -half + quarter, -half, half, 0, half, this.colors.yellow);
+    // --- Dibujo del nuevo triángulo ---
+    this.drawTriangle(nT1.x, nT1.y, nT2.x, nT2.y, nT3.x, nT3.y, this.colors.blue);
 
-    // Pieza 6: Pierna derecha (triángulo mediano)
-    //this.drawTriangle(0, -half + quarter, half, half, 0, half, this.colors.blue);
 
-    // Pieza 7: Pie (cuadrado pequeño)
-    //this.drawSquare(-eighth, half, eighth, this.colors.purple);
+    // Terminacion de las manos 
+    // --- Cálculo de los vértices para el nuevo triángulo invertido --- 
+
+    // Vértice 1 (mT1): Comienza en la posición del vértice nT2 del triángulo anterior.
+    const mT1 = {
+      x: nT2.x,
+      y: nT2.y + 4.5
+    };
+
+    // Vértice 2 (mT2) - Punta hacia abajo: Se mueve directamente hacia abajo en Y.
+    const mT2 = {
+      x: mT1.x - 84,  // Se mueve un poco a la izquierda para ajustar la inclinación.
+      y: mT1.y - 75  // Se baja 100 unidades.
+    };
+
+    // Vértice 3 (mT3): Se posiciona en diagonal para cerrar el triángulo.
+    const mT3 = {
+      x: mT1.x - 80, // Más a la izquierda.
+      y: mT1.y   // Más abajo pero menos que mT2 para crear la inclinación diagonal.
+    };
+
+    // --- Dibujo del nuevo triángulo ---
+    this.drawTriangle(mT1.x, mT1.y, mT2.x, mT2.y, mT3.x, mT3.y, this.colors.yellow);
   }
 
   /*------------------------------------------------------------------
