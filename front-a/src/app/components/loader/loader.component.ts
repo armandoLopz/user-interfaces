@@ -54,106 +54,20 @@ export class LoaderComponent {
     // Seleccionamos qué figura dibujar según el estado (transición)
     switch (this.currentState) {
       case 0:
-        this.drawFigure73(size);
+        this.drawFigure200(size);
         break;
       case 1:
-        this.drawFigure156(size);
+        this.drawFigure73(size);
         break;
       case 2:
-        this.drawFigure200(size);
+        this.drawFigure156(size);
         break;
     }
     this.ctx.restore();
   }
 
-  figura1(size: number): void {
-    const half = size / 2;
-    const quarter = size / 4;
-    const eighth = size / 8;
-
-    // 1. Cabeza (cuadrado pequeño rotado 45°)
-    //    Se ubica por encima del torso.
-    this.drawRotatedSquare(
-      -quarter / 2,          // X (aprox. centro a la izquierda)
-      -half - quarter,       // Y (un poco más arriba del “-half”)
-      quarter,               // Tamaño del cuadrado
-      45,                    // Ángulo de rotación
-      this.colors.blue
-    );
-
-    // 2. Torso (paralelogramo)
-    //    Debajo de la cabeza, hacia la mitad superior del canvas.
-    this.drawParallelogram(
-      -quarter,              // X inicial
-      -half + eighth,        // Y inicial
-      quarter,               // Ancho del paralelogramo
-      quarter,               // Alto del paralelogramo
-      this.colors.orange
-    );
-
-    // 3. Brazo izquierdo (triángulo pequeño)
-    this.drawTriangle(
-      -quarter,              // Punto 1 (x)
-      -half + eighth,        // Punto 1 (y)
-      -quarter - eighth,     // Punto 2 (x)
-      -half + quarter,       // Punto 2 (y)
-      -quarter,              // Punto 3 (x)
-      -half + quarter + eighth, // Punto 3 (y)
-      this.colors.teal
-    );
-
-    // 4. Brazo derecho (triángulo pequeño)
-    this.drawTriangle(
-      0,                     // Punto 1 (x)
-      -half + eighth,        // Punto 1 (y)
-      eighth,                // Punto 2 (x)
-      -half + quarter,       // Punto 2 (y)
-      0,                     // Punto 3 (x)
-      -half + quarter + eighth, // Punto 3 (y)
-      this.colors.purple
-    );
-
-    // 5. Pierna izquierda (triángulo grande)
-    this.drawTriangle(
-      -quarter,              // Punto 1 (x)
-      -half + quarter,       // Punto 1 (y)
-      -half,                 // Punto 2 (x)
-      half,                  // Punto 2 (y)
-      0,                     // Punto 3 (x)
-      half,                  // Punto 3 (y)
-      this.colors.yellow
-    );
-
-    // 6. Pierna derecha (triángulo mediano)
-    this.drawTriangle(
-      0,                     // Punto 1 (x)
-      -half + quarter,       // Punto 1 (y)
-      half,                  // Punto 2 (x)
-      half,                  // Punto 2 (y)
-      0,                     // Punto 3 (x)
-      half,                  // Punto 3 (y)
-      this.colors.blue
-    );
-
-    // 7. Pie (cuadrado pequeño)
-    this.drawSquare(
-      -eighth,               // X
-      half,                  // Y
-      eighth,                // Tamaño
-      this.colors.purple
-    );
-  }
-
   /*------------------------------------------------------------------
     Figura 73 – Ejemplo de silueta humana rezando
-    Se usan los 7 elementos:
-      1. Cabeza: cuadrado rotado (representado como un diamante)
-      2. Torso: paralelogramo
-      3. Brazo izquierdo: triángulo pequeño
-      4. Brazo derecho: triángulo pequeño
-      5. Pierna izquierda: triángulo grande
-      6. Pierna derecha: triángulo mediano
-      7. Pie: cuadrado pequeño
   ------------------------------------------------------------------*/
   drawFigure73(size: number): void {
 
@@ -309,14 +223,6 @@ export class LoaderComponent {
 
   /*------------------------------------------------------------------
     Figura 156 – Ejemplo de figura tipo pájaro
-    Se usan los 7 elementos:
-      1. Cabeza: triángulo pequeño
-      2. Cuerpo: cuadrado
-      3. Ala izquierda: triángulo grande
-      4. Ala derecha: triángulo grande
-      5. Cola: triángulo mediano
-      6. Pie izquierdo: triángulo pequeño
-      7. Pie derecho: paralelogramo
   ------------------------------------------------------------------*/
   drawFigure156(size: number): void {
     const half = size / 2;
@@ -361,26 +267,29 @@ export class LoaderComponent {
     const quarter = size / 4;
     const eighth = size / 8;
 
-    // Pieza 1: Triángulo grande superior izquierdo
-    this.drawTriangle(-half, -half, 0, -half, -half, 0, this.colors.blue);
-
-    // Pieza 2: Triángulo grande superior derecho
-    this.drawTriangle(0, -half, half, -half, 0, 0, this.colors.teal);
-
-    // Pieza 3: Triángulo mediano inferior izquierdo
-    this.drawTriangle(-half, 0, -quarter, 0, -half, quarter, this.colors.purple);
-
-    // Pieza 4: Triángulo mediano inferior derecho
-    this.drawTriangle(0, 0, quarter, 0, 0, quarter, this.colors.orange);
-
-    // Pieza 5: Cuadrado central
-    this.drawSquare(-quarter, 0, quarter, this.colors.yellow);
-
-    // Pieza 6: Triángulo pequeño superior central
-    this.drawTriangle(-quarter / 2, -half, quarter / 2, -half, 0, -half + quarter, this.colors.blue);
+    const rotationAngle = 45; // Ángulo de rotación en grados (puedes ajustar este valor)
 
     // Pieza 7: Paralelogramo inferior central
-    this.drawParallelogram(quarter, 0, quarter, quarter, this.colors.teal);
+    this.drawParallelogramInclined(-140, -140, 65, 50, 140, this.colors.blue);
+
+    // Pieza 1: Triángulo grande superior izquierdo
+    //this.drawTriangle(-half, -half, 0, -half, -half, 0, this.colors.blue);
+
+    // Pieza 2: Triángulo grande superior derecho
+    //this.drawTriangle(0, -half, half, -half, 0, 0, this.colors.teal);
+
+    // Pieza 3: Triángulo mediano inferior izquierdo
+    //this.drawTriangle(-half, 0, -quarter, 0, -half, quarter, this.colors.purple);
+
+    // Pieza 4: Triángulo mediano inferior derecho
+    //this.drawTriangle(0, 0, quarter, 0, 0, quarter, this.colors.orange);
+
+    // Pieza 5: Cuadrado central
+    //this.drawSquare(-quarter, 0, quarter, this.colors.yellow);
+
+    // Pieza 6: Triángulo pequeño superior central
+    //this.drawTriangle(-quarter / 2, -half, quarter / 2, -half, 0, -half + quarter, this.colors.blue);
+
   }
 
   // Métodos de dibujo básicos
@@ -405,6 +314,57 @@ export class LoaderComponent {
     this.ctx.lineWidth = 1;
     this.ctx.stroke();
   }
+
+  drawRotatedParallelogram(x: number, y: number, width: number, height: number, color: string, angle: number): void {
+    this.ctx.save(); // Guardar el contexto
+    this.ctx.translate(x + width / 2, y + height / 2); // Mover al centro del paralelogramo
+    this.ctx.rotate(angle * Math.PI / 180); // Rotar el contexto en grados
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(-width / 2, -height / 2); // Mover el vértice inicial
+    this.ctx.lineTo(width / 2, -height / 2);
+    this.ctx.lineTo(width / 2 - height, height / 2);
+    this.ctx.lineTo(-width / 2 - height, height / 2);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+
+    this.ctx.restore(); // Restaurar el contexto
+  }
+
+  drawParallelogramInclined(x: number, y: number, width: number, height: number, angle: number, color: string): void {
+    const radian = angle * Math.PI / 180;
+    // Calculamos el offset vertical para las esquinas superiores e inferiores
+    // usando el ancho y la tangente del ángulo (la pendiente será tan(angle))
+    const offset = width * Math.tan(radian);
+
+    // Definimos los vértices:
+    // - Lado izquierdo vertical: x constante
+    // - Lado derecho vertical: x constante en x + width
+    // - Arista superior: de (x, y) a (x + width, y + offset)
+    // - Arista inferior: de (x, y + height) a (x + width, y + height + offset)
+    const x1 = x, y1 = y;                              // Esquina superior izquierda
+    const x2 = x + width, y2 = y + offset;             // Esquina superior derecha (diagonal)
+    const x3 = x + width, y3 = y + height + offset;      // Esquina inferior derecha (diagonal)
+    const x4 = x, y4 = y + height;                     // Esquina inferior izquierda
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.lineTo(x3, y3);
+    this.ctx.lineTo(x4, y4);
+    this.ctx.closePath();
+
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+  }
+
 
   drawTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, color: string): void {
     this.ctx.beginPath();
