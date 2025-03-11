@@ -28,7 +28,7 @@ export class LoaderComponent {
     this.ctx = canvas.getContext("2d")!;
     // Se define el tamaño del canvas
     canvas.width = 400;
-    canvas.height = 400;
+    canvas.height = 800;
     this.animate();
   }
 
@@ -66,6 +66,84 @@ export class LoaderComponent {
     this.ctx.restore();
   }
 
+  figura1(size: number): void {
+    const half = size / 2;
+    const quarter = size / 4;
+    const eighth = size / 8;
+
+    // 1. Cabeza (cuadrado pequeño rotado 45°)
+    //    Se ubica por encima del torso.
+    this.drawRotatedSquare(
+      -quarter / 2,          // X (aprox. centro a la izquierda)
+      -half - quarter,       // Y (un poco más arriba del “-half”)
+      quarter,               // Tamaño del cuadrado
+      45,                    // Ángulo de rotación
+      this.colors.blue
+    );
+
+    // 2. Torso (paralelogramo)
+    //    Debajo de la cabeza, hacia la mitad superior del canvas.
+    this.drawParallelogram(
+      -quarter,              // X inicial
+      -half + eighth,        // Y inicial
+      quarter,               // Ancho del paralelogramo
+      quarter,               // Alto del paralelogramo
+      this.colors.orange
+    );
+
+    // 3. Brazo izquierdo (triángulo pequeño)
+    this.drawTriangle(
+      -quarter,              // Punto 1 (x)
+      -half + eighth,        // Punto 1 (y)
+      -quarter - eighth,     // Punto 2 (x)
+      -half + quarter,       // Punto 2 (y)
+      -quarter,              // Punto 3 (x)
+      -half + quarter + eighth, // Punto 3 (y)
+      this.colors.teal
+    );
+
+    // 4. Brazo derecho (triángulo pequeño)
+    this.drawTriangle(
+      0,                     // Punto 1 (x)
+      -half + eighth,        // Punto 1 (y)
+      eighth,                // Punto 2 (x)
+      -half + quarter,       // Punto 2 (y)
+      0,                     // Punto 3 (x)
+      -half + quarter + eighth, // Punto 3 (y)
+      this.colors.purple
+    );
+
+    // 5. Pierna izquierda (triángulo grande)
+    this.drawTriangle(
+      -quarter,              // Punto 1 (x)
+      -half + quarter,       // Punto 1 (y)
+      -half,                 // Punto 2 (x)
+      half,                  // Punto 2 (y)
+      0,                     // Punto 3 (x)
+      half,                  // Punto 3 (y)
+      this.colors.yellow
+    );
+
+    // 6. Pierna derecha (triángulo mediano)
+    this.drawTriangle(
+      0,                     // Punto 1 (x)
+      -half + quarter,       // Punto 1 (y)
+      half,                  // Punto 2 (x)
+      half,                  // Punto 2 (y)
+      0,                     // Punto 3 (x)
+      half,                  // Punto 3 (y)
+      this.colors.blue
+    );
+
+    // 7. Pie (cuadrado pequeño)
+    this.drawSquare(
+      -eighth,               // X
+      half,                  // Y
+      eighth,                // Tamaño
+      this.colors.purple
+    );
+  }
+
   /*------------------------------------------------------------------
     Figura 73 – Ejemplo de silueta humana rezando
     Se usan los 7 elementos:
@@ -78,6 +156,7 @@ export class LoaderComponent {
       7. Pie: cuadrado pequeño
   ------------------------------------------------------------------*/
   drawFigure73(size: number): void {
+
     const half = size / 2;
     const quarter = size / 4;
     const eighth = size / 8;
@@ -88,42 +167,103 @@ export class LoaderComponent {
     const offsetY = -quarter; // Ajuste para mover la figura hacia arriba
 
     // Triángulo superior (▲)
-    this.drawTriangle(
-      (-eighth + 38) * scale, (-quarter + offsetY) * scale,  // Punta superior
-      (-quarter) * scale, (0 + offsetY) * scale,             // Esquina inferior izquierda
-      (quarter) * scale, (0 + offsetY) * scale,              // Esquina inferior derecha
-      this.colors.teal
-    );
-
-    // Triángulo inferior (▼)
-    this.drawTriangle(
-      (-eighth + 38) * scale, (quarter + offsetY) * scale,   // Punta inferior
-      (-quarter) * scale, (0 + offsetY) * scale,             // Esquina superior izquierda
-      (quarter) * scale, (0 + offsetY) * scale,              // Esquina superior derecha
+    this.drawRotatedSquare(
+      -quarter / 2,          // X (aprox. centro a la izquierda)
+      -half - quarter,       // Y (un poco más arriba del “-half”)
+      quarter,               // Tamaño del cuadrado
+      45,                    // Ángulo de rotación
       this.colors.blue
     );
 
-
-    // Triángulo más ancho y bajo (cuello y hombros)
-    const neckWidth = size-60;  // Aumentamos la base aún más
-    const neckHeight = size / 4; // Aumentamos la altura para hacerlo más grande
-
-    // Ajustamos la posición para que el triángulo de "cuello y hombros" empiece después del triángulo inferior
-    const newOffsetY = quarter + offsetY + size / 4;  // Aquí sumamos un poco más de espacio
+    // 2. Triángulo detrás de la cabeza, en el mismo eje X
+    //    - Llevamos el vértice superior a x=0 y lo subimos un poco por encima de la cabeza.
+    const headBottomY = -half;
+    const offsetRight = quarter - 55;
 
     this.drawTriangle(
-      (-neckWidth / 2) * scale + 64, (newOffsetY - neckHeight) * scale,  // Punta superior (hacia arriba)
-      (-neckWidth / 2) * scale, newOffsetY * scale,                    // Esquina izquierda
-      (neckWidth / 2) * scale, newOffsetY * scale,                     // Esquina derecha
-      this.colors.orange  // Puedes usar otro color si lo prefieres
-    );
+      // Vértice 1 (apex): se coloca en headBottomY y desplazado a la derecha
+      offsetRight, headBottomY,
+      // Vértice 2: ajustamos para formar el triángulo
+      offsetRight - eighth - 20, headBottomY + 19 + eighth,
+      // Vértice 3: sigue en el mismo eje X que el vértice 1
+      offsetRight, headBottomY + 2.8 * eighth,
+      this.colors.teal
+    )
+
+    // --- Cálculo de los vértices para el romboidee volteado ---
+    const A = { x: offsetRight + 4, y: headBottomY };
+
+    // Ahora, en lugar de restar para mover a la izquierda, sumamos para mover hacia la derecha.
+    const B = {
+      x: offsetRight + (eighth + 20),
+      y: headBottomY + (19 + eighth)
+    };
+
+    // Mantenemos C y D igual, pues esos vértices se definen con base en A
+    const C = { x: offsetRight + 4, y: headBottomY + 2.88 * eighth };
+    const D = {
+      x: offsetRight + 59,
+      y: headBottomY + 2.75 * eighth + (19 + eighth)
+    };
+
+    // --- Dibujo del romboidee volteado ---
+    // El orden de conexión es: A → B → D → C → A
+    this.drawRomboidee(A.x, A.y, B.x, B.y, D.x, D.y, C.x, C.y, this.colors.purple);
+
+    // --- Cálculo de los vértices para el nuevo triángulo ---
+
+    // Vértice 1: es el vértice 2 del triángulo original.
+    const T1 = {
+      x: offsetRight - eighth - 20,
+      y: headBottomY + 5 + (19 + eighth)
+    };
+
+    // Vértice 2: es el vértice D del romboide.
+    const T2 = {
+      x: offsetRight + 55,
+      y: headBottomY + 2.8 * eighth + (19 + eighth)
+    };
+
+    // Vértice 3: tiene el mismo x que T1 y el mismo y que T2.
+    const T3 = {
+      x: T1.x,
+      y: T2.y + 90
+    };
+
+    // --- Dibujo del nuevo triángulo ---
+    this.drawTriangle(T1.x, T1.y, T2.x, T2.y, T3.x, T3.y, this.colors.orange);
+
+    // --- Cálculo de los vértices para el nuevo triángulo Simulando los pies ---
+
+    // --- Cálculo de los vértices para el nuevo triángulo Simulando los pies ---
+
+// Vértice 1 (nV1): parte de la posición del vértice 2 del triángulo original, bajado un poco.
+const nV1 = {
+  x: offsetRight - eighth + 95,
+  y: -headBottomY + (- 55 + eighth)  // Se baja 5 unidades adicionales
+};
+
+// Vértice 2 (nV2): se toma como el vértice D del romboide.
+const nV2 = {
+  x: offsetRight + 58,
+  y: headBottomY + 2.88 * eighth + (19 + eighth)
+};
+
+// Vértice 3 (nV3) ajustado para que la punta sea menos larga.
+const nV3 = {
+  x: nV1.x - 160,  // Reducimos la distancia horizontal para hacer la punta más corta.
+  y: nV2.y + 130   // Reducimos la caída vertical.
+};
+
+// --- Dibujo del nuevo triángulo ---
+this.drawTriangle(nV1.x, nV1.y, nV2.x, nV2.y, nV3.x, nV3.y, this.colors.yellow);
+
     //this.drawRotatedSquare(-quarter / 2, -half - quarter, quarter, 45, this.colors.blue);
 
     // Pieza 2: Torso (paralelogramo)
     //this.drawParallelogram(-quarter, -half + eighth, quarter, quarter, this.colors.orange);
 
     // Pieza 3: Brazo izquierdo (triángulo pequeño)
-    //this.drawTriangle(-quarter, -half + eighth, -quarter - eighth, -half + quarter, -quarter, -half + quarter + eighth, this.colors.teal);
 
     // Pieza 4: Brazo derecho (triángulo pequeño)
     //this.drawTriangle(0, -half + eighth, eighth, -half + quarter, 0, -half + quarter + eighth, this.colors.purple);
@@ -215,6 +355,27 @@ export class LoaderComponent {
   }
 
   // Métodos de dibujo básicos
+
+  // Función para dibujar un cuadrilátero (romboidee)
+  drawRomboidee(
+    x1: number, y1: number,
+    x2: number, y2: number,
+    x3: number, y3: number,
+    x4: number, y4: number,
+    color: string
+  ): void {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.lineTo(x3, y3);
+    this.ctx.lineTo(x4, y4);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+  }
 
   drawTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, color: string): void {
     this.ctx.beginPath();
