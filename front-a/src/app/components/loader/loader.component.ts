@@ -267,10 +267,75 @@ export class LoaderComponent {
     const quarter = size / 4;
     const eighth = size / 8;
 
-    const rotationAngle = 45; // Ángulo de rotación en grados (puedes ajustar este valor)
+    // Dimensiones del paralelogramo
+    const parallelogramWidth = 65;
+    const parallelogramHeight = 50;
+    const parallelogramX = -140;
+    const parallelogramY = -140;
 
-    // Pieza 7: Paralelogramo inferior central
-    this.drawParallelogramInclined(-140, -140, 65, 50, 140, this.colors.blue);
+    // Dibujar el paralelogramo
+    this.drawParallelogramInclined(parallelogramX, parallelogramY, parallelogramWidth, parallelogramHeight, 140, this.colors.blue);
+
+    //Triangulo abajo del paralelogramos
+    const triangleX = parallelogramX + parallelogramWidth / 2; // Centrado respecto al paralelogramo
+    const triangleY = parallelogramY + parallelogramHeight; // Debajo del paralelogramo
+    const triangleBase = parallelogramWidth; // Base igual al ancho del paralelogramo
+    const triangleHeight = parallelogramHeight; // Altura igual a la del paralelogramo
+
+    this.drawRotatedRightTriangle(triangleX + 33, triangleY + 4, triangleBase, triangleHeight + 4, 180, this.colors.orange);
+
+    // ---- Nuevo triángulo conectando la punta superior del paralelogramo con la base del triángulo ----
+    const topPointX = parallelogramX + parallelogramWidth; // Punta más alta del paralelogramo
+    const topPointY = parallelogramY; // Parte más alta del paralelogramo
+
+    const bottomPointX = triangleX + triangleBase; // Extremo derecho del triángulo inferior
+    const bottomPointY = triangleY + triangleHeight; // Punto más bajo del triángulo inferior
+
+    this.drawRotatedRightTriangle(topPointX + 3.5, topPointY + 54, bottomPointX - topPointX + 76, bottomPointY - topPointY + 30, 270, this.colors.teal);
+
+    // ---- Nuevo triángulo conectando la parte más baja del triángulo pequeño ----
+    const baseSmallTriangleX = triangleX; // X de la base del triángulo más pequeño
+    const baseSmallTriangleY = triangleY + triangleHeight; // Punto más bajo del triángulo pequeño
+
+    const newTriangleEndX = baseSmallTriangleX + 100; // Ajuste para la base
+    const newTriangleEndY = baseSmallTriangleY + 50; // Ajuste para la altura
+
+    this.drawRotatedRightTriangle(
+      baseSmallTriangleX + 97,
+      baseSmallTriangleY - 42.5,
+      newTriangleEndX - baseSmallTriangleX + 20,
+      newTriangleEndY - baseSmallTriangleY + 80,
+      90,
+      this.colors.purple
+    );
+
+    let baseTriangleX = parallelogramX + parallelogramWidth / 2; // Centrado respecto al paralelogramo
+    let baseTriangleY = parallelogramY + parallelogramHeight; // Debajo del paralelogramo
+    let baseTriangleWidth = parallelogramWidth; // Base igual al ancho del paralelogramo
+    let baseTriangleHeight = parallelogramHeight; // Altura igual a la del paralelogramo
+
+    this.drawRotatedRightTriangle(
+      baseTriangleX + 100,
+      baseTriangleY + 8,
+      baseTriangleWidth,
+      baseTriangleHeight + 4,
+      0,
+      this.colors.orange
+    );
+
+    baseTriangleX = parallelogramX + parallelogramWidth / 2; // Centrado respecto al paralelogramo
+    baseTriangleY = parallelogramY + parallelogramHeight; // Debajo del paralelogramo
+    baseTriangleWidth = parallelogramWidth; // Base igual al ancho del paralelogramo
+    baseTriangleHeight = parallelogramHeight; // Altura igual a la del paralelogramo
+
+    this.drawRotatedRightTriangle(
+      baseTriangleX + 170,
+      baseTriangleY + 8.5,
+      baseTriangleWidth + 15,
+      baseTriangleHeight + 41,
+      50,
+      this.colors.yellow
+    );
 
     // Pieza 1: Triángulo grande superior izquierdo
     //this.drawTriangle(-half, -half, 0, -half, -half, 0, this.colors.blue);
@@ -333,6 +398,26 @@ export class LoaderComponent {
     this.ctx.stroke();
 
     this.ctx.restore(); // Restaurar el contexto
+  }
+
+  drawRotatedRightTriangle(x: number, y: number, width: number, height: number, angle: number, color: string): void {
+    this.ctx.save();
+    // Se traslada al vértice donde estará el ángulo recto
+    this.ctx.translate(x, y);
+    // Se rota el contexto en el ángulo indicado (convertido a radianes)
+    this.ctx.rotate(angle * Math.PI / 180);
+    // Se dibuja el triángulo con vértices en (0,0), (width,0) y (0,height)
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, 0);
+    this.ctx.lineTo(width, 0);
+    this.ctx.lineTo(0, height);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+    this.ctx.restore();
   }
 
   drawParallelogramInclined(x: number, y: number, width: number, height: number, angle: number, color: string): void {
