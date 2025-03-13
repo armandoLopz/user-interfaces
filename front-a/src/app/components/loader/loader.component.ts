@@ -54,13 +54,13 @@ export class LoaderComponent {
     // Seleccionamos qué figura dibujar según el estado (transición)
     switch (this.currentState) {
       case 0:
-        this.drawFigure200(size);
+        this.drawFigure156(size);
         break;
       case 1:
         this.drawFigure73(size);
         break;
       case 2:
-        this.drawFigure156(size);
+        this.drawFigure200(size);
         break;
     }
     this.ctx.restore();
@@ -224,31 +224,38 @@ export class LoaderComponent {
   /*------------------------------------------------------------------
     Figura 156 – Ejemplo de figura tipo pájaro
   ------------------------------------------------------------------*/
+  /*------------------------------------------------------------------
+  Figura 156 – Ajustada para parecerse a la imagen proporcionada
+------------------------------------------------------------------*/
   drawFigure156(size: number): void {
-    const half = size / 2;
-    const quarter = size / 4;
-    const eighth = size / 8;
+    const half = size / 2;       // Mitad
+    const quarter = size / 4;    // Cuarta parte
+    const eighth = size / 8;     // Octava parte
 
-    // Pieza 1: Cabeza (triángulo pequeño)
-    this.drawTriangle(-quarter, -half, 0, -half, -quarter / 2, -half - quarter, this.colors.teal);
+    // ---------------------------------------------------------------
+    // 4) Triángulo grande superior (base horizontal arriba, apex abajo)
+    // ---------------------------------------------------------------
+    //  - Base en (-quarter, -half) y (quarter, -half)
+    //  - Vértice inferior en (0, -quarter) para que apunte hacia abajo
+    this.drawTriangle(
+      -quarter, -half,    // Esquina superior izq
+      quarter, -half,    // Esquina superior der
+      0, -quarter, // Vértice inferior
+      this.colors.purple
+    );
 
-    // Pieza 2: Cuerpo (cuadrado)
-    this.drawSquare(-quarter, -quarter, quarter, this.colors.blue);
+    this.drawRotatedRightTriangle(-half + 158, half -237, 70, 75, 135, this.colors.blue)
 
-    // Pieza 3: Ala izquierda (triángulo grande)
-    this.drawTriangle(-half, -half, -quarter, -quarter, -half, 0, this.colors.orange);
+    this.drawRotatedRightTriangle(half - 210, half -184, 150, 150, -45, this.colors.yellow)
+    
+    this.drawRotatedRightTriangle(-half + 106.2, half -185, 70, 75, 135, this.colors.teal)
+    
+    this.drawParallelogramInclined(-half + 220, half - 190, 62, 110, -30,this.colors.teal)
+    
+    this.drawRotatedSquare(-86, -7, 68, 45 ,this.colors.yellow)
+    
+    this.drawRotatedRightTriangle(-half + 158.5, half -130, 140, 140, 45, this.colors.orange)
 
-    // Pieza 4: Ala derecha (triángulo grande)
-    this.drawTriangle(0, -half, half, -half, quarter, 0, this.colors.purple);
-
-    // Pieza 5: Cola (triángulo mediano)\n    this.drawTriangle(-quarter, 0, quarter, 0, 0, quarter, this.colors.yellow);\n",
-    this.drawTriangle(-quarter, 0, quarter, 0, 0, quarter, this.colors.yellow);
-
-    // Pieza 6: Pie izquierdo (triángulo pequeño)
-    this.drawTriangle(-quarter, quarter, -half, half, -quarter, half, this.colors.orange);
-
-    // Pieza 7: Pie derecho (paralelogramo)
-    this.drawParallelogram(0, quarter, quarter, quarter, this.colors.blue);
   }
 
   /*------------------------------------------------------------------
@@ -338,7 +345,6 @@ export class LoaderComponent {
     );
 
     // --- NUEVA PARTE: Dibujar un cuadrado debajo del último triángulo ---
-    // Para ello, calculamos (aproximadamente) el borde inferior del último triángulo y su centro horizontal.
     const lastTriangleX = baseTriangleX + 170; // Valor usado en el último triángulo
     const lastTriangleY = baseTriangleY + 8.5;
     // Calculamos el offset vertical del triángulo usando su "ancho" y el ángulo (50°)
@@ -353,25 +359,7 @@ export class LoaderComponent {
     const gap = 10; // Separación entre el triángulo y el cuadrado
     const squareX = triangleCenterX - squareSize / 2;
     const squareY = bottomEdgeY + gap;
-    this.drawSquare(squareX -13, squareY - 8, squareSize -43, this.colors.blue);
-
-    // Pieza 1: Triángulo grande superior izquierdo
-    //this.drawTriangle(-half, -half, 0, -half, -half, 0, this.colors.blue);
-
-    // Pieza 2: Triángulo grande superior derecho
-    //this.drawTriangle(0, -half, half, -half, 0, 0, this.colors.teal);
-
-    // Pieza 3: Triángulo mediano inferior izquierdo
-    //this.drawTriangle(-half, 0, -quarter, 0, -half, quarter, this.colors.purple);
-
-    // Pieza 4: Triángulo mediano inferior derecho
-    //this.drawTriangle(0, 0, quarter, 0, 0, quarter, this.colors.orange);
-
-    // Pieza 5: Cuadrado central
-    //this.drawSquare(-quarter, 0, quarter, this.colors.yellow);
-
-    // Pieza 6: Triángulo pequeño superior central
-    //this.drawTriangle(-quarter / 2, -half, quarter / 2, -half, 0, -half + quarter, this.colors.blue);
+    this.drawSquare(squareX - 13, squareY - 8, squareSize - 43, this.colors.blue);
 
   }
 
