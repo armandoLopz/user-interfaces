@@ -38,7 +38,7 @@ export class LoaderComponent {
     this.transitionProgress += this.transitionSpeed;
     if (this.transitionProgress >= 1) {
       this.transitionProgress = 0;
-      //this.currentState = (this.currentState + 1) % 3;
+      this.currentState = (this.currentState + 1) % 3;
     }
     this.drawTangramState();
   }
@@ -54,10 +54,10 @@ export class LoaderComponent {
     // Seleccionamos qué figura dibujar según el estado (transición)
     switch (this.currentState) {
       case 0:
-        this.drawFigure156(size);
+        this.drawFigure73(size);
         break;
       case 1:
-        this.drawFigure73(size);
+        this.drawFigure156(size);
         break;
       case 2:
         this.drawFigure200(size);
