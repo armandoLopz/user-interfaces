@@ -329,13 +329,31 @@ export class LoaderComponent {
     baseTriangleHeight = parallelogramHeight; // Altura igual a la del paralelogramo
 
     this.drawRotatedRightTriangle(
-      baseTriangleX + 170,
-      baseTriangleY + 8.5,
+      baseTriangleX + 169,
+      baseTriangleY + 8.8,
       baseTriangleWidth + 15,
       baseTriangleHeight + 41,
-      50,
+      49.5,
       this.colors.yellow
     );
+
+    // --- NUEVA PARTE: Dibujar un cuadrado debajo del último triángulo ---
+    // Para ello, calculamos (aproximadamente) el borde inferior del último triángulo y su centro horizontal.
+    const lastTriangleX = baseTriangleX + 170; // Valor usado en el último triángulo
+    const lastTriangleY = baseTriangleY + 8.5;
+    // Calculamos el offset vertical del triángulo usando su "ancho" y el ángulo (50°)
+    const triangleBottomOffset = (baseTriangleWidth + 15) * Math.sin(50 * Math.PI / 180); // 80 * sin(50°)
+    const bottomEdgeY = lastTriangleY + triangleBottomOffset;  // Aproximadamente -81.5 + 80*sin(50°)
+    // Para centrar el cuadrado, estimamos el centro horizontal del triángulo:
+    // En la figura rotada, el vértice (80,0) se transforma aproximadamente a (80*cos(50°), 80*sin(50°)) y
+    // el vértice (0, height) a (- (baseTriangleHeight+41)*sin(50°), (baseTriangleHeight+41)*cos(50°)).
+    // Se puede estimar el centro como:
+    const triangleCenterX = lastTriangleX - 6.13; // Valor aproximado obtenido de promediar los offsets
+    const squareSize = 100; // Tamaño del cuadrado
+    const gap = 10; // Separación entre el triángulo y el cuadrado
+    const squareX = triangleCenterX - squareSize / 2;
+    const squareY = bottomEdgeY + gap;
+    this.drawSquare(squareX -13, squareY - 8, squareSize -43, this.colors.blue);
 
     // Pieza 1: Triángulo grande superior izquierdo
     //this.drawTriangle(-half, -half, 0, -half, -half, 0, this.colors.blue);
