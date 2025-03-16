@@ -20,7 +20,7 @@ canvas {
 
 .loading-text {
   font-family: Arial, sans-serif;
-  font-size: 18px;
+  font-size: 24px;
   color: #4999c8;
   letter-spacing: 2px;
   animation: pulse 1.5s infinite;
@@ -45,3 +45,22 @@ canvas {
   }
 }
 
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.figure-label {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}

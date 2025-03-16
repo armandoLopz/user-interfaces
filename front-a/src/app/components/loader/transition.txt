@@ -1,0 +1,567 @@
+import { Component, ElementRef, ViewChild } from '@angular/core';
+
+@Component({
+  selector: 'app-loader',
+  templateUrl: './loader.component.html',
+  styleUrls: ['./loader.component.css']
+})
+export class LoaderComponent {
+
+  @ViewChild("tangramCanvas") canvasRef!: ElementRef<HTMLCanvasElement>;
+  private ctx!: CanvasRenderingContext2D;
+  private animationFrame!: number;
+  private currentState = 0;
+  // La transición se divide en 3 fases:
+  // 0–0.4: figura armada (hold)
+  // 0.4–0.7: desarme (disassemble)
+  // 0.7–1.0: armado de la siguiente figura (assemble)
+  private phaseHold = 0.4;
+  private phaseDisassemble = 0.3;
+  private phaseAssemble = 0.3;
+  private transitionProgress = 0;
+  private transitionSpeed = 0.01;
+  private colors = {
+    blue: "#4999C8",
+    teal: "#49C8B1",
+    purple: "#8A49C8",
+    orange: "#C87949",
+    yellow: "#C8BE49"
+  };
+
+  ngAfterViewInit(): void {
+    const canvas = this.canvasRef.nativeElement;
+    this.ctx = canvas.getContext("2d")!;
+    // Definición del tamaño del canvas
+    canvas.width = 400;
+    canvas.height = 800;
+    this.animate();
+  }
+
+  animate(): void {
+    this.animationFrame = requestAnimationFrame(() => this.animate());
+    // Limpiar el canvas
+    this.ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
+    // Incrementar el progreso de transición
+    this.transitionProgress += this.transitionSpeed;
+    if (this.transitionProgress >= 1) {
+      this.transitionProgress = 0;
+      this.currentState = (this.currentState + 1) % 3;
+    }
+    this.drawTangramState();
+  }
+
+  drawTangramState(): void {
+    const canvas = this.canvasRef.nativeElement;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    // Usamos el 80% del mínimo para escalar la figura
+    const size = Math.min(canvas.width, canvas.height) * 0.8;
+    this.ctx.save();
+    this.ctx.translate(centerX, centerY);
+
+    if (this.transitionProgress < this.phaseHold) {
+      // Fase HOLD: mostrar la figura armada según currentState
+      switch (this.currentState) {
+        case 0:
+          this.drawFigure73(size);
+          break;
+        case 1:
+          this.drawFigure156(size);
+          break;
+        case 2:
+          this.drawFigure200(size);
+          break;
+      }
+    } else if (this.transitionProgress < this.phaseHold + this.phaseDisassemble) {
+      // Fase DESARME: la figura actual se separa y gira
+      const factor = (this.transitionProgress - this.phaseHold) / this.phaseDisassemble;
+      // El factor irá de 0 a 1 en esta fase
+      switch (this.currentState) {
+        case 0:
+          this.drawFigure73Transition(size, factor, 'disassemble');
+          break;
+        case 1:
+          this.drawFigure156Transition(size, factor, 'disassemble');
+          break;
+        case 2:
+          this.drawFigure200Transition(size, factor, 'disassemble');
+          break;
+      }
+    } else {
+      // Fase ARMADO: la siguiente figura se arma
+      const factor = (this.transitionProgress - (this.phaseHold + this.phaseDisassemble)) / this.phaseAssemble;
+      const nextState = (this.currentState + 1) % 3;
+      switch (nextState) {
+        case 0:
+          this.drawFigure73Transition(size, factor, 'assemble');
+          break;
+        case 1:
+          this.drawFigure156Transition(size, factor, 'assemble');
+          break;
+        case 2:
+          this.drawFigure200Transition(size, factor, 'assemble');
+          break;
+      }
+    }
+
+    this.ctx.restore();
+  }
+
+  /**
+   * Helper: Dibuja una pieza aplicándole un desplazamiento y una rotación extra.
+   * @param drawFunc Función de dibujo (la pieza en posición "base")
+   * @param displacement Objeto {x, y} de desplazamiento máximo (se multiplica por factor)
+   * @param extraRotation Ángulo extra (en grados) que se aplicará multiplicado por factor
+   * @param factor Valor entre 0 y 1
+   */
+  drawPieceWithTransition(drawFunc: () => void, displacement: { x: number, y: number }, extraRotation: number, factor: number): void {
+    this.ctx.save();
+    // Se traslada según el desplazamiento
+    this.ctx.translate(displacement.x * factor, displacement.y * factor);
+    // Se rota adicionalmente
+    this.ctx.rotate(extraRotation * factor * Math.PI / 180);
+    drawFunc();
+    this.ctx.restore();
+  }
+
+  /*------------------------------------------
+    FIGURA 73 – Ejemplo de silueta humana rezando
+  -------------------------------------------*/
+  drawFigure73(size: number): void {
+    const half = size / 2;
+    const quarter = size / 4;
+    const eighth = size / 8;
+
+    // Pieza 1: Cabeza (cuadrado rotado)
+    this.drawRotatedSquare(
+      -quarter / 2, -half - quarter,
+      quarter, 45, this.colors.blue
+    );
+
+    // Pieza 2: Triángulo detrás de la cabeza
+    const headBottomY = -half;
+    const offsetRight = quarter - 55;
+    this.drawTriangle(
+      offsetRight, headBottomY,
+      offsetRight - eighth - 20, headBottomY + 19 + eighth,
+      offsetRight, headBottomY + 2.8 * eighth,
+      this.colors.teal
+    );
+
+    // Pieza 3: Romboidee volteado
+    const A = { x: offsetRight + 4, y: headBottomY };
+    const B = { x: offsetRight + (eighth + 20), y: headBottomY + (19 + eighth) };
+    const C = { x: offsetRight + 3.25, y: headBottomY + 2.88 * eighth };
+    const D = { x: offsetRight + 59, y: headBottomY + 2.75 * eighth + (19 + eighth) };
+    this.drawRomboidee(A.x, A.y, B.x, B.y, D.x, D.y, C.x, C.y, this.colors.purple);
+
+    // Pieza 4: Triángulo del cuerpo medio
+    const T1 = { x: offsetRight - eighth - 19.2, y: headBottomY + 4.5 + (19 + eighth) };
+    const T2 = { x: offsetRight + 57, y: headBottomY + 2.8 * eighth + (19 + eighth) };
+    const T3 = { x: T1.x, y: T2.y + 90 };
+    this.drawTriangle(T1.x, T1.y, T2.x, T2.y, T3.x, T3.y, this.colors.orange);
+
+    // Pieza 5: Triángulo simulando los pies
+    const nV1 = { x: offsetRight - eighth + 95, y: -headBottomY + (-55 + eighth) };
+    const nV2 = { x: offsetRight + 58, y: headBottomY + 2.88 * eighth + (19 + eighth) };
+    const nV3 = { x: nV1.x - 160, y: nV2.y + 130 };
+    this.drawTriangle(nV1.x, nV1.y, nV2.x, nV2.y, nV3.x, nV3.y, this.colors.yellow);
+
+    // Pieza 6: Brazo (triángulo con punta libre)
+    const nT1 = { x: offsetRight - eighth - 22.8, y: headBottomY + 5 + (19 + eighth) };
+    const nT2 = { x: nT1.x, y: nT1.y + 100 };
+    const nT3 = { x: nT1.x - 110, y: nT1.y };
+    this.drawTriangle(nT1.x, nT1.y, nT2.x, nT2.y, nT3.x, nT3.y, this.colors.blue);
+
+    // Pieza 7: Terminación de la mano (triángulo invertido)
+    const mT1 = { x: nT2.x, y: nT2.y + 4.5 };
+    const mT2 = { x: mT1.x - 84, y: mT1.y - 75 };
+    const mT3 = { x: mT1.x - 80, y: mT1.y };
+    this.drawTriangle(mT1.x, mT1.y, mT2.x, mT2.y, mT3.x, mT3.y, this.colors.yellow);
+  }
+
+  /**
+   * Transición para Figura 73.
+   * En modo 'disassemble' se separan y giran las piezas a partir de la configuración base.
+   * En modo 'assemble' se "rebobinan" la animación (factor invertido) para mostrar la formación de la figura.
+   */
+  drawFigure73Transition(size: number, factor: number, mode: 'disassemble' | 'assemble'): void {
+    const half = size / 2;
+    const quarter = size / 4;
+    const eighth = size / 8;
+    // Para 'assemble' usamos (1 - factor) para invertir el efecto
+    const currentFactor = mode === 'disassemble' ? factor : (1 - factor);
+
+    // Ejemplo para cada pieza se aplica un desplazamiento y rotación extra.
+    // Los valores de displacement y extraRotation son ajustables.
+    
+    // Pieza 1: Cabeza (cuadrado rotado)
+    this.drawPieceWithTransition(() => {
+      this.drawRotatedSquare(-quarter / 2, -half - quarter, quarter, 45, this.colors.blue);
+    }, { x: 0, y: -20 }, 30, currentFactor);
+
+    // Pieza 2: Triángulo detrás de la cabeza
+    this.drawPieceWithTransition(() => {
+      this.drawTriangle(
+        quarter - 55, -half,
+        (quarter - 55) - eighth - 20, -half + 19 + eighth,
+        quarter - 55, -half + 2.8 * eighth,
+        this.colors.teal
+      );
+    }, { x: 20, y: -20 }, 20, currentFactor);
+
+    // Pieza 3: Romboidee volteado
+    this.drawPieceWithTransition(() => {
+      const A = { x: (quarter - 55) + 4, y: -half };
+      const B = { x: (quarter - 55) + (eighth + 20), y: -half + (19 + eighth) };
+      const C = { x: (quarter - 55) + 3.25, y: -half + 2.88 * eighth };
+      const D = { x: (quarter - 55) + 59, y: -half + 2.75 * eighth + (19 + eighth) };
+      this.drawRomboidee(A.x, A.y, B.x, B.y, D.x, D.y, C.x, C.y, this.colors.purple);
+    }, { x: -20, y: 20 }, 25, currentFactor);
+
+    // Pieza 4: Triángulo del cuerpo medio
+    this.drawPieceWithTransition(() => {
+      const T1 = { x: (quarter - 55) - eighth - 19.2, y: -half + 4.5 + (19 + eighth) };
+      const T2 = { x: (quarter - 55) + 57, y: -half + 2.8 * eighth + (19 + eighth) };
+      const T3 = { x: T1.x, y: T2.y + 90 };
+      this.drawTriangle(T1.x, T1.y, T2.x, T2.y, T3.x, T3.y, this.colors.orange);
+    }, { x: 0, y: 30 }, 20, currentFactor);
+
+    // Pieza 5: Triángulo simulando los pies
+    this.drawPieceWithTransition(() => {
+      const nV1 = { x: (quarter - 55) - eighth + 95, y: half + (-55 + eighth) };
+      const nV2 = { x: (quarter - 55) + 58, y: -half + 2.88 * eighth + (19 + eighth) };
+      const nV3 = { x: nV1.x - 160, y: nV2.y + 130 };
+      this.drawTriangle(nV1.x, nV1.y, nV2.x, nV2.y, nV3.x, nV3.y, this.colors.yellow);
+    }, { x: -30, y: 30 }, 30, currentFactor);
+
+    // Pieza 6: Brazo
+    this.drawPieceWithTransition(() => {
+      const nT1 = { x: (quarter - 55) - eighth - 22.8, y: -half + 5 + (19 + eighth) };
+      const nT2 = { x: nT1.x, y: nT1.y + 100 };
+      const nT3 = { x: nT1.x - 110, y: nT1.y };
+      this.drawTriangle(nT1.x, nT1.y, nT2.x, nT2.y, nT3.x, nT3.y, this.colors.blue);
+    }, { x: 30, y: -30 }, 30, currentFactor);
+
+    // Pieza 7: Terminación de la mano
+    this.drawPieceWithTransition(() => {
+      const mT1 = { x: (quarter - 55) - eighth - 22.8, y: -half + 5 + (19 + eighth) + 100 + 4.5 };
+      const mT2 = { x: mT1.x - 84, y: mT1.y - 75 };
+      const mT3 = { x: mT1.x - 80, y: mT1.y };
+      this.drawTriangle(mT1.x, mT1.y, mT2.x, mT2.y, mT3.x, mT3.y, this.colors.yellow);
+    }, { x: -30, y: 30 }, 20, currentFactor);
+  }
+
+  /*------------------------------------------
+    FIGURA 156 – Ejemplo tipo pájaro
+  -------------------------------------------*/
+  drawFigure156(size: number): void {
+    const half = size / 2;
+    const quarter = size / 4;
+    const eighth = size / 8;
+
+    // Pieza 1: Triángulo grande superior
+    this.drawTriangle(
+      -quarter, -half,
+       quarter, -half,
+       0, -quarter,
+       this.colors.purple
+    );
+
+    // Pieza 2: Triángulo rotado (blue)
+    this.drawRotatedRightTriangle(-half + 158, half - 237, 70, 75, 135, this.colors.blue);
+
+    // Pieza 3: Triángulo rotado (yellow)
+    this.drawRotatedRightTriangle(half - 210, half - 184, 150, 150, -45, this.colors.yellow);
+
+    // Pieza 4: Triángulo rotado (teal)
+    this.drawRotatedRightTriangle(-half + 106.2, half - 185, 70, 75, 135, this.colors.teal);
+
+    // Pieza 5: Paralelogramo inclinado (teal)
+    this.drawParallelogramInclined(-half + 220, half - 190, 62, 110, -30, this.colors.teal);
+
+    // Pieza 6: Cuadrado rotado (yellow)
+    this.drawRotatedSquare(-86, -7, 68, 45, this.colors.yellow);
+
+    // Pieza 7: Triángulo rotado (orange)
+    this.drawRotatedRightTriangle(-half + 158.5, half - 130, 140, 140, 45, this.colors.orange);
+  }
+
+  drawFigure156Transition(size: number, factor: number, mode: 'disassemble' | 'assemble'): void {
+    const half = size / 2;
+    const quarter = size / 4;
+    const eighth = size / 8;
+    // Para efecto similar, usamos valores de desplazamiento y rotación (ajusta según sea necesario)
+    const currentFactor = mode === 'disassemble' ? factor : (1 - factor);
+    // Aquí se puede replicar la estructura de drawFigure156 usando drawPieceWithTransition
+    this.drawPieceWithTransition(() => {
+      this.drawTriangle(-quarter, -half, quarter, -half, 0, -quarter, this.colors.purple);
+    }, { x: 0, y: -30 }, 30, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      this.drawRotatedRightTriangle(-half + 158, half - 237, 70, 75, 135, this.colors.blue);
+    }, { x: -20, y: 20 }, 20, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      this.drawRotatedRightTriangle(half - 210, half - 184, 150, 150, -45, this.colors.yellow);
+    }, { x: 20, y: -20 }, 25, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      this.drawRotatedRightTriangle(-half + 106.2, half - 185, 70, 75, 135, this.colors.teal);
+    }, { x: 30, y: 30 }, 20, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      this.drawParallelogramInclined(-half + 220, half - 190, 62, 110, -30, this.colors.teal);
+    }, { x: -30, y: -30 }, 25, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      this.drawRotatedSquare(-86, -7, 68, 45, this.colors.yellow);
+    }, { x: 0, y: 20 }, 20, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      this.drawRotatedRightTriangle(-half + 158.5, half - 130, 140, 140, 45, this.colors.orange);
+    }, { x: -20, y: 0 }, 20, currentFactor);
+  }
+
+  /*------------------------------------------
+    FIGURA 200 – Patrón geométrico abstracto
+  -------------------------------------------*/
+  drawFigure200(size: number): void {
+    const half = size / 2;
+    const quarter = size / 4;
+    const eighth = size / 8;
+
+    const parallelogramWidth = 65;
+    const parallelogramHeight = 50;
+    const parallelogramX = -140;
+    const parallelogramY = -140;
+
+    this.drawParallelogramInclined(parallelogramX, parallelogramY, parallelogramWidth, parallelogramHeight, 140, this.colors.blue);
+
+    const triangleX = parallelogramX + parallelogramWidth / 2;
+    const triangleY = parallelogramY + parallelogramHeight;
+    const triangleBase = parallelogramWidth;
+    const triangleHeight = parallelogramHeight;
+    this.drawRotatedRightTriangle(triangleX + 33, triangleY + 4, triangleBase, triangleHeight + 4, 180, this.colors.orange);
+
+    const topPointX = parallelogramX + parallelogramWidth;
+    const topPointY = parallelogramY;
+    const bottomPointX = triangleX + parallelogramWidth;
+    const bottomPointY = triangleY + parallelogramHeight;
+    this.drawRotatedRightTriangle(topPointX + 3.5, topPointY + 54, bottomPointX - topPointX + 76, bottomPointY - topPointY + 30, 270, this.colors.teal);
+
+    const baseSmallTriangleX = triangleX;
+    const baseSmallTriangleY = triangleY + parallelogramHeight;
+    const newTriangleEndX = baseSmallTriangleX + 100;
+    const newTriangleEndY = baseSmallTriangleY + 50;
+    this.drawRotatedRightTriangle(baseSmallTriangleX + 97, baseSmallTriangleY - 42.5, newTriangleEndX - baseSmallTriangleX + 20, newTriangleEndY - baseSmallTriangleY + 80, 90, this.colors.purple);
+
+    let baseTriangleX = parallelogramX + parallelogramWidth / 2;
+    let baseTriangleY = parallelogramY + parallelogramHeight;
+    this.drawRotatedRightTriangle(baseTriangleX + 100, baseTriangleY + 8, parallelogramWidth, parallelogramHeight + 4, 0, this.colors.orange);
+
+    baseTriangleX = parallelogramX + parallelogramWidth / 2;
+    baseTriangleY = parallelogramY + parallelogramHeight;
+    this.drawRotatedRightTriangle(baseTriangleX + 169, baseTriangleY + 8.8, parallelogramWidth + 15, parallelogramHeight + 41, 49.5, this.colors.yellow);
+
+    const lastTriangleX = baseTriangleX + 170;
+    const lastTriangleY = baseTriangleY + 8.5;
+    const triangleBottomOffset = (parallelogramWidth + 15) * Math.sin(50 * Math.PI / 180);
+    const bottomEdgeY = lastTriangleY + triangleBottomOffset;
+    const triangleCenterX = lastTriangleX - 6.13;
+    const squareSize = 100;
+    const gap = 10;
+    const squareX = triangleCenterX - squareSize / 2;
+    const squareY = bottomEdgeY + gap;
+    this.drawSquare(squareX - 13, squareY - 8, squareSize - 43, this.colors.blue);
+  }
+
+  drawFigure200Transition(size: number, factor: number, mode: 'disassemble' | 'assemble'): void {
+    const currentFactor = mode === 'disassemble' ? factor : (1 - factor);
+    const parallelogramWidth = 65;
+    const parallelogramHeight = 50;
+    const parallelogramX = -140;
+    const parallelogramY = -140;
+
+    this.drawPieceWithTransition(() => {
+      this.drawParallelogramInclined(parallelogramX, parallelogramY, parallelogramWidth, parallelogramHeight, 140, this.colors.blue);
+    }, { x: 0, y: -30 }, 30, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      const triangleX = parallelogramX + parallelogramWidth / 2;
+      const triangleY = parallelogramY + parallelogramHeight;
+      this.drawRotatedRightTriangle(triangleX + 33, triangleY + 4, parallelogramWidth, parallelogramHeight + 4, 180, this.colors.orange);
+    }, { x: 20, y: 20 }, 25, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      const triangleX = parallelogramX + parallelogramWidth / 2;
+      const triangleY = parallelogramY + parallelogramHeight;
+      const topPointX = parallelogramX + parallelogramWidth;
+      const topPointY = parallelogramY;
+      const bottomPointX = triangleX + parallelogramWidth;
+      const bottomPointY = triangleY + parallelogramHeight;
+      this.drawRotatedRightTriangle(topPointX + 3.5, topPointY + 54, bottomPointX - topPointX + 76, bottomPointY - topPointY + 30, 270, this.colors.teal);
+    }, { x: -20, y: 20 }, 25, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      const triangleX = parallelogramX + parallelogramWidth / 2;
+      const triangleY = parallelogramY + parallelogramHeight;
+      const baseSmallTriangleX = triangleX;
+      const baseSmallTriangleY = triangleY + parallelogramHeight;
+      const newTriangleEndX = baseSmallTriangleX + 100;
+      const newTriangleEndY = baseSmallTriangleY + 50;
+      this.drawRotatedRightTriangle(baseSmallTriangleX + 97, baseSmallTriangleY - 42.5, newTriangleEndX - baseSmallTriangleX + 20, newTriangleEndY - baseSmallTriangleY + 80, 90, this.colors.purple);
+    }, { x: 0, y: -20 }, 20, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      const baseTriangleX = parallelogramX + parallelogramWidth / 2;
+      const baseTriangleY = parallelogramY + parallelogramHeight;
+      this.drawRotatedRightTriangle(baseTriangleX + 100, baseTriangleY + 8, parallelogramWidth, parallelogramHeight + 4, 0, this.colors.orange);
+    }, { x: -20, y: 20 }, 20, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      const baseTriangleX = parallelogramX + parallelogramWidth / 2;
+      const baseTriangleY = parallelogramY + parallelogramHeight;
+      this.drawRotatedRightTriangle(baseTriangleX + 169, baseTriangleY + 8.8, parallelogramWidth + 15, parallelogramHeight + 41, 49.5, this.colors.yellow);
+    }, { x: 20, y: -20 }, 20, currentFactor);
+
+    this.drawPieceWithTransition(() => {
+      const triangleX = parallelogramX + parallelogramWidth / 2;
+      const triangleY = parallelogramY + parallelogramHeight;
+      const baseTriangleX = parallelogramX + parallelogramWidth / 2;
+      const baseTriangleY = parallelogramY + parallelogramHeight;
+      const lastTriangleX = baseTriangleX + 170;
+      const lastTriangleY = baseTriangleY + 8.5;
+      const triangleBottomOffset = (parallelogramWidth + 15) * Math.sin(50 * Math.PI / 180);
+      const bottomEdgeY = lastTriangleY + triangleBottomOffset;
+      const triangleCenterX = lastTriangleX - 6.13;
+      const squareSize = 100, gap = 10;
+      const squareX = triangleCenterX - squareSize / 2;
+      const squareY = bottomEdgeY + gap;
+      this.drawSquare(squareX - 13, squareY - 8, squareSize - 43, this.colors.blue);
+    }, { x: 0, y: 30 }, 20, currentFactor);
+  }
+
+  /*------------------------------------------
+    MÉTODOS BÁSICOS DE DIBUJO
+  ------------------------------------------*/
+  drawRomboidee(x1: number, y1: number, x2: number, y2: number,
+                x3: number, y3: number, x4: number, y4: number, color: string): void {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.lineTo(x3, y3);
+    this.ctx.lineTo(x4, y4);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+  }
+
+  drawRotatedParallelogram(x: number, y: number, width: number, height: number, color: string, angle: number): void {
+    this.ctx.save();
+    this.ctx.translate(x + width / 2, y + height / 2);
+    this.ctx.rotate(angle * Math.PI / 180);
+    this.ctx.beginPath();
+    this.ctx.moveTo(-width / 2, -height / 2);
+    this.ctx.lineTo(width / 2, -height / 2);
+    this.ctx.lineTo(width / 2 - height, height / 2);
+    this.ctx.lineTo(-width / 2 - height, height / 2);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
+
+  drawRotatedRightTriangle(x: number, y: number, width: number, height: number, angle: number, color: string): void {
+    this.ctx.save();
+    this.ctx.translate(x, y);
+    this.ctx.rotate(angle * Math.PI / 180);
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, 0);
+    this.ctx.lineTo(width, 0);
+    this.ctx.lineTo(0, height);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
+
+  drawParallelogramInclined(x: number, y: number, width: number, height: number, angle: number, color: string): void {
+    const radian = angle * Math.PI / 180;
+    const offset = width * Math.tan(radian);
+    const x1 = x, y1 = y;
+    const x2 = x + width, y2 = y + offset;
+    const x3 = x + width, y3 = y + height + offset;
+    const x4 = x, y4 = y + height;
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.lineTo(x3, y3);
+    this.ctx.lineTo(x4, y4);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+  }
+
+  drawTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, color: string): void {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x1, y1);
+    this.ctx.lineTo(x2, y2);
+    this.ctx.lineTo(x3, y3);
+    this.ctx.closePath();
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.stroke();
+  }
+
+  drawSquare(x: number, y: number, size: number, color: string): void {
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(x, y, size, size);
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.strokeRect(x, y, size, size);
+  }
+
+  drawRotatedSquare(x: number, y: number, size: number, angle: number, color: string): void {
+    const centerX = x + size / 2;
+    const centerY = y + size / 2;
+    this.ctx.save();
+    this.ctx.translate(centerX, centerY);
+    this.ctx.rotate(angle * Math.PI / 180);
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(-size / 2, -size / 2, size, size);
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
+    this.ctx.strokeRect(-size / 2, -size / 2, size, size);
+    this.ctx.restore();
+  }
+
+  getFigureName(): string {
+    switch (this.currentState) {
+      case 0: return "73";
+      case 1: return "156";
+      case 2: return "200";
+      default: return "";
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+    }
+  }
+}

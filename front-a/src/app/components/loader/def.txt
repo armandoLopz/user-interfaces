@@ -3,12 +3,9 @@ import { Component, type ElementRef, type OnDestroy, type AfterViewInit, ViewChi
 @Component({
   selector: "app-loader",
   template: `
-  <div class="loader-container">
     <canvas #tangramCanvas></canvas>
-    <div class="loading-text">Loading...</div>
-    <div class="figure-label">Shape {{ getFigureName() }}</div>
-  </div>
-`,
+    <div class="figure-label">Figura {{ getFigureName() }}</div>
+  `,
   styleUrls: ["./loader.component.css"],
 })
 export class LoaderComponent implements AfterViewInit, OnDestroy {
@@ -16,13 +13,14 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
   private ctx!: CanvasRenderingContext2D
   private animationFrame!: number
   private currentState = 0
+  // Animation variables similar to the HTML implementation
   private nextState = 1
   private animationProgress = 0
   private animationSpeed = 0.008
   private transitionCount = 0
-  private maxTransitions = 6
+  private maxTransitions = 6 // 3 figures * 2 times = 6 transitions
 
-  // Original colors
+  // Keep the original colors
   private colors = {
     blue: "#4999C8",
     teal: "#49C8B1",
@@ -35,25 +33,22 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
     const canvas = this.canvasRef.nativeElement
     this.ctx = canvas.getContext("2d")!
     canvas.width = 400
-    canvas.height = 600
+    canvas.height = 400 // Make it square for better proportions
     this.animate()
   }
 
   /**
-   * Easing function for smooth animation
+   * Easing function from the HTML implementation
    */
   easeInOutCubic(t: number): number {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
   }
 
-  /**
-   * Main animation loop
-   */
   animate(): void {
     this.animationFrame = requestAnimationFrame(() => this.animate())
     const canvas = this.canvasRef.nativeElement
 
-    // Clear the canvas
+    // Clear the canvas completely like in the HTML implementation
     this.ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Update animation progress
@@ -67,7 +62,12 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
 
       // Increment transition counter
       this.transitionCount++
+
+      // If we've completed all transitions, we could add a callback here
+      // similar to the finishLoader function in the HTML
       if (this.transitionCount >= this.maxTransitions) {
+        // Optional: Add any completion logic here
+        // For now, we'll just reset the counter to keep the animation going
         this.transitionCount = 0
       }
     }
@@ -406,42 +406,9 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Interpolate between two hex colors
-   */
-  interpolateColor(color1: string, color2: string, factor: number): string {
-    // Convert hex to RGB
-    const hex1 = color1.replace("#", "")
-    const hex2 = color2.replace("#", "")
-
-    // Parse the hex values to get R, G, B components
-    const r1 = Number.parseInt(hex1.substring(0, 2), 16)
-    const g1 = Number.parseInt(hex1.substring(2, 4), 16)
-    const b1 = Number.parseInt(hex1.substring(4, 6), 16)
-
-    const r2 = Number.parseInt(hex2.substring(0, 2), 16)
-    const g2 = Number.parseInt(hex2.substring(2, 4), 16)
-    const b2 = Number.parseInt(hex2.substring(4, 6), 16)
-
-    // Interpolate each component
-    const r = Math.round(r1 + factor * (r2 - r1))
-    const g = Math.round(g1 + factor * (g2 - g1))
-    const b = Math.round(b1 + factor * (b2 - b1))
-
-    // Convert back to hex
-    const rHex = r.toString(16).padStart(2, "0")
-    const gHex = g.toString(16).padStart(2, "0")
-    const bHex = b.toString(16).padStart(2, "0")
-
-    return `#${rHex}${gHex}${bHex}`
-  }
-
-  /**
    * Draw an interpolated piece between two states
    */
   drawInterpolatedPiece(currentPiece: any, nextPiece: any, progress: number): void {
-    // Interpolate the color
-    const interpolatedColor = this.interpolateColor(currentPiece.color, nextPiece.color, progress)
-
     // Handle different piece types
     if (currentPiece.type === "square" && nextPiece.type === "square") {
       // Interpolate square properties
@@ -450,7 +417,7 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
       const size = this.interpolate(currentPiece.size, nextPiece.size, progress)
       const angle = this.interpolate(currentPiece.angle, nextPiece.angle, progress)
 
-      this.drawRotatedSquare(x, y, size, angle, interpolatedColor)
+      this.drawRotatedSquare(x, y, size, angle, currentPiece.color)
     } else if (currentPiece.type === "triangle" && nextPiece.type === "triangle") {
       // Interpolate triangle points
       const points = []
@@ -468,7 +435,7 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
         points[1][1],
         points[2][0],
         points[2][1],
-        interpolatedColor,
+        currentPiece.color,
       )
     } else if (currentPiece.type === "polygon" && nextPiece.type === "polygon") {
       // Interpolate polygon points
@@ -485,7 +452,7 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
         ])
       }
 
-      this.drawPolygon(points, interpolatedColor)
+      this.drawPolygon(points, currentPiece.color)
     } else if (currentPiece.type === "rightTriangle" && nextPiece.type === "rightTriangle") {
       // Interpolate right triangle properties
       const x = this.interpolate(currentPiece.x, nextPiece.x, progress)
@@ -494,7 +461,7 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
       const height = this.interpolate(currentPiece.height, nextPiece.height, progress)
       const angle = this.interpolate(currentPiece.angle, nextPiece.angle, progress)
 
-      this.drawRotatedRightTriangle(x, y, width, height, angle, interpolatedColor)
+      this.drawRotatedRightTriangle(x, y, width, height, angle, currentPiece.color)
     } else if (currentPiece.type === "parallelogram" && nextPiece.type === "parallelogram") {
       // Interpolate parallelogram properties
       const x = this.interpolate(currentPiece.x, nextPiece.x, progress)
@@ -503,17 +470,17 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
       const height = this.interpolate(currentPiece.height, nextPiece.height, progress)
       const angle = this.interpolate(currentPiece.angle, nextPiece.angle, progress)
 
-      this.drawParallelogramInclined(x, y, width, height, angle, interpolatedColor)
+      this.drawParallelogramInclined(x, y, width, height, angle, currentPiece.color)
     } else {
       // If types don't match, try to convert to polygon and interpolate
-      this.interpolateMixedPieces(currentPiece, nextPiece, progress, interpolatedColor)
+      this.interpolateMixedPieces(currentPiece, nextPiece, progress)
     }
   }
 
   /**
    * Interpolate between pieces of different types by converting to polygons
    */
-  interpolateMixedPieces(currentPiece: any, nextPiece: any, progress: number, interpolatedColor: string): void {
+  interpolateMixedPieces(currentPiece: any, nextPiece: any, progress: number): void {
     // Convert both pieces to polygon points
     const currentPoints = this.pieceToPoints(currentPiece)
     const nextPoints = this.pieceToPoints(nextPiece)
@@ -532,8 +499,8 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
       ])
     }
 
-    // Draw the interpolated polygon with the interpolated color
-    this.drawPolygon(points, interpolatedColor)
+    // Draw the interpolated polygon
+    this.drawPolygon(points, currentPiece.color)
   }
 
   /**
@@ -625,14 +592,25 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
     this.ctx.stroke()
   }
 
-  /**
-   * Draw a triangle with the given points and color
-   */
-  drawTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, color: string): void {
+  /*------------------------------------------
+    MÉTODOS BÁSICOS DE DIBUJO (KEEPING ORIGINAL)
+  ------------------------------------------*/
+  drawRomboidee(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    x3: number,
+    y3: number,
+    x4: number,
+    y4: number,
+    color: string,
+  ): void {
     this.ctx.beginPath()
     this.ctx.moveTo(x1, y1)
     this.ctx.lineTo(x2, y2)
     this.ctx.lineTo(x3, y3)
+    this.ctx.lineTo(x4, y4)
     this.ctx.closePath()
     this.ctx.fillStyle = color
     this.ctx.fill()
@@ -641,26 +619,24 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
     this.ctx.stroke()
   }
 
-  /**
-   * Draw a rotated square with the given properties
-   */
-  drawRotatedSquare(x: number, y: number, size: number, angle: number, color: string): void {
-    const centerX = x + size / 2
-    const centerY = y + size / 2
+  drawRotatedParallelogram(x: number, y: number, width: number, height: number, color: string, angle: number): void {
     this.ctx.save()
-    this.ctx.translate(centerX, centerY)
+    this.ctx.translate(x + width / 2, y + height / 2)
     this.ctx.rotate((angle * Math.PI) / 180)
+    this.ctx.beginPath()
+    this.ctx.moveTo(-width / 2, -height / 2)
+    this.ctx.lineTo(width / 2, -height / 2)
+    this.ctx.lineTo(width / 2 - height, height / 2)
+    this.ctx.lineTo(-width / 2 - height, height / 2)
+    this.ctx.closePath()
     this.ctx.fillStyle = color
-    this.ctx.fillRect(-size / 2, -size / 2, size, size)
+    this.ctx.fill()
     this.ctx.strokeStyle = "rgba(0,0,0,0.1)"
     this.ctx.lineWidth = 1
-    this.ctx.strokeRect(-size / 2, -size / 2, size, size)
+    this.ctx.stroke()
     this.ctx.restore()
   }
 
-  /**
-   * Draw a rotated right triangle with the given properties
-   */
   drawRotatedRightTriangle(x: number, y: number, width: number, height: number, angle: number, color: string): void {
     this.ctx.save()
     this.ctx.translate(x, y)
@@ -678,9 +654,6 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
     this.ctx.restore()
   }
 
-  /**
-   * Draw a parallelogram with the given properties
-   */
   drawParallelogramInclined(x: number, y: number, width: number, height: number, angle: number, color: string): void {
     const radian = (angle * Math.PI) / 180
     const offset = width * Math.tan(radian)
@@ -705,9 +678,41 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
     this.ctx.stroke()
   }
 
-  /**
-   * Get the name of the current figure
-   */
+  drawTriangle(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, color: string): void {
+    this.ctx.beginPath()
+    this.ctx.moveTo(x1, y1)
+    this.ctx.lineTo(x2, y2)
+    this.ctx.lineTo(x3, y3)
+    this.ctx.closePath()
+    this.ctx.fillStyle = color
+    this.ctx.fill()
+    this.ctx.strokeStyle = "rgba(0,0,0,0.1)"
+    this.ctx.lineWidth = 1
+    this.ctx.stroke()
+  }
+
+  drawSquare(x: number, y: number, size: number, color: string): void {
+    this.ctx.fillStyle = color
+    this.ctx.fillRect(x, y, size, size)
+    this.ctx.strokeStyle = "rgba(0,0,0,0.1)"
+    this.ctx.lineWidth = 1
+    this.ctx.strokeRect(x, y, size, size)
+  }
+
+  drawRotatedSquare(x: number, y: number, size: number, angle: number, color: string): void {
+    const centerX = x + size / 2
+    const centerY = y + size / 2
+    this.ctx.save()
+    this.ctx.translate(centerX, centerY)
+    this.ctx.rotate((angle * Math.PI) / 180)
+    this.ctx.fillStyle = color
+    this.ctx.fillRect(-size / 2, -size / 2, size, size)
+    this.ctx.strokeStyle = "rgba(0,0,0,0.1)"
+    this.ctx.lineWidth = 1
+    this.ctx.strokeRect(-size / 2, -size / 2, size, size)
+    this.ctx.restore()
+  }
+
   getFigureName(): string {
     switch (this.currentState) {
       case 0:
