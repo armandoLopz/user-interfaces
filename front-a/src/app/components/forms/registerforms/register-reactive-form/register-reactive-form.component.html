@@ -1,0 +1,53 @@
+<h1>Formulario de registro</h1>
+
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name</label>
+    <input type="text" id="name" placeholder="Enter your name" formControlName="name" required>
+    @if (getname().hasError('required') && (getname().touched || formSubmitted)) {
+    <p>Name is required</p>
+    }
+
+    @if (getname().hasError('customStringEmptyValidator') && (getname().touched || formSubmitted)) {
+    <p>Name cannot be empty</p>
+    }
+  </div>
+
+  <div>
+    <label for="lastname">Lastname</label>
+    <input type="text" id="lastname" placeholder="Enter your lastname" formControlName="lastname" required>
+    @if (getLastname().invalid && (getLastname().touched || formSubmitted)) {
+    <p>Last name is required</p>
+    }
+  </div>
+
+  <div>
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="Enter your email" formControlName="email" required>
+    @if (getEmail().invalid && (getEmail().touched || formSubmitted)) {
+    <p>Email is required</p>
+    @if (getEmail().errors?.['email']) {
+    <p>Invalid email address</p>
+    }
+    }
+  </div>
+
+  <div>
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter your username" formControlName="username" required>
+    @if (getUsername().invalid && (getUsername().touched || formSubmitted)) {
+    <p>Username is required</p>
+    }
+  </div>
+
+  <div>
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter your password" formControlName="password" required>
+    @if (getPassword().invalid && (getPassword().touched || formSubmitted)) {
+    <p>Password is required</p>
+    }
+  </div>
+
+  <button type="submit" >Submit</button>
+
+</form>

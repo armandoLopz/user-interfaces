@@ -2,13 +2,7 @@ import { Component, type ElementRef, type OnDestroy, type AfterViewInit, ViewChi
 
 @Component({
   selector: "app-loader",
-  template: `
-  <div class="loader-container">
-    <canvas #tangramCanvas></canvas>
-    <div class="loading-text">Loading...</div>
-    <div class="figure-label">Shape {{ getFigureName() }}</div>
-  </div>
-`,
+  templateUrl : './loader.component.html',
   styleUrls: ["./loader.component.css"],
 })
 export class LoaderComponent implements AfterViewInit, OnDestroy {
@@ -30,7 +24,7 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
     orange: "#C87949",
     yellow: "#C8BE49",
   }
-
+  
   ngAfterViewInit(): void {
     const canvas = this.canvasRef.nativeElement
     this.ctx = canvas.getContext("2d")!

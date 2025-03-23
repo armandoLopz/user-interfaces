@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-//import { HomePageComponent } from './pages/home-page/home-page.component';
+import { RegisterReactiveFormComponent } from './components/forms/registerforms/register-reactive-form/register-reactive-form.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RegisterReactiveFormComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
