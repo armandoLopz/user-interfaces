@@ -1,0 +1,2 @@
+add mesagges for user register, email , etc 
+or any error in the request

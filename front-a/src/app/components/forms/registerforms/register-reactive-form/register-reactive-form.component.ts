@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { customStringEmptyValidator } from '../../../../utils/customValidators';
+import { ApiUserService } from '../../../../services/user/api.user.service';
+import { userInterface } from '../../../../interfaces/interfaces.models';
 
 @Component({
   selector: 'app-register-reactive-form',
@@ -12,13 +14,26 @@ import { customStringEmptyValidator } from '../../../../utils/customValidators';
 export class RegisterReactiveFormComponent {
 
   private formBuilder = inject(FormBuilder);
+  private userService = inject(ApiUserService);
+
+  private user: userInterface = {
+
+    first_name: '',
+    last_name: '',
+    email: '',
+    cellphone: '',
+    password: '',
+    username: '',
+
+  }
 
   userForm = this.formBuilder.nonNullable.group({
 
     name: ['', [Validators.required, customStringEmptyValidator] ],
-    lastname: ['', Validators.required],
+    lastname: ['', [Validators.required, customStringEmptyValidator]],
     email: ['', [Validators.required, Validators.email]],
-    username: ['', Validators.required],
+    cellphone: ['', [Validators.required, customStringEmptyValidator]],
+    username: ['', [Validators.required, customStringEmptyValidator]],
     password: ['', Validators.required]
 
   })
@@ -31,10 +46,36 @@ export class RegisterReactiveFormComponent {
 
   onSubmit() {
     this.formSubmitted = true; // Establece formSubmitted en true cuando se envía el formulario
-    console.log(this.getname().errors);
-    
+
     if (this.userForm.valid) {
-      console.log(this.userForm.value);
+      
+      this.user.first_name = this.userForm.controls.name.value
+      this.user.last_name = this.userForm.controls.lastname.value
+      this.user.email = this.userForm.controls.email.value
+      this.user.cellphone = this.userForm.controls.cellphone.value
+      this.user.username = this.userForm.controls.username.value
+      this.user.password = this.userForm.controls.password.value
+
+      try {
+        
+        this.userService.postUserData(this.user).subscribe({
+
+          next: (res) => {
+
+            alert("usuario creado exitosamente")
+          },
+          error: (err) => {
+
+            console.log("error al crear el usuario" + err);
+            
+          }
+
+        })
+      } catch (error) {
+        
+        console.log("error procesando la solicitud " + error);
+        
+      }
     }
   }
 
@@ -60,6 +101,11 @@ export class RegisterReactiveFormComponent {
     return this.userForm.controls.username;
   }
 
+  getCellphone(): FormControl<string>{
+
+    return this.userForm.controls.cellphone
+  }
+  
   getPassword(): FormControl<string>{
 
     return this.userForm.controls.password;

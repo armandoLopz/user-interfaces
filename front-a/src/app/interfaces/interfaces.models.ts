@@ -4,8 +4,8 @@ export interface userInterface {
     last_name: string,
     email: string,
     cellphone: string,
-    personal_description: string,
-    personal_site: string,
+    personal_description?: string,
+    personal_site?: string,
     password: string,
     username:string,
     //photo: string
