@@ -4,6 +4,8 @@ import { Validators } from '@angular/forms';
 import { customStringEmptyValidator } from '../../../../utils/customValidators';
 import { ApiUserService } from '../../../../services/user/api.user.service';
 import { userInterface } from '../../../../interfaces/interfaces.models';
+import { Router } from '@angular/router';
+import { LOGIN_ROUTE } from '../../../../app.routes.constans';
 
 @Component({
   selector: 'app-register-reactive-form',
@@ -15,6 +17,9 @@ export class RegisterReactiveFormComponent {
 
   private formBuilder = inject(FormBuilder);
   private userService = inject(ApiUserService);
+  private router = inject(Router)
+  private loginURL: string = LOGIN_ROUTE
+  protected formSubmitted = false; // Inicializa formSubmitted en false
 
   private user: userInterface = {
 
@@ -38,10 +43,6 @@ export class RegisterReactiveFormComponent {
 
   })
 
-  formSubmitted = false; // Inicializa formSubmitted en false
-
-  constructor() { }
-
   ngOnInit(): void { }
 
   onSubmit() {
@@ -63,6 +64,7 @@ export class RegisterReactiveFormComponent {
           next: (res) => {
 
             alert("usuario creado exitosamente")
+            this.router.navigateByUrl(this.loginURL)
           },
           error: (err) => {
 
@@ -79,7 +81,7 @@ export class RegisterReactiveFormComponent {
     }
   }
 
-  //Getter user form
+  //Getters user form
 
   getname(): FormControl<string>{
 
