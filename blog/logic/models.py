@@ -8,8 +8,8 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True, blank= False)
     cellphone = models.IntegerField(blank= False)
-    personal_description = models.CharField(max_length=500)
-    personal_site = models.CharField(max_length=70, blank= False)
+    personal_description = models.CharField(max_length=500, null=True)
+    personal_site = models.CharField(max_length=70, null=True)
 
 class Configuration(models.Model):
     
