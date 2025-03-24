@@ -1,127 +1,128 @@
 <div class="flex min-h-screen bg-indigo-50">
-    <app-side-bar></app-side-bar>
-  
-    <div class="flex-1 p-6">
-      <!-- Section: Personal Information -->
-      <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-indigo-700">
-            <i class="fas fa-user text-indigo-500 mr-2"></i>Personal Information
-          </h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <p><strong>Email:</strong> {{ user?.email }}</p>
-            <p><strong>Phone:</strong> {{ user?.cellphone }}</p>
-            <p *ngIf="user?.personal_site">
-              <strong>Website:</strong>
-              <a [href]="user.personal_site" class="text-indigo-600 hover:underline">
-                {{ user.personal_site }}
-              </a>
-            </p>
-            <p *ngIf="user?.personal_description">
-              <strong>Description:</strong> {{ user.personal_description }}
-            </p>
-          </div>
-          <div *ngIf="mainAddress?.city">
-            <p><strong>Country:</strong> {{ mainAddress?.country }}</p>
-            <p><strong>City:</strong> {{ mainAddress?.city }}</p>
-            <p *ngIf="mainAddress?.street">
-              <strong>Address:</strong> {{ mainAddress.street }}
-            </p>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Section: Work Experience -->
-      <div class="bg-white shadow-md rounded-lg p-6 mb-6" *ngIf="latestWork">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-indigo-700">
-            <i class="fas fa-briefcase text-indigo-500 mr-2"></i> Work Experience
-          </h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <p><strong>Company:</strong> {{ latestWork.name_company }}</p>
-            <p><strong>Job Title:</strong> {{ latestWork.job_title }}</p>
-          </div>
-          <div>
-            <p>
-              <strong>Period:</strong>
-              {{ formatDate(latestWork.start_work_date) }} -
-              {{ latestWork.currently_working ? 'Present' : formatDate(latestWork.end_work_date) }}
-            </p>
-            <p *ngIf="latestWork.description_of_the_job">
-              <strong>Description:</strong> {{ latestWork.description_of_the_job }}
-            </p>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Section: Education -->
-      <div class="bg-white shadow-md rounded-lg p-6 mb-6" *ngIf="latestEducation">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-indigo-700">
-            <i class="fas fa-graduation-cap text-indigo-500 mr-2"></i>Education
-          </h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <p><strong>Institution:</strong> {{ latestEducation.name_institution }}</p>
-            <p><strong>Degree:</strong> {{ latestEducation.degree_studied }}</p>
-          </div>
-          <div>
-            <p>
-              <strong>Level:</strong>
-              {{ getDegreeLevel() }}
-            </p>
-            <p>
-              <strong>Period:</strong>
-              {{ formatDate(latestEducation.start_studied_date) }} -
-              {{ latestEducation.currently_studying ? 'Present' : formatDate(latestEducation.end_studied_date) }}
-            </p>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Section: Languages, Skills and Competencies -->
-      <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Languages -->
-          <div *ngIf="languages.length">
-            <h3 class="text-lg font-bold text-indigo-700 mb-2">
-              <i class="fas fa-language text-indigo-500 mr-2"></i>Languages
-            </h3>
+  <app-side-bar></app-side-bar>
 
-            <p *ngFor="let lang of languages">
+  <div class="flex-1 p-6">
+    <!-- Section: Personal Information -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-indigo-700">
+          <i class="fas fa-user text-indigo-500 mr-2"></i>Personal Information
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <p><strong>Email:</strong> {{ user?.email }}</p>
+          <p><strong>Phone:</strong> {{ user?.cellphone }}</p>
+          <p *ngIf="user?.personal_site">
+            <strong>Website:</strong>
+            <a [href]="user.personal_site" class="text-indigo-600 hover:underline">
+              {{ user.personal_site }}
+            </a>
+          </p>
+          <p *ngIf="user?.personal_description">
+            <strong>Description:</strong> {{ user.personal_description }}
+          </p>
+        </div>
+        <div *ngIf="mainAddress?.city">
+          <p><strong>Country:</strong> {{ mainAddress?.country }}</p>
+          <p><strong>City:</strong> {{ mainAddress?.city }}</p>
+          <p *ngIf="mainAddress?.street">
+            <strong>Address:</strong> {{ mainAddress.street }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Work Experience -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6" *ngIf="latestWork">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-indigo-700">
+          <i class="fas fa-briefcase text-indigo-500 mr-2"></i> Work Experience
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <p><strong>Company:</strong> {{ latestWork.name_company }}</p>
+          <p><strong>Job Title:</strong> {{ latestWork.job_title }}</p>
+        </div>
+        <div>
+          <p>
+            <strong>Period:</strong>
+            {{ formatDate(latestWork.start_work_date) }} -
+            {{ latestWork.currently_working ? 'Present' : formatDate(latestWork.end_work_date) }}
+          </p>
+          <p *ngIf="latestWork.description_of_the_job">
+            <strong>Description:</strong> {{ latestWork.description_of_the_job }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Education -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6" *ngIf="latestEducation">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-indigo-700">
+          <i class="fas fa-graduation-cap text-indigo-500 mr-2"></i>Education
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <p><strong>Institution:</strong> {{ latestEducation.name_institution }}</p>
+          <p><strong>Degree:</strong> {{ latestEducation.degree_studied }}</p>
+        </div>
+        <div>
+          <p>
+            <strong>Level:</strong>
+            {{ getDegreeLevel() }}
+          </p>
+          <p>
+            <strong>Period:</strong>
+            {{ formatDate(latestEducation.start_studied_date) }} -
+            {{ latestEducation.currently_studying ? 'Present' : formatDate(latestEducation.end_studied_date) }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Section: Languages, Skills and Competencies -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-bold text-indigo-700"> <i class="fas fa-user-tie text-indigo-500 mr-2"></i>  Profesional Information</h2> <br>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Languages -->
+        <div *ngIf="languages.length" class="text-center">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">
+            <i class="fas fa-language text-indigo-500 mr-2"></i>Languages
+          </h3>
+          <div class="flex flex-col items-center">
+            <p *ngFor="let lang of languages" class="mb-1">
               {{ lang.name }} - {{ getLanguageLevel(lang) }}
             </p>
           </div>
-  
-          <!-- Skills -->
+        </div>
 
-  </div>
-            <div *ngIf="skills.length">
-            <h3 class="text-lg font-bold text-indigo-700 mb-2">
-              <i class="fas fa-tools text-indigo-500 mr-2"></i>Skills
-            </h3>
-
-            <p *ngFor="let skill of skills">
+        <!-- Skills -->
+        <div *ngIf="skills.length" class="text-center">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">
+            <i class="fas fa-tools text-indigo-500 mr-2"></i>Skills
+          </h3>
+          <div class="flex flex-col items-center">
+            <p *ngFor="let skill of skills" class="mb-1">
               {{ skill.skill_name }} (Level: {{ skill.skill_proficiency }})
             </p>
           </div>
-  
-          <!-- Competencies -->
-          <div *ngIf="competencies.length">
-            <h3 class="text-lg font-bold text-indigo-700 mb-2">
-              <i class="fas fa-certificate text-indigo-500 mr-2"></i>Competencies
-            </h3>
+        </div>
 
-            <p *ngFor="let comp of competencies">
+        <!-- Competencies -->
+        <div *ngIf="competencies.length" class="text-center">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">
+            <i class="fas fa-certificate text-indigo-500 mr-2"></i>Competencies
+          </h3>
+          <div class="flex flex-col items-center">
+            <p *ngFor="let comp of competencies" class="mb-1">
               {{ comp.name_competencies }} (Level: {{ comp.competencies_proficiency }})
             </p>
-    
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
