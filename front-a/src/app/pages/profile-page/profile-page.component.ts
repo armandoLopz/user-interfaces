@@ -22,7 +22,8 @@ export class ProfilePageComponent implements OnInit {
   languages: any[] = [];
   skills: any[] = [];
   competencies: any[] = [];
-
+  activeTab: string = "languages";
+  
   // Mappings for levels (typed as Record<string, string>)
   degreeLevels: Record<string, string> = {
     'HS': 'High School',
