@@ -3,28 +3,28 @@
 
   <div class="flex-1 p-6">
     <!-- Section: Personal Information -->
-    <div class="bg-white shadow-sm rounded-lg p-6 mb-6" *ngIf="user">
+    <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
       <h2 class="text-xl font-bold text-indigo-700 mb-4">
         <i class="fas fa-user text-indigo-500 mr-2"></i>Personal Information
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
-          <p class="mb-2"><strong>Phone:</strong> {{ user.cellphone }}</p>
-          <p class="mb-2" *ngIf="user.personal_site">
+          <p class="mb-2"><strong>Email:</strong> {{ user?.email }}</p>
+          <p class="mb-2"><strong>Phone:</strong> {{ user?.cellphone }}</p>
+          <p class="mb-2" *ngIf="user?.personal_site">
             <strong>Website:</strong>
-            <a [href]="user.personal_site" class="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
+            <a [href]="user.personal_site" class="text-indigo-600 hover:underline">
               {{ user.personal_site }}
             </a>
           </p>
-          <p class="mb-2" *ngIf="user.personal_description">
+          <p class="mb-2" *ngIf="user?.personal_description">
             <strong>Description:</strong> {{ user.personal_description }}
           </p>
         </div>
-        <div *ngIf="mainAddress">
-          <p class="mb-2"><strong>Country:</strong> {{ mainAddress.country }}</p>
-          <p class="mb-2"><strong>City:</strong> {{ mainAddress.city }}</p>
-          <p class="mb-2" *ngIf="mainAddress.street">
+        <div *ngIf="mainAddress?.city">
+          <p class="mb-2"><strong>Country:</strong> {{ mainAddress?.country }}</p>
+          <p class="mb-2"><strong>City:</strong> {{ mainAddress?.city }}</p>
+          <p class="mb-2" *ngIf="mainAddress?.street">
             <strong>Address:</strong> {{ mainAddress.street }}
           </p>
         </div>
@@ -41,12 +41,8 @@
           Add work experience
         </button>
       </div>
-      @if (!latestWork) {
-      <div class="text-center py-4 text-gray-500">
-        No work experience added yet
-      </div>
-      } @else {
-      <div class="border rounded-lg p-4">
+      
+      <div class="border rounded-lg p-4" *ngIf="latestWork">
         <div class="flex justify-between">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div>
@@ -60,8 +56,8 @@
             <div>
               <p class="mb-1"><strong>Period:</strong></p>
               <p>
-                {{ latestWork.start_work_date| date }} -
-                {{ latestWork.currently_working ? 'Present' : (latestWork.end_work_date| date) }}
+                {{ formatDate(latestWork.start_work_date) }} -
+                {{ latestWork.currently_working ? 'Present' : formatDate(latestWork.end_work_date) }}
               </p>
             </div>
             <div *ngIf="latestWork.description_of_the_job">
@@ -79,7 +75,9 @@
           </div>
         </div>
       </div>
-      }
+      <div class="text-center py-4 text-gray-500" *ngIf="!latestWork">
+        No work experience added yet
+      </div>
     </div>
 
     <!-- Section: Education -->
@@ -92,13 +90,8 @@
           Add education
         </button>
       </div>
-
-      @if (!latestEducation) {
-      <div class="text-center py-4 text-gray-500">
-        No education added yet
-      </div>
-      } @else {
-      <div class="border rounded-lg p-4">
+      
+      <div class="border rounded-lg p-4" *ngIf="latestEducation">
         <div class="flex justify-between">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div>
@@ -111,13 +104,13 @@
             </div>
             <div>
               <p class="mb-1"><strong>Level:</strong></p>
-              <p>{{ latestEducation.degree_level }}</p>
+              <p>{{ getDegreeLevel() }}</p>
             </div>
             <div>
               <p class="mb-1"><strong>Period:</strong></p>
               <p>
-                {{ latestEducation.start_studied_date| date }} -
-                {{ latestEducation.currently_studying ? 'Present' : (latestEducation.end_studied_date| date) }}
+                {{ formatDate(latestEducation.start_studied_date) }} -
+                {{ latestEducation.currently_studying ? 'Present' : formatDate(latestEducation.end_studied_date) }}
               </p>
             </div>
           </div>
@@ -131,11 +124,13 @@
           </div>
         </div>
       </div>
-      }
+      <div class="text-center py-4 text-gray-500" *ngIf="!latestEducation">
+        No education added yet
+      </div>
     </div>
 
-     <!-- Section: Professional Information -->
-     <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
+    <!-- Section: Professional Information -->
+    <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
       <h2 class="text-xl font-bold text-indigo-700 mb-4">
         <i class="fas fa-user-tie text-indigo-500 mr-2"></i>Professional Information
       </h2>
@@ -182,7 +177,7 @@
           </button>
         </div>
         
-        <div *ngIf="languages?.length">
+        <div *ngIf="languages.length">
           <div *ngFor="let lang of languages" class="border rounded-lg p-4 mb-3">
             <div class="flex justify-between items-center">
               <div>
@@ -199,7 +194,7 @@
             </div>
           </div>
         </div>
-        <div class="text-center py-4 text-gray-500" *ngIf="!languages?.length">
+        <div class="text-center py-4 text-gray-500" *ngIf="!languages.length">
           No languages added yet
         </div>
       </div>
@@ -212,12 +207,11 @@
           </button>
         </div>
         
-        <div *ngIf="skills?.length">
-          
+        <div *ngIf="skills.length">
           <div *ngFor="let skill of skills" class="border rounded-lg p-4 mb-3">
             <div class="flex justify-between items-center">
               <div>
-                <span class="font-semibold">{{ skill.name }}</span> (Level: {{ skill.proficiency }})
+                <span class="font-semibold">{{ skill.skill_name }}</span> (Level: {{ skill.skill_proficiency }})
               </div>
               <div class="flex gap-2">
                 <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
@@ -230,7 +224,7 @@
             </div>
           </div>
         </div>
-        <div class="text-center py-4 text-gray-500" *ngIf="!skills?.length">
+        <div class="text-center py-4 text-gray-500" *ngIf="!skills.length">
           No skills added yet
         </div>
       </div>
@@ -243,11 +237,11 @@
           </button>
         </div>
         
-        <div *ngIf="competencies?.length">
+        <div *ngIf="competencies.length">
           <div *ngFor="let comp of competencies" class="border rounded-lg p-4 mb-3">
             <div class="flex justify-between items-center">
               <div>
-                <span class="font-semibold">{{ comp.name }}</span> (Level: {{ comp.proficiency }})
+                <span class="font-semibold">{{ comp.name_competencies }}</span> (Level: {{ comp.competencies_proficiency }})
               </div>
               <div class="flex gap-2">
                 <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
@@ -260,7 +254,7 @@
             </div>
           </div>
         </div>
-        <div class="text-center py-4 text-gray-500" *ngIf="!competencies?.length">
+        <div class="text-center py-4 text-gray-500" *ngIf="!competencies.length">
           No competencies added yet
         </div>
       </div>

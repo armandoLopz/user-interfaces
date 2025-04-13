@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, Signal } from '@angular/core';
 import { GenericService } from '../../services/generic/generic.service';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { forkJoin, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { userInterface, LanguageInterface, skillsOrCompetenciesInterface, WorkExperienceInterface, educationInterface, addressInterface } from '../../interfaces/interfaces.models';
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
@@ -14,16 +14,21 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, SideBarComponent]
 })
 export class ProfilePageComponent implements OnInit {
+
   // Main Data
-  user: any = {};
-  mainAddress: any = {};
-  latestEducation: any = {};
-  latestWork: any = {};
-  languages: any[] = [];
-  skills: any[] = [];
-  competencies: any[] = [];
+  user: userInterface | null = null;
+  mainAddress: addressInterface | null = null;
+  latestEducation: educationInterface | null = null;
+  latestWork: WorkExperienceInterface | null = null;
+  languages: LanguageInterface[] | null = null;
+  skills: skillsOrCompetenciesInterface[] | null = null;
+  competencies: skillsOrCompetenciesInterface[] | null = null
+
   activeTab: string = "languages";
-  
+
+  workEmpty = signal(false)
+  educationEmpty = signal(false)
+
   // Mappings for levels (typed as Record<string, string>)
   degreeLevels: Record<string, string> = {
     'HS': 'High School',
@@ -47,12 +52,33 @@ export class ProfilePageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.loadUserData();
+
+    if (this.latestWork == null) {
+
+      this.workEmpty.set(true);
+    }
+
+    if (this.latestEducation == null) {
+
+      this.educationEmpty.set(true);
+    }
+
+  }
+
+  objectIsEmpty(objectValue: Object) {
+
+    if (Object.keys(objectValue).length !== 0) {
+
+      objectValue = true;
+
+    }
   }
 
   private loadUserData(): void {
     const userId = this.getUserIdFromToken();
-    
+
     if (!userId) {
       this.router.navigate(['/login']);
       return;
@@ -72,16 +98,23 @@ export class ProfilePageComponent implements OnInit {
         return throwError(() => new Error('Error loading user data'));
       })
     ).subscribe({
+      
       next: (data) => {
         this.user = data.user || {};
         this.mainAddress = (data.addresses || []).filter((address: any) => address.user == userId)[0] || {};
         this.latestEducation = (data.educations || []).filter((edu: any) => edu.user == userId)[0] || {};
         this.latestWork = (data.workExperiences || []).filter((work: any) => work.user == userId)[0] || {};
+
         this.languages = (data.languages || []).filter((lang: any) => lang.user == userId);
-        this.skills = (data.skills || []).filter((skill: any) => skill.user == userId);
+        this.skills = (data.skills || []).filter((skill: skillsOrCompetenciesInterface) => skill.id == userId);
         this.competencies = (data.competencies || []).filter((comp: any) => comp.user == userId);
+
+
       }
     });
+    console.log(this.skills);
+    
+
   }
 
   private getUserIdFromToken(): number | null {
