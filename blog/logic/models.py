@@ -153,8 +153,8 @@ class Languages(models.Model):
     
 class Skills(models.Model):
 
-    skill_name = models.CharField(max_length=30)
-    skill_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    name = models.CharField(max_length=30)
+    proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
     user = models.ManyToManyField(User)
 
@@ -166,8 +166,8 @@ class Skills(models.Model):
     
 class Competencies(models.Model):
 
-    name_competencies = models.CharField(max_length=30)
-    competencies_proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    name = models.CharField(max_length=30)
+    proficiency = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
     user = models.ManyToManyField(User)
     class Meta:

@@ -98,7 +98,7 @@ export class ProfilePageComponent implements OnInit {
         return throwError(() => new Error('Error loading user data'));
       })
     ).subscribe({
-      
+
       next: (data) => {
         this.user = data.user || {};
         this.mainAddress = (data.addresses || []).filter((address: any) => address.user == userId)[0] || {};
@@ -109,11 +109,10 @@ export class ProfilePageComponent implements OnInit {
         this.skills = (data.skills || []).filter((skill: skillsOrCompetenciesInterface) => skill.id == userId);
         this.competencies = (data.competencies || []).filter((comp: any) => comp.user == userId);
 
-
       }
     });
     console.log(this.skills);
-    
+
 
   }
 
