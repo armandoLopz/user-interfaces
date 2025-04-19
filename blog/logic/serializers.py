@@ -16,6 +16,20 @@ class User_serializer(serializers.ModelSerializer):
         
         return super().create(validated_data)
 
+class Video_serializer(serializers.ModelSerializer):
+
+    class Meta:
+        
+        model = Video
+        fields = ('__all__')
+
+class Image_serializer(serializers.ModelSerializer):
+
+    class Meta:
+        
+        model = Image
+        fields = ('__all__')
+
 class Configuration_serializer(serializers.ModelSerializer):
 
     class Meta:

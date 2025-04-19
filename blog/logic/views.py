@@ -8,6 +8,14 @@ class User_view(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = User_serializer
 
+class Video_view(viewsets.ModelViewSet):
+    queryset = Video.objects.all()
+    serializer_class = Video_serializer
+
+class Image_view(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = Image_serializer
+
 class Configuration_View(viewsets.ModelViewSet):
     queryset = Configuration.objects.all()
     serializer_class = Configuration_serializer

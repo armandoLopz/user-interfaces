@@ -11,6 +11,29 @@ class User(AbstractUser):
     personal_description = models.CharField(max_length=500, null=True)
     personal_site = models.CharField(max_length=70, null=True)
 
+class Video(models.Model):
+
+    title = models.CharField(max_length=500)
+    description = models.CharField(max_length=500)
+    file = models.FileField(upload_to= 'videos/')
+
+    class Meta:
+        db_table = "video"
+    
+    def __str__(self):
+        return self.title + " " + self.description + " " + self.file
+
+class Image(models.Model):
+
+    title = models.CharField(max_length=500, default= 'title')
+    image = models.ImageField(upload_to= 'images/')
+    
+    class Meta:
+        db_table = "image"
+
+    def __str__(self):
+        return self.image
+
 class Configuration(models.Model):
     
     name = models.CharField(max_length=50)
