@@ -15,7 +15,7 @@ class Video(models.Model):
 
     title = models.CharField(max_length=500)
     description = models.CharField(max_length=500)
-    file = models.FileField(upload_to= 'videos/')
+    video = models.FileField(upload_to= 'videos/')
     subtitle_english = models.FileField(upload_to='subtitles/', blank=True, null=True)
     subtitle_spanish = models.FileField(upload_to='subtitles/', blank=True, null=True)
 
