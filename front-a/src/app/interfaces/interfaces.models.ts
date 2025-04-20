@@ -33,10 +33,13 @@ export interface ImageInterface {
 }
 
 export interface VideoInterface {
-    id?:          number;
-    title:       string;
-    description: string;
-    file:        string;
+    
+    id?:               number;
+    title:            string;
+    description:      string;
+    video_file:       string;
+    subtitle_english: string;
+    subtitle_spanish: string;
 }
 
 export interface userAuth {
