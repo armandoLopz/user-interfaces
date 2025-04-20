@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ADMIN_PAGE_ROUTE } from '../../app.routes.constans';
 import { LoaderComponent } from '../../components/loader/loader.component';
+import { ShowMultimediaComponent } from '../../components/show-multimedia/show-multimedia.component';
 
 @Component({
   selector: 'app-h-page',
-  imports: [RouterLink, LoaderComponent],
+  imports: [RouterLink, LoaderComponent, ShowMultimediaComponent],
   templateUrl: './h-page.component.html',
   styleUrl: './h-page.component.css'
 })

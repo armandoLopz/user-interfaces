@@ -1,0 +1,120 @@
+<section class="mb-16 py-12 bg-gray-100">
+    <div class="container mx-auto px-4">
+      <h2 class="text-4xl font-extrabold text-center mb-8 text-indigo-800">Media Gallery</h2>
+      <p class="text-gray-700 text-lg text-center max-w-3xl mx-auto mb-10">
+        Explore our collection of videos and images showcasing our work and insights.
+      </p>
+  
+      <div class="flex justify-center mb-8">
+        <button
+          (click)="setActiveTab('videos')"
+          [ngClass]="{
+            'bg-indigo-700 text-white': activeTab === 'videos',
+            'bg-white text-indigo-700 border border-indigo-700': activeTab !== 'videos'
+          }"
+          class="px-8 py-3 rounded-l-lg text-lg font-semibold transition-colors duration-300 focus:outline-none hover:bg-indigo-800 hover:text-white"
+        >
+          Videos
+        </button>
+        <button
+          (click)="setActiveTab('images')"
+          [ngClass]="{
+            'bg-indigo-700 text-white': activeTab === 'images',
+            'bg-white text-indigo-700 border border-indigo-700': activeTab !== 'images'
+          }"
+          class="px-8 py-3 rounded-r-lg text-lg font-semibold transition-colors duration-300 focus:outline-none hover:bg-indigo-800 hover:text-white"
+        >
+          Images
+        </button>
+      </div>
+  
+      @if (activeTab === 'videos' && videoLoading) {
+        <div class="text-center text-indigo-700 text-xl">Loading videos...</div>
+      }
+      @if (activeTab === 'images' && imageLoading) {
+        <div class="text-center text-indigo-700 text-xl">Loading images...</div>
+      }
+  
+      @if (activeTab === 'videos' && videoError) {
+        <div class="text-center text-red-600 text-xl">{{ videoError }}</div>
+      }
+      @if (activeTab === 'images' && imageError) {
+        <div class="text-center text-red-600 text-xl">{{ imageError }}</div>
+      }
+  
+      @if (activeTab === 'videos' && !videoLoading && !videoError) {
+        @if (videos.length > 0) {
+          <div class="relative">
+            <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4">
+              @for (video of videos; track video.id) {
+                <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex-shrink-0 snap-center">
+                  <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                    <div class="relative pt-[56.25%]"> <video class="absolute inset-0 w-full h-full object-cover" controls preload="none"
+                             [poster]="video.video_file ? '/placeholder.svg?height=200&width=350' : ''">
+  
+                        @if (video.video_file) {
+                           <source [src]="video.video_file" type="video/mp4">
+                           }
+  
+                        @if (video.subtitle_english) {
+                          <track [src]="video.subtitle_english" kind="subtitles" srclang="en" label="English">
+                        }
+                         @if (video.subtitle_spanish) {
+                          <track [src]="video.subtitle_spanish" kind="subtitles" srclang="es" label="Spanish">
+                        }
+  
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                    <div class="p-6">
+                      <h3 class="text-xl font-bold text-indigo-800 mb-3">{{ video.title }}</h3>
+                      <p class="text-gray-600 text-base">{{ video.description }}</p>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          } @else {
+           <div class="text-center text-gray-600 w-full">No videos found.</div>
+        }
+      }
+  
+      @if (activeTab === 'images' && !imageLoading && !imageError) {
+        @if (images.length > 0) {
+          <div class="relative">
+             <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-4">
+              @for (image of images; track image.id) {
+                <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex-shrink-0 snap-center">
+                  <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105">
+                    <div class="relative pt-[75%]"> @if (image.image) {
+                         <img [src]="image.image" [alt]="image.title" class="absolute inset-0 w-full h-full object-cover">
+                       } @else {
+                         <img src="/placeholder.svg" alt="No image available" class="absolute inset-0 w-full h-full object-cover">
+                       }
+                    </div>
+                    <div class="p-6">
+                      <h3 class="text-xl font-bold text-indigo-800 mb-3">{{ image.title }}</h3>
+                      </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          } @else {
+           <div class="text-center text-gray-600 w-full">No images found.</div>
+        }
+      }
+  
+       </div>
+  </section>
+  
+  <style>
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
+  </style>
