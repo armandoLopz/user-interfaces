@@ -1,13 +1,33 @@
 @import 'cropperjs/dist/cropper.min.css';
 
-/* Estilos Generales */
+/* Siempre muestra el grid 3×3 */
+.cropper-view-box .cropper-dashed {
+  display: block !important;
+  opacity: 0.7;     /* ajusta la opacidad a tu gusto */
+}
+
+/* Opcional: mejora la visibilidad de la zona activa */
+.cropper-view-box .cropper-face {
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+/* Asegúrate de que los control points sean bien visibles */
+.cropper-point {
+  width: 12px;
+  height: 12px;
+  background-color: #4f46e5;
+  opacity: 1;
+}
+
+
+/* General Styles */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;
 }
 
-/* Estilos para el Contenedor del Cropper */
+/* Improved Cropper Container Styles */
 .cropper-container {
   width: 500px;
   height: 500px;
@@ -16,16 +36,16 @@
   border-radius: 12px;
   overflow: hidden;
   position: relative;
+  margin: 0 auto;
 }
 
 .cropper-image {
+  display: block;
   max-width: 100%;
   max-height: 100%;
-  display: block;
-  object-fit: contain;
 }
 
-/* Vista Previa del Recorte */
+/* Crop Preview Styles */
 .preview-container {
   width: 400px;
   height: 400px;
@@ -41,7 +61,7 @@
   object-fit: cover;
 }
 
-/* Botones de Herramientas */
+/* Toolbar Button Styles */
 .toolbar-btn {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -62,7 +82,7 @@
   margin-right: 0.5rem;
 }
 
-/* Personalización de Cropper.js */
+/* Cropper.js Customization */
 .cropper-view-box {
   outline: 2px solid #4f46e5;
   outline-color: rgba(79, 70, 229, 0.75);
@@ -79,6 +99,10 @@
 .cropper-line {
   background-color: #4f46e5;
   opacity: 0.3;
+}
+
+.cropper-face {
+  background-color: rgba(79, 70, 229, 0.1);
 }
 
 /* Responsive Design */
@@ -100,13 +124,13 @@
   }
 }
 
-/* Estilos para Inputs de Archivo */
+/* File Input Styles */
 input[type="file"]::-webkit-file-upload-button {
   visibility: hidden;
 }
 
 input[type="file"]::before {
-  content: 'Seleccionar Archivo';
+  content: 'Select File';
   display: inline-block;
   padding: 0.5rem 1rem;
   background-color: #4f46e5;
@@ -120,7 +144,7 @@ input[type="file"]:hover::before {
   background-color: #4338ca;
 }
 
-/* Mensajes de Error */
+/* Error Message Styles */
 .bg-red-100 {
   background-color: #fee2e2;
 }

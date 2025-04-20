@@ -2,49 +2,48 @@
   <app-side-bar></app-side-bar>
 
   <main class="container mx-auto px-4 py-8">
-
     <br>
-    <h1 class="text-4xl font-bold text-indigo-700 mb-8">Gestión Multimedia</h1>
+    <h1 class="text-4xl font-bold text-indigo-700 mb-8">Multimedia Management</h1>
 
     <!-- Video Upload Section -->
     <section class="mb-16">
-      <h2 class="text-3xl font-bold text-indigo-700 mb-6">Subir Video</h2>
+      <h2 class="text-3xl font-bold text-indigo-700 mb-6">Upload Video</h2>
       <form [formGroup]="videoForm" (ngSubmit)="onSubmitVideo()" class="bg-white p-6 rounded-xl shadow-lg">
         <div class="mb-6">
-          <label class="block text-indigo-700 font-semibold mb-3">Título del Video</label>
-          <input type="text" formControlName="title" placeholder="Título del video"
+          <label class="block text-indigo-700 font-semibold mb-3">Video Title</label>
+          <input type="text" formControlName="title" placeholder="Enter video title"
                  class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent">
           <div class="text-red-600 text-sm mt-1" *ngIf="videoForm.get('title')?.invalid && videoForm.get('title')?.touched">
-            <span *ngIf="videoForm.get('title')?.errors?.['required']">Campo requerido</span>
-            <span *ngIf="videoForm.get('title')?.errors?.['minlength']">Mínimo 3 caracteres</span>
+            <span *ngIf="videoForm.get('title')?.errors?.['required']">Title is required</span>
+            <span *ngIf="videoForm.get('title')?.errors?.['minlength']">Minimum 3 characters required</span>
           </div>
         </div>
 
         <div class="mb-6">
-          <label class="block text-indigo-700 font-semibold mb-3">Descripción</label>
-          <textarea formControlName="description" rows="4" placeholder="Descripción del video"
+          <label class="block text-indigo-700 font-semibold mb-3">Description</label>
+          <textarea formControlName="description" rows="4" placeholder="Enter video description"
                     class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent"></textarea>
           <div class="text-red-600 text-sm mt-1" *ngIf="videoForm.get('description')?.invalid && videoForm.get('description')?.touched">
-            <span *ngIf="videoForm.get('description')?.errors?.['required']">Campo requerido</span>
-            <span *ngIf="videoForm.get('description')?.errors?.['minlength']">Mínimo 10 caracteres</span>
+            <span *ngIf="videoForm.get('description')?.errors?.['required']">Description is required</span>
+            <span *ngIf="videoForm.get('description')?.errors?.['minlength']">Minimum 10 characters required</span>
           </div>
         </div>
 
         <div class="mb-6">
-          <label class="block text-indigo-700 font-semibold mb-3">Archivo de Video (MP4/WebM, máx. 50MB)</label>
+          <label class="block text-indigo-700 font-semibold mb-3">Video File (MP4/WebM, max. 50MB)</label>
           <input type="file" accept="video/mp4,video/webm" (change)="onVideoFileChange($event)"
                  class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
           <video #videoPreview *ngIf="currentVideoFile" controls class="mt-4 w-full max-w-2xl rounded-lg"></video>
         </div>
 
         <div class="mb-6">
-          <label class="block text-indigo-700 font-semibold mb-3">Subtítulos en Español (.vtt/.srt)</label>
+          <label class="block text-indigo-700 font-semibold mb-3">Spanish Subtitles (.vtt/.srt)</label>
           <input type="file" accept=".vtt,.srt" (change)="onSubtitleESChange($event)"
                  class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
         </div>
 
         <div class="mb-8">
-          <label class="block text-indigo-700 font-semibold mb-3">Subtítulos en Inglés (.vtt/.srt)</label>
+          <label class="block text-indigo-700 font-semibold mb-3">English Subtitles (.vtt/.srt)</label>
           <input type="file" accept=".vtt,.srt" (change)="onSubtitleENChange($event)"
                  class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
         </div>
@@ -56,7 +55,7 @@
                     [class.bg-indigo-600]="selectedSubtitle === 'es'"
                     class="px-4 py-2 rounded-lg text-white transition-colors"
                     [class.bg-gray-400]="selectedSubtitle !== 'es'">
-              Español
+              Spanish
             </button>
             <button type="button" (click)="changeSubtitleLanguage('en')"
                     [class.bg-indigo-600]="selectedSubtitle === 'en'"
@@ -74,17 +73,17 @@
 
         <button type="submit" [disabled]="videoForm.invalid"
                 class="w-full py-3 px-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors disabled:bg-indigo-300 disabled:cursor-not-allowed">
-          Subir Video
+          Upload Video
         </button>
       </form>
     </section>
 
-    <!-- Image Upload Section -->
+    <!-- Image Upload Section - FIXED -->
     <section class="mb-16">
-      <h2 class="text-3xl font-bold text-indigo-700 mb-6">Subir Imagen</h2>
+      <h2 class="text-3xl font-bold text-indigo-700 mb-6">Upload Image</h2>
       <form [formGroup]="imageForm" (ngSubmit)="onSubmitImage()" class="bg-white p-6 rounded-xl shadow-lg">
         <div class="mb-6">
-          <label class="block text-indigo-700 font-semibold mb-3">Imagen (JPG/PNG/WebP, mín. 800x600px)</label>
+          <label class="block text-indigo-700 font-semibold mb-3">Image (JPG/PNG/WebP, min. 800x600px)</label>
           <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onImageFileChange($event)"
                  class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
         </div>
@@ -94,18 +93,19 @@
         </div>
 
         <div *ngIf="isImageLoaded" class="mb-8">
-          <h3 class="text-xl font-bold text-indigo-600 mb-4">Editor de Imagen</h3>
+          <h3 class="text-xl font-bold text-indigo-600 mb-4">Image Editor</h3>
           
+          <!-- FIXED: Added a proper container with fixed dimensions -->
           <div class="cropper-container mx-auto mb-8">
-            <img #imageElement [src]="imagePreview" alt="Previsualización" class="cropper-image">
+            <img #imageElement [src]="imagePreview" alt="Preview" class="cropper-image">
           </div>
 
           <div class="flex flex-wrap gap-3 justify-center mb-6">
             <button type="button" (click)="rotateImage(-90)" class="toolbar-btn">
-              <i class="fas fa-undo-alt mr-2"></i>Rotar Izquierda
+              <i class="fas fa-undo-alt mr-2"></i>Rotate Left
             </button>
             <button type="button" (click)="rotateImage(90)" class="toolbar-btn">
-              <i class="fas fa-redo-alt mr-2"></i>Rotar Derecha
+              <i class="fas fa-redo-alt mr-2"></i>Rotate Right
             </button>
             <button type="button" (click)="zoomIn()" class="toolbar-btn">
               <i class="fas fa-search-plus mr-2"></i>Zoom In
@@ -113,29 +113,31 @@
             <button type="button" (click)="zoomOut()" class="toolbar-btn">
               <i class="fas fa-search-minus mr-2"></i>Zoom Out
             </button>
+            <!-- FIXED: Renamed to clarify function -->
             <button type="button" (click)="setMoveMode()" class="toolbar-btn">
-              <i class="fas fa-arrows-alt mr-2"></i>Mover
+              <i class="fas fa-arrows-alt mr-2"></i>Move Image
             </button>
-            <button type="button" (click)="setZoomMode()" class="toolbar-btn">
-              <i class="fas fa-crop-alt mr-2"></i>Recortar
+            <!-- FIXED: Renamed and fixed function call -->
+            <button type="button" (click)="setCropMode()" class="toolbar-btn">
+              <i class="fas fa-crop-alt mr-2"></i>Adjust Crop
             </button>
             <button type="button" (click)="resetCropper()" class="toolbar-btn">
-              <i class="fas fa-sync-alt mr-2"></i>Reiniciar
+              <i class="fas fa-sync-alt mr-2"></i>Reset
             </button>
             <button type="button" (click)="onCropImage()" class="toolbar-btn bg-green-600 hover:bg-green-700">
-              <i class="fas fa-check mr-2"></i>Aplicar Recorte
+              <i class="fas fa-check mr-2"></i>Apply Crop
             </button>
           </div>
 
           <div *ngIf="croppedImage" class="preview-container mx-auto">
-            <h3 class="text-xl font-bold text-indigo-600 mb-4">Vista Previa</h3>
-            <img [src]="croppedImage" alt="Imagen Recortada" class="preview-image">
+            <h3 class="text-xl font-bold text-indigo-600 mb-4">Preview</h3>
+            <img [src]="croppedImage" alt="Cropped Image" class="preview-image">
           </div>
         </div>
 
         <button type="submit" [disabled]="!croppedImage"
                 class="w-full py-3 px-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors disabled:bg-indigo-300 disabled:cursor-not-allowed">
-          Guardar Imagen
+          Save Image
         </button>
       </form>
     </section>

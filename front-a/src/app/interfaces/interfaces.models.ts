@@ -26,6 +26,19 @@ export interface LanguageInterface {
     user?: number[];
 }
 
+export interface ImageInterface {
+    id?:    number;
+    title: string;
+    image: string;
+}
+
+export interface VideoInterface {
+    id?:          number;
+    title:       string;
+    description: string;
+    file:        string;
+}
+
 export interface userAuth {
 
     username: string,
