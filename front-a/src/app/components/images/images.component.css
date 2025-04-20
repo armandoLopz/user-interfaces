@@ -1,0 +1,35 @@
+/* Add this to your images.component.css file */
+
+/* Target the background element added by Cropper.js */
+.cropper-bg {
+    /* Example: Use a very subtle gray checkerboard */
+    background: #e5e7eb !important; /* Tailwind gray-200 */
+    background-image: linear-gradient(45deg, #f9fafb 25%, transparent 25%, transparent 75%, #f9fafb 75%, #f9fafb), linear-gradient(45deg, #f9fafb 25%, transparent 25%, transparent 75%, #f9fafb 75%, #f9fafb) !important; /* Very light gray / white checkerboard */
+    background-size: 20px 20px !important; /* Size of the checkerboard squares */
+    background-position: 0 0, 10px 10px !important; /* Offset for the checkerboard pattern */
+  
+    /* Or a solid color */
+    /* background-color: #f3f4f6 !important; */ /* Tailwind gray-100 */
+    /* background-image: none !important; */
+  }
+  
+  /* Optional: Style the canvas itself if needed */
+  /* The canvas holds the image */
+  .cropper-canvas {
+      /* Example: Ensure it takes full height within the container */
+      height: 100% !important;
+      max-height: 100% !important;
+  }
+  
+  /* Optional: Style the container */
+  /* The div you apply #cropperImageElement is where cropper lives */
+  /* You already have styles in the HTML, these are just examples */
+  /* Ensure the image inside cropper does not cause issues */
+  /* Cropper usually handles this, but you can add styles if necessary */
+  .cropper-container img {
+      display: block; /* Prevent extra space below image */
+      max-width: 100%; /* Ensure image fits container */
+  }
+  
+  /* Cropper.js adds various elements, inspect the DOM to target others if needed */
+  /* .cropper-view-box, .cropper-face, etc. */
