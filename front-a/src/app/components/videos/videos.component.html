@@ -1,0 +1,93 @@
+<!-- Video Upload Section -->
+<section class="mb-16">
+  <h2 class="text-3xl font-bold text-gray-800 mb-6">Upload Video</h2>
+  <form [formGroup]="videoForm" (ngSubmit)="onSubmitVideo()" class="bg-white p-6 rounded-xl shadow-lg">
+    <div class="mb-6">
+      <label class="block text-gray-700 font-semibold mb-3">Video Title</label>
+      <input type="text" formControlName="title" placeholder="Enter video title"
+             class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent">
+      
+      @if (videoForm.get('title')?.invalid && videoForm.get('title')?.touched) {
+        <div class="text-red-600 text-sm mt-1">
+          @if (videoForm.get('title')?.errors?.['required']) {
+            <span>Title is required</span>
+          }
+          @if (videoForm.get('title')?.errors?.['minlength']) {
+            <span>Minimum 3 characters required</span>
+          }
+        </div>
+      }
+    </div>
+    
+    <div class="mb-6">
+      <label class="block text-gray-700 font-semibold mb-3">Description</label>
+      <textarea formControlName="description" rows="4" placeholder="Enter video description"
+                class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent"></textarea>
+      
+      @if (videoForm.get('description')?.invalid && videoForm.get('description')?.touched) {
+        <div class="text-red-600 text-sm mt-1">
+          @if (videoForm.get('description')?.errors?.['required']) {
+            <span>Description is required</span>
+          }
+          @if (videoForm.get('description')?.errors?.['minlength']) {
+            <span>Minimum 10 characters required</span>
+          }
+        </div>
+      }
+    </div>
+    
+    <div class="mb-6">
+      <label class="block text-gray-700 font-semibold mb-3">Video File (MP4/WebM, max. 50MB)</label>
+      <input type="file" accept="video/mp4,video/webm" (change)="onVideoFileChange($event)"
+             class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+      
+      @if (currentVideoFile) {
+        <video #videoPreview controls class="mt-4 w-full max-w-2xl rounded-lg"></video>
+      }
+    </div>
+    
+    <div class="mb-6">
+      <label class="block text-gray-700 font-semibold mb-3">Spanish Subtitles (.vtt/.srt)</label>
+      <input type="file" accept=".vtt,.srt" (change)="onSubtitleESChange($event)"
+             class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+    </div>
+    
+    <div class="mb-8">
+      <label class="block text-gray-700 font-semibold mb-3">English Subtitles (.vtt/.srt)</label>
+      <input type="file" accept=".vtt,.srt" (change)="onSubtitleENChange($event)"
+             class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+    </div>
+    
+    <!-- Video Player -->
+    @if (currentVideoFile && (subtitleENUrl || subtitleESUrl)) {
+      <div class="mb-8">
+        <div class="flex gap-3 mb-4">
+          <button type="button" (click)="changeSubtitleLanguage('es')" 
+                  [class.bg-blue-600]="selectedSubtitle === 'es'"
+                  class="px-4 py-2 rounded-lg text-white transition-colors"
+                  [class.bg-gray-400]="selectedSubtitle !== 'es'">
+            Spanish
+          </button>
+          <button type="button" (click)="changeSubtitleLanguage('en')"
+                  [class.bg-blue-600]="selectedSubtitle === 'en'"
+                  class="px-4 py-2 rounded-lg text-white transition-colors"
+                  [class.bg-gray-400]="selectedSubtitle !== 'en'">
+            English
+          </button>
+        </div>
+        <video #videoPlayer controls class="w-full max-w-2xl rounded-lg bg-black"></video>
+      </div>
+    }
+    
+    @if (videoError) {
+      <div class="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
+        {{ videoError }}
+      </div>
+    }
+    
+    <button type="submit" [disabled]="videoForm.invalid"
+            class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:bg-blue-300 disabled:cursor-not-allowed">
+      Upload Video
+    </button>
+  </form>
+</section>
