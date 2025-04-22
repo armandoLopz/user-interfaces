@@ -1,26 +1,29 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ImageService } from '../../services/multimedia/image.service';
 import { VideoService } from '../../services/multimedia/video.service';
-// Import the specific interfaces you are using
 import { VideoInterface, ImageInterface } from '../../interfaces/interfaces.models';
 import { Subscription, catchError, of } from 'rxjs';
-// Only import NgClass as it's used for [ngClass] in the template
-import { NgClass } from '@angular/common';
+import { NgClass, CommonModule } from '@angular/common'; // Import CommonModule for NgIf, NgFor, etc.
+
+// Definimos una interfaz local que extiende la original para manejar el estado del placeholder
+interface VideoDisplay extends VideoInterface {
+  showPlaceholder: boolean; // Propiedad para controlar la visibilidad del placeholder
+}
 
 @Component({
   selector: 'app-show-multimedia',
-  standalone: true, // The component is standalone
+  standalone: true, // El componente es standalone
   imports: [
-     // Required for services using HttpClient
-    NgClass // Needed for [ngClass]
-    // NgIf and NgFor are NOT needed here because we are using the @if and @for template syntax directly
+    CommonModule, // Import CommonModule for NgIf, NgFor, NgClass, etc.
+    NgClass // NgClass is also included in CommonModule, but listed here for clarity if preferred
   ],
   templateUrl: './show-multimedia.component.html',
   styleUrls: ['./show-multimedia.component.css']
 })
 export class ShowMultimediaComponent implements OnInit, OnDestroy {
 
-  videos: VideoInterface[] = [];
+  // Usamos la nueva interfaz extendida para la lista de videos
+  videos: VideoDisplay[] = [];
   images: ImageInterface[] = [];
   activeTab: 'videos' | 'images' = 'videos';
   videoLoading = true;
@@ -30,76 +33,207 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
+  // Carousel state
+  currentVideoIndex = 0;
+  currentImageIndex = 0;
+  itemsPerSlide = 3; // Number of items to show per slide
+
   constructor(
     private videoService: VideoService,
     private imageService: ImageService
   ) { }
 
   ngOnInit(): void {
-    // Load data when the component initializes
+    // Cargar datos cuando el componente se inicializa
     this.loadVideos();
     this.loadImages();
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions to prevent memory leaks
+    // Desuscribirse de todas las suscripciones para prevenir fugas de memoria
     this.subscriptions.unsubscribe();
   }
 
   /**
-   * Fetches video data from the VideoService.
+   * Obtiene los datos de videos desde el VideoService.
    */
   loadVideos(): void {
     this.videoLoading = true;
-    this.videoError = null; // Clear previous errors
+    this.videoError = null; // Limpiar errores previos
     this.subscriptions.add(
       this.videoService.getAllVideos().pipe(
         catchError(error => {
           console.error('Error loading videos:', error);
-          // Set a user-friendly error message
+          // Establecer un mensaje de error amigable para el usuario
           this.videoError = 'Failed to load videos. Please try again later.';
           this.videoLoading = false;
-          // Return an empty observable to complete the stream and prevent errors from breaking the app
+          // Retornar un observable vacío para completar el stream y evitar que los errores rompan la aplicación
           return of([]);
         })
       ).subscribe(data => {
-        this.videos = data;
+        // Mapeamos los datos recibidos a nuestra nueva interfaz, inicializando showPlaceholder a true
+        this.videos = data.map(video => ({
+          ...video,
+          showPlaceholder: true // Inicialmente mostramos el placeholder para cada video
+        }));
         this.videoLoading = false;
+
+        console.log(this.videos);
+        console.log(this.videos.length);
+        
+        
       })
     );
+    
   }
 
   /**
-   * Fetches image data from the ImageService.
+   * Obtiene los datos de imágenes desde el ImageService.
    */
   loadImages(): void {
     this.imageLoading = true;
-    this.imageError = null; // Clear previous errors
+    this.imageError = null; // Limpiar errores previos
     this.subscriptions.add(
       this.imageService.getAllimages().pipe(
         catchError(error => {
           console.error('Error loading images:', error);
-           // Set a user-friendly error message
+           // Establecer un mensaje de error amigable
           this.imageError = 'Failed to load images. Please try again later.';
           this.imageLoading = false;
-           // Return an empty observable
+           // Retornar un observable vacío
           return of([]);
         })
       ).subscribe(data => {
         this.images = data;
         this.imageLoading = false;
       })
+      
     );
   }
 
   /**
-   * Sets the currently active media tab.
-   * @param tab - The tab to activate ('videos' or 'images').
+   * Establece la pestaña de medios activa actualmente.
+   * @param tab - La pestaña a activar ('videos' o 'images').
    */
   setActiveTab(tab: 'videos' | 'images'): void {
     this.activeTab = tab;
-    // You might want to reset the scroll position or carousel index here
-    // if you implement a carousel with index tracking.
+    // Reset indices when changing tabs
+    this.currentVideoIndex = 0;
+    this.currentImageIndex = 0;
   }
 
+  /**
+   * Se llama cuando un elemento de video ha cargado suficientes datos para mostrar un frame.
+   * Oculta el placeholder correspondiente para ese video.
+   * @param video El objeto de video cargado (con la propiedad showPlaceholder).
+   */
+  onVideoLoaded(video: VideoDisplay): void {
+    video.showPlaceholder = false;
+  }
+
+  // --- Carousel Navigation Logic ---
+
+  /**
+   * Moves the video carousel to the next set of items.
+   */
+  nextVideo(): void {
+    const nextIndex = this.currentVideoIndex + this.itemsPerSlide;
+    if (nextIndex < this.videos.length) {
+      this.currentVideoIndex = nextIndex;
+    } else {
+      // Wrap around to the beginning
+      this.currentVideoIndex = 0;
+    }
+  }
+
+  /**
+   * Moves the video carousel to the previous set of items.
+   */
+  prevVideo(): void {
+    const prevIndex = this.currentVideoIndex - this.itemsPerSlide;
+    if (prevIndex >= 0) {
+      this.currentVideoIndex = prevIndex;
+    } else {
+      // Wrap around to the end
+      // Calculate the index of the last full slide, or the very last item if not a full slide
+      const remainingItems = this.videos.length % this.itemsPerSlide;
+      if (remainingItems === 0) {
+         // If total items is a multiple of itemsPerSlide, go back to the start of the last full slide
+        this.currentVideoIndex = this.videos.length - this.itemsPerSlide;
+      } else {
+        // Go back to the start of the last partial slide
+        this.currentVideoIndex = this.videos.length - remainingItems;
+      }
+       // Handle case where there are fewer items than itemsPerSlide
+       if (this.currentVideoIndex < 0 && this.videos.length > 0) {
+           this.currentVideoIndex = 0; // Go to the first slide if wrapping back from the beginning
+       } else if (this.videos.length === 0) {
+           this.currentVideoIndex = 0; // Keep at 0 if there are no videos
+       }
+    }
+  }
+
+
+  /**
+   * Moves the image carousel to the next set of items.
+   */
+  nextImage(): void {
+    const nextIndex = this.currentImageIndex + this.itemsPerSlide;
+    if (nextIndex < this.images.length) {
+      this.currentImageIndex = nextIndex;
+    } else {
+      // Wrap around to the beginning
+      this.currentImageIndex = 0;
+    }
+  }
+
+  /**
+   * Moves the image carousel to the previous set of items.
+   */
+  prevImage(): void {
+    const prevIndex = this.currentImageIndex - this.itemsPerSlide;
+     if (prevIndex >= 0) {
+      this.currentImageIndex = prevIndex;
+    } else {
+      // Wrap around to the end
+       const remainingItems = this.images.length % this.itemsPerSlide;
+       if (remainingItems === 0) {
+          this.currentImageIndex = this.images.length - this.itemsPerSlide;
+       } else {
+         this.currentImageIndex = this.images.length - remainingItems;
+       }
+        // Handle case where there are fewer items than itemsPerSlide
+       if (this.currentImageIndex < 0 && this.images.length > 0) {
+           this.currentImageIndex = 0; // Go to the first slide if wrapping back from the beginning
+       } else if (this.images.length === 0) {
+           this.currentImageIndex = 0; // Keep at 0 if there are no images
+       }
+    }
+  }
+
+  /**
+   * Gets the videos that should be currently displayed in the carousel.
+   * @returns An array of VideoDisplay objects.
+   */
+  get displayedVideos(): VideoDisplay[] {
+    return this.videos.slice(this.currentVideoIndex, this.currentVideoIndex + this.itemsPerSlide);
+  }
+
+   /**
+   * Gets the images that should be currently displayed in the carousel.
+   * @returns An array of ImageInterface objects.
+   */
+  get displayedImages(): ImageInterface[] {
+    return this.images.slice(this.currentImageIndex, this.currentImageIndex + this.itemsPerSlide);
+  }
+
+   // Determine if the previous button should be disabled (optional)
+   // isPrevDisabled(currentIndex: number, totalItems: number): boolean {
+   //   return currentIndex === 0;
+   // }
+
+   // Determine if the next button should be disabled (optional)
+   // isNextDisabled(currentIndex: number, totalItems: number): boolean {
+   //    return currentIndex + this.itemsPerSlide >= totalItems;
+   // }
 }
