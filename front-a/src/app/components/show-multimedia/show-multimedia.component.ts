@@ -30,6 +30,7 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
   imageLoading = true;
   videoError: string | null = null;
   imageError: string | null = null;
+  isAnimating = false;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -47,11 +48,40 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
     // Cargar datos cuando el componente se inicializa
     this.loadVideos();
     this.loadImages();
+    
+    // Ajustar itemsPerSlide según el tamaño de la pantalla
+    this.adjustItemsPerSlide();
+    
+    // Escuchar cambios en el tamaño de la ventana
+    window.addEventListener('resize', this.onWindowResize.bind(this));
   }
 
   ngOnDestroy(): void {
     // Desuscribirse de todas las suscripciones para prevenir fugas de memoria
     this.subscriptions.unsubscribe();
+    
+    // Eliminar el event listener
+    window.removeEventListener('resize', this.onWindowResize.bind(this));
+  }
+
+  /**
+   * Ajusta la cantidad de elementos por slide según el tamaño de la pantalla
+   */
+  adjustItemsPerSlide(): void {
+    if (window.innerWidth < 480) {
+      this.itemsPerSlide = 1;
+    } else if (window.innerWidth < 768) {
+      this.itemsPerSlide = 2;
+    } else {
+      this.itemsPerSlide = 3;
+    }
+  }
+
+  /**
+   * Maneja el evento de cambio de tamaño de la ventana
+   */
+  onWindowResize(): void {
+    this.adjustItemsPerSlide();
   }
 
   /**
@@ -77,10 +107,6 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
           showPlaceholder: true // Inicialmente mostramos el placeholder para cada video
         }));
         this.videoLoading = false;
-
-        console.log(this.videos);
-        console.log(this.videos.length);
-        
         
       })
     );
@@ -131,6 +157,62 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
     video.showPlaceholder = false;
   }
 
+  /**
+   * Helper method to generate transform style for carousel
+   */
+  getTransformStyle(type: 'video' | 'image'): string {
+    const currentIndex = type === 'video' ? this.currentVideoIndex : this.currentImageIndex;
+    return `translateX(-${currentIndex * (100 / this.itemsPerSlide)}%)`;
+  }
+
+  /**
+   * Genera un array para los indicadores de página
+   */
+  getPageIndicators(totalItems: number): number[] {
+    const pageCount = Math.ceil(totalItems / this.itemsPerSlide);
+    return Array.from({ length: pageCount }, (_, i) => i);
+  }
+
+  /**
+   * Verifica si la página de video actual está activa
+   */
+  isActiveVideoPage(pageIndex: number): boolean {
+    return Math.floor(this.currentVideoIndex / this.itemsPerSlide) === pageIndex;
+  }
+
+  /**
+   * Verifica si la página de imagen actual está activa
+   */
+  isActiveImagePage(pageIndex: number): boolean {
+    return Math.floor(this.currentImageIndex / this.itemsPerSlide) === pageIndex;
+  }
+
+  /**
+   * Navega a una página específica de videos
+   */
+  goToVideoPage(pageIndex: number): void {
+    this.currentVideoIndex = pageIndex * this.itemsPerSlide;
+    this.animateTransition();
+  }
+
+  /**
+   * Navega a una página específica de imágenes
+   */
+  goToImagePage(pageIndex: number): void {
+    this.currentImageIndex = pageIndex * this.itemsPerSlide;
+    this.animateTransition();
+  }
+
+  /**
+   * Anima la transición entre slides
+   */
+  animateTransition(): void {
+    this.isAnimating = true;
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, 500); // Duración de la animación
+  }
+
   // --- Carousel Navigation Logic ---
 
   /**
@@ -144,6 +226,7 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
       // Wrap around to the beginning
       this.currentVideoIndex = 0;
     }
+    this.animateTransition();
   }
 
   /**
@@ -171,6 +254,7 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
            this.currentVideoIndex = 0; // Keep at 0 if there are no videos
        }
     }
+    this.animateTransition();
   }
 
 
@@ -185,6 +269,7 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
       // Wrap around to the beginning
       this.currentImageIndex = 0;
     }
+    this.animateTransition();
   }
 
   /**
@@ -209,6 +294,7 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
            this.currentImageIndex = 0; // Keep at 0 if there are no images
        }
     }
+    this.animateTransition();
   }
 
   /**
@@ -226,14 +312,4 @@ export class ShowMultimediaComponent implements OnInit, OnDestroy {
   get displayedImages(): ImageInterface[] {
     return this.images.slice(this.currentImageIndex, this.currentImageIndex + this.itemsPerSlide);
   }
-
-   // Determine if the previous button should be disabled (optional)
-   // isPrevDisabled(currentIndex: number, totalItems: number): boolean {
-   //   return currentIndex === 0;
-   // }
-
-   // Determine if the next button should be disabled (optional)
-   // isNextDisabled(currentIndex: number, totalItems: number): boolean {
-   //    return currentIndex + this.itemsPerSlide >= totalItems;
-   // }
 }

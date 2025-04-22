@@ -1,7 +1,102 @@
 .hide-scrollbar {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
-  }
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+/* Estilos para el carrusel */
+.carousel-container {
+ overflow: hidden;
+ position: relative;
+ width: 100%;
+}
+
+.carousel-track {
+ display: flex;
+ transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+ width: 100%;
+}
+
+.carousel-track.animating {
+ transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-item {
+ flex: 0 0 auto;
+ width: calc(100% / 3); /* Para 3 elementos por slide */
+}
+
+/* Botones de navegación */
+.carousel-nav-button {
+ flex-shrink: 0;
+ margin: 0 0.5rem;
+ background-color: #4338ca;
+ color: white;
+ padding: 0.5rem;
+ border-radius: 9999px;
+ transition: all 0.3s ease;
+ border: none;
+ outline: none;
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.carousel-nav-button:hover {
+ background-color: #3730a3;
+ transform: scale(1.05);
+}
+
+.carousel-nav-button:active {
+ transform: scale(0.95);
+}
+
+.carousel-nav-button.disabled {
+ opacity: 0.5;
+ cursor: not-allowed;
+ pointer-events: none;
+}
+
+/* Indicadores de página */
+.carousel-indicator {
+ width: 10px;
+ height: 10px;
+ border-radius: 50%;
+ background-color: #d1d5db;
+ border: none;
+ padding: 0;
+ transition: all 0.3s ease;
+ cursor: pointer;
+}
+
+.carousel-indicator.active {
+ background-color: #4338ca;
+ transform: scale(1.2);
+}
+
+/* Animación de transición */
+@keyframes fadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+}
+
+.carousel-item {
+ animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+ .carousel-item {
+   width: calc(100% / 2); /* Para 2 elementos en tablets */
+ }
+}
+
+@media (max-width: 480px) {
+ .carousel-item {
+   width: 100%; /* Para 1 elemento en móviles */
+ }
+}
