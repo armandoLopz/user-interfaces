@@ -8,6 +8,7 @@ import { WorkSectionComponent } from '../../components/work-section/work-section
 import { ApiUserService } from '../../services/user/api.user.service';
 import { EducationSectionComponent } from '../../components/education-section/education-section.component';
 import { TabComponent } from '../../components/tab/tab.component';
+import { getUserIdFromToken } from '../../utils/getToken';
 
 @Component({
   selector: 'app-profile-page',
@@ -41,7 +42,7 @@ export class ProfilePageComponent implements OnInit {
 
   private loadUserData(): void {
 
-    const userId = this.getUserIdFromToken();
+    const userId = getUserIdFromToken();
 
     if (!userId) {
       this.router.navigate(['/login']);
@@ -65,18 +66,6 @@ export class ProfilePageComponent implements OnInit {
       },
     });
 
-  }
-
-  private getUserIdFromToken(): number | null {
-    const token = localStorage.getItem('access_token');
-    if (!token) return null;
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.user_id;
-    } catch (e) {
-      console.error('Error decoding token:', e);
-      return null;
-    }
   }
 
 }

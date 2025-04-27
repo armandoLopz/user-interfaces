@@ -4,13 +4,12 @@
   background-color: #f0f0f0;  /* Fondo temporal para depuración */
 }
 
-/* Corregir iconos rotos de Leaflet */
 .leaflet-marker-icon,
 .leaflet-div-icon {
-  background-image: url('https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png');
+  background-image: url('./../../../../assets/icons/marker-icon.png');
 }
 
 .leaflet-marker-shadow {
-  background-image: url('https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png');
+  background-image: url('./../../../../assets/icons/marker-shadow.png');
 }
 

@@ -34,12 +34,12 @@ export class AddressService {
   deleteAddressData(addressId: number): Observable<addressInterface> {
 
     //PROBABLY CAN U¿I CHANGE THIS RETURN TYPE
-    return this.http.delete<addressInterface>(`${this.url}/${addressId}`)
+    return this.http.delete<addressInterface>(`${this.url}${addressId}/`)
   }
 
   updateAddressData(updateAddressData: any): Observable<addressInterface> {
 
-    return this.http.put<addressInterface>(`${this.url}/${updateAddressData.id}`, updateAddressData)
+    return this.http.put<addressInterface>(`${this.url}${updateAddressData.id}/`, updateAddressData)
   }
 
 }

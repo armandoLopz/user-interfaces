@@ -1,5 +1,10 @@
+/*
+  map.component.ts
+  Integración de Leaflet Control Geocoder para búsqueda de ubicaciones
+*/
 import { Component, AfterViewInit, ElementRef, ViewChild, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
+import 'leaflet-control-geocoder'; // Importa el plugin de geocodificación
 import { addressInterface } from '../../../interfaces/interfaces.models';
 
 interface LocationData {
@@ -37,16 +42,17 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   private initialZoom = 13;
 
   private customIcon = L.icon({
-    iconUrl: '/assets/icons/marker-icon.png', // Ruta a la imagen del marcador
-    shadowUrl: 'assets/icons/marker-shadow.png', // Ruta a la sombra del marcador
-    iconSize: [25, 41], // Tamaño del icono
-    iconAnchor: [12, 41], // Punto donde se "ancla" el icono en el mapa
-    popupAnchor: [1, -34], // Punto donde aparece el popup
-    shadowSize: [41, 41] // Tamaño de la sombra
+    iconUrl: '/assets/icons/marker-icon.png',
+    shadowUrl: 'assets/icons/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
   });
 
   ngOnInit(): void {
     this.addLeafletCss();
+    this.addGeocoderCss();
   }
 
   ngAfterViewInit(): void {
@@ -58,10 +64,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private addLeafletCss(): void {
-    const leafletCssId = 'leaflet-css';
-    if (!document.getElementById(leafletCssId)) {
+    const id = 'leaflet-css';
+    if (!document.getElementById(id)) {
       const link = document.createElement('link');
-      link.id = leafletCssId;
+      link.id = id;
       link.rel = 'stylesheet';
       link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
       link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';
@@ -70,26 +76,52 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private addGeocoderCss(): void {
+    const id = 'geocoder-css';
+    if (!document.getElementById(id)) {
+      const link = document.createElement('link');
+      link.id = id;
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css';
+      document.head.appendChild(link);
+    }
+  }
+
   private initializeMap(): void {
     if (!this.map && this.mapContainer?.nativeElement) {
-      this.map = L.map(this.mapContainer.nativeElement).setView(this.initialCoordinates, this.initialZoom);
+      // Inicializar mapa
+      this.map = L.map(this.mapContainer.nativeElement)
+        .setView(this.initialCoordinates, this.initialZoom);
 
-      // Añadir capa de mosaico
+      // Capa base
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
       }).addTo(this.map);
 
-      // Agregar evento de clic en el mapa
+      // Agregar control de búsqueda (geocoder)
+      const geocoderControl = (L.Control as any)
+        .geocoder({ defaultMarkGeocode: false })
+        .addTo(this.map);
+
+      geocoderControl.on('markgeocode', (e: any) => {
+        const latlng: L.LatLng = e.geocode.center;
+        // Ajustar vista
+        this.map.fitBounds(e.geocode.bbox);
+        // Actualizar marcador y datos
+        this.updateMarker(latlng);
+        this.reverseGeocode(latlng.lat, latlng.lng);
+      });
+
+      // Evento de clic para actualizar manualmente
       this.map.on('click', (e: L.LeafletMouseEvent) => {
         this.updateMarker(e.latlng);
         this.reverseGeocode(e.latlng.lat, e.latlng.lng);
       });
 
       // Crear marcador inicial
-      this.marker = L.marker(this.initialCoordinates, { draggable: false }).addTo(this.map);
-      //this.marker.bindPopup('Ubicación inicial').openPopup();
+      this.marker = L.marker(this.initialCoordinates, { icon: this.customIcon }).addTo(this.map);
 
-      // Ajustar tamaño del mapa
+      // Ajustar tamaño al renderizar
       setTimeout(() => this.map.invalidateSize(), 500);
     }
   }
@@ -98,7 +130,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.marker) {
       this.marker.setLatLng(latlng).openPopup();
     } else {
-      this.marker = L.marker(latlng).addTo(this.map).openPopup();
+      this.marker = L.marker(latlng, { icon: this.customIcon }).addTo(this.map).openPopup();
     }
   }
 
@@ -108,31 +140,27 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       .then(data => {
         if (data && data.address) {
           const { country, city, road } = data.address;
-
-          // Guardar datos en el objeto
           this.locationData = {
-            lat: lat,
-            lon: lon,
+            lat,
+            lon,
             country: country || 'Desconocido',
             city: city || 'Desconocida',
             street: road || 'Desconocida'
           };
 
-          // Mostrar datos en el marcador
-          const locationInfo = `Country: ${this.locationData.country}, City: ${this.locationData.city}, Street: ${this.locationData.street}`;
-          this.marker.bindPopup(locationInfo).openPopup();
+          const info = `Country: ${this.locationData.country}, City: ${this.locationData.city}, Street: ${this.locationData.street}`;
+          this.marker.bindPopup(info).openPopup();
 
-          // Emitir los datos al componente padre
+          // Emitir al padre
           const address: addressInterface = {
             country: this.locationData.country,
             city: this.locationData.city,
             street: this.locationData.street
           };
-
-          this.addressSelected.emit(address); // Emitir la dirección seleccionada
+          this.addressSelected.emit(address);
         }
       })
-      .catch(error => console.error('Error obteniendo datos de ubicación:', error));
+      .catch(err => console.error('Error en reverse geocode:', err));
   }
 
   private destroyMap(): void {
