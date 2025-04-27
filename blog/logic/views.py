@@ -1,12 +1,17 @@
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
+from rest_framework import generics
 
 # Create your views here.
 
 class User_view(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = User_serializer
+
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserDetailSerializer
 
 class Video_view(viewsets.ModelViewSet):
     queryset = Video.objects.all()

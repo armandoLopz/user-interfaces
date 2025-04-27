@@ -17,6 +17,7 @@ router.register('skills', Skills_view)
 router.register('competencies', Competencies_view) 
 
 urlpatterns = [
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    path('api/users/<int:pk>/detail/', UserDetailView.as_view()),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

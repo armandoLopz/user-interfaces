@@ -78,3 +78,37 @@ class Competencies_serializer(serializers.ModelSerializer):
         
         model = Competencies
         fields = ('__all__')
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    
+    addresses = serializers.SerializerMethodField()
+    work_experiences = serializers.SerializerMethodField()
+    educations = serializers.SerializerMethodField()
+    languages = serializers.SerializerMethodField()
+    skills = serializers.SerializerMethodField()
+    competencies = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name',
+                  'cellphone', 'personal_description', 'personal_site', 'addresses',
+                  'work_experiences', 'educations', 'languages', 'skills',
+                  'competencies']
+
+    def get_addresses(self, user):
+        return Address_serializer(user.address_set.all(), many=True).data
+
+    def get_work_experiences(self, user):
+        return Work_experience_serializer(user.work_experience_set.all(), many=True).data
+
+    def get_educations(self, user):
+        return Education_serializer(user.education_set.all(), many=True).data
+
+    def get_languages(self, user):
+        return Languages_serializer(user.languages_set.all(), many=True).data
+
+    def get_skills(self, user):
+        return Skills_serializer(user.skills_set.all(), many=True).data
+
+    def get_competencies(self, user):
+        return Competencies_serializer(user.competencies_set.all(), many=True).data
