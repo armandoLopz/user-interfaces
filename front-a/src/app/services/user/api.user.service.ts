@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { url } from '../../utils/constants';
 import { userInterface } from '../../interfaces/interfaces.models';
+import { UserDetailsInterface } from '../../interfaces/interfaces.models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,13 @@ export class ApiUserService {
   getDataUser(): Observable<userInterface[]> {
 
     return this.http.get<userInterface[]>(this.url);
+  }
+
+  getAllUserDetails(idUser: number): Observable<UserDetailsInterface> {
+
+    const urlQueryIdParam = `${this.url}${idUser}/detail`
+    
+    return this.http.get<UserDetailsInterface>(urlQueryIdParam);
   }
 
   postUserData(newUser: userInterface): Observable<userInterface> {

@@ -1,3 +1,35 @@
+export interface UserDetailsInterface {
+    result: ResultInterface;
+}
+
+export interface ResultInterface {
+    id:                   number;
+    username:             string;
+    email:                string;
+    first_name:           string;
+    last_name:            string;
+    cellphone:            number;
+    personal_description: string;
+    personal_site:        string;
+    addresses:            addressInterface[];
+    work_experiences:     WorkExperienceInterface[];
+    educations:           educationInterface[];
+    languages:            LanguageInterface[];
+    skills:               skillsOrCompetenciesInterface[];
+    competencies:         skillsOrCompetenciesInterface[];
+}
+
+export interface UserDetailsInterface {
+    
+    user: userInterface;
+    addresses:            addressInterface[];
+    work_experiences:     WorkExperienceInterface[];
+    educations:           educationInterface[];
+    languages:            LanguageInterface[];
+    skills:               skillsOrCompetenciesInterface[];
+    competencies:         skillsOrCompetenciesInterface[];
+}
+
 export interface userInterface {
 
     id?: number,

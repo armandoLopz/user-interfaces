@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, signal } from '@angular/core';
 import { WorkExperienceInterface } from '../../interfaces/interfaces.models';
 import { WorkService } from '../../services/work/work.service';
-import { IfStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-work-section',
@@ -11,14 +10,14 @@ import { IfStmt } from '@angular/compiler';
 })
 export class WorkSectionComponent implements OnInit {
 
-  latestWork = signal<WorkExperienceInterface[]>([]);
-  @Input() userId: number | null = null;
+  @Input()latestWork = signal<WorkExperienceInterface[]>([]);
+  userId: number | null = null;
 
   constructor(private workService: WorkService) { }
 
   ngOnInit(): void {
 
-    if (this.userId) {
+    /*if (this.userId) {
 
       this.workService.getDataWorkByUserId(this.userId)
         .subscribe({
@@ -33,8 +32,8 @@ export class WorkSectionComponent implements OnInit {
     }else {
 
       console.error("the user id is null")
-    }
+    }*/
 
-  }
+  } 
 
 }

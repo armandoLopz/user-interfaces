@@ -10,10 +10,7 @@ import { AddressService } from '../../services/address/address.service';
 })
 export class AddressSectionComponent implements OnInit {
 
-
-  @Input() userId: number | null = null;
-
-  mainAddress = signal<addressInterface[]>([]);
+  @Input() mainAddress = signal<addressInterface[]>([]);
 
   constructor(
     private addressService: AddressService
@@ -21,7 +18,7 @@ export class AddressSectionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.userId) {
+    /* if (this.userId) {
 
       this.addressService.getDataAddressByUserId(this.userId)
         .subscribe({
@@ -37,7 +34,7 @@ export class AddressSectionComponent implements OnInit {
     }else{
 
       console.error("user id is null")
-    }
+    }*/
 
   }
 

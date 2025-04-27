@@ -5,26 +5,29 @@ import { forkJoin, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { userInterface, LanguageInterface, skillsOrCompetenciesInterface, WorkExperienceInterface, educationInterface, addressInterface } from '../../interfaces/interfaces.models';
+import { userInterface, LanguageInterface, skillsOrCompetenciesInterface, WorkExperienceInterface, educationInterface, addressInterface, UserDetailsInterface, ResultInterface } from '../../interfaces/interfaces.models';
 import { AddressSectionComponent } from '../../components/address-section/address-section.component';
+import { WorkSectionComponent } from '../../components/work-section/work-section.component';
+import { ApiUserService } from '../../services/user/api.user.service';
 
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
   standalone: true,
-  imports: [CommonModule, SideBarComponent, AddressSectionComponent]
+  imports: [CommonModule, SideBarComponent, AddressSectionComponent, WorkSectionComponent]
 })
 export class ProfilePageComponent implements OnInit {
 
   // Main Data
-  user: userInterface | null = null;
-  mainAddress: addressInterface | null = null;
-  latestEducation: educationInterface | null = null;
-  latestWork: WorkExperienceInterface | null = null;
-  languages: LanguageInterface[] | null = null;
-  skills: skillsOrCompetenciesInterface[] | null = null;
-  competencies: skillsOrCompetenciesInterface[] | null = null
+  user = signal<ResultInterface | null>(null);
+
+  mainAddress = signal<addressInterface[]>([]);
+  latestEducation = signal<educationInterface[]>([]);
+  latestWork = signal<WorkExperienceInterface[]>([]);
+  languages = signal<LanguageInterface[]>([])
+  skills = signal<skillsOrCompetenciesInterface[]>([]);
+  competencies = signal<skillsOrCompetenciesInterface[]>([]);
 
   activeTab: string = "languages";
 
@@ -49,7 +52,7 @@ export class ProfilePageComponent implements OnInit {
   };
 
   constructor(
-    private genericService: GenericService<any>,
+    private userService: ApiUserService,
     private router: Router
   ) { }
 
@@ -79,6 +82,7 @@ export class ProfilePageComponent implements OnInit {
   }
 
   private loadUserData(): void {
+
     const userId = this.getUserIdFromToken();
 
     if (!userId) {
@@ -86,7 +90,27 @@ export class ProfilePageComponent implements OnInit {
       return;
     }
 
-    forkJoin({
+    //this.userService.getAllUserDetails(userId).subscribe({})
+
+    this.userService.getAllUserDetails(userId).subscribe({
+      next: (data: UserDetailsInterface) => {
+        
+        this.user.set(data.result),        
+        this.mainAddress.set(data.result.addresses)
+        this.latestEducation.set(data.result.educations)
+        this.latestWork.set(data.result.work_experiences)
+        this.languages.set(data.result.languages)
+        this.skills.set(data.result.skills)
+        this.competencies.set(data.result.competencies)
+        
+      },
+      error: (error) => {
+        console.error("Error fetching user details:", error);
+      },
+    });
+
+
+    /* forkJoin({
       user: this.genericService.getOne('/users', userId),
       addresses: this.genericService.getAll(`/addresses/?user=${userId}`),
       educations: this.genericService.getAll(`/educations/?user=${userId}`),
@@ -112,9 +136,7 @@ export class ProfilePageComponent implements OnInit {
         this.competencies = (data.competencies || []).filter((comp: any) => comp.user == userId);
 
       }
-    });
-    console.log(this.skills);
-
+    }); */
 
   }
 
@@ -141,13 +163,14 @@ export class ProfilePageComponent implements OnInit {
   }
 
   // Método helper para obtener el nivel de grado sin argumentos
+  /*
   getDegreeLevel(): string {
     if (this.latestEducation && this.latestEducation.degree_level) {
       return this.degreeLevels[this.latestEducation.degree_level] || this.latestEducation.degree_level;
     }
     return '';
-  }
-
+  }*/ 
+ 
   // Método helper para obtener el nivel de idioma para cada registro
   getLanguageLevel(lang: any): string {
     if (lang && lang.language_level) {

@@ -1,0 +1,46 @@
+<!-- Section: Education -->
+<div class="bg-white shadow-sm rounded-lg p-6 mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-indigo-700">
+        <i class="fas fa-graduation-cap text-indigo-500 mr-2"></i>Education
+      </h2>
+      <button class="px-3 py-1 bg-white border border-gray-300 rounded-md text-sm hover:bg-gray-50">
+        Add education
+      </button>
+    </div>
+
+    @if (!latestEducation) {
+    <div class="text-center py-4 text-gray-500">
+      No education added yet
+    </div>
+    } @else {
+    <div class="border rounded-lg p-4">
+      <div class="flex justify-between">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+          <div>
+            <p class="mb-1"><strong>Institution:</strong> {{ latestEducation.name_institution }}</p>
+          </div>
+          <div>
+            <p class="mb-1"><strong>Degree:</strong> {{ latestEducation.degree_studied }}</p>
+          </div>
+          <div>
+            <p class="mb-1"><strong>Level:</strong> {{ latestEducation.degree_level }}</p>
+          </div>
+          <div>
+            <p class="mb-1"><strong>Period:</strong>
+              {{ latestEducation.start_studied_date| date }} -
+              {{ latestEducation.currently_studying ? 'Present' : (latestEducation.end_studied_date| date) }}</p>
+          </div>
+        </div>
+        <div class="flex gap-2 ml-4">
+          <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
+            <i class="fas fa-pencil-alt text-gray-500"></i>
+          </button>
+          <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
+            <i class="fas fa-trash-alt text-red-500"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
