@@ -1,3 +1,6 @@
+/*
+  address-section.component.ts
+*/
 import { CommonModule } from '@angular/common';
 import { Component, Input, signal, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -32,7 +35,6 @@ export class AddressSectionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  
     this.initForm();
   }
 
@@ -49,7 +51,6 @@ export class AddressSectionComponent implements OnInit {
     this.editingId = null;
     this.editMode.set(false);
     this.showForm.set(true);
-    
   }
 
   onMapSelect(addr: addressInterface) {
@@ -57,32 +58,36 @@ export class AddressSectionComponent implements OnInit {
   }
 
   onSubmit() {
-    
     const value = this.addressForm.value as addressInterface;
     const userId: number | null = getUserIdFromToken();
 
     if (typeof userId === 'number') {
-      
       value.user = [userId];
     }
 
     if (this.editMode()) {
+      if (!window.confirm('Are you sure you want to save changes to this address?')) {
+        return;
+      }
       const updated: any = { ...value, id: this.editingId };
       this.addressService.updateAddressData(updated).subscribe(res => {
-        // Actualiza solo el registro modificado
+        // Update only the modified record
         this.mainAddress.update(list => list.map(a => a.id === res.id ? res : a));
         this.showForm.set(false);
+        window.alert('Address updated successfully.');
       });
     } else {
       this.addressService.postAddressData(value).subscribe(res => {
-        // Agrega sin sobrescribir anteriores
+        // Add without overwriting previous
         this.mainAddress.update(list => [...list, res]);
         this.showForm.set(false);
+        window.alert('Address added successfully.');
       });
     }
   }
 
   onEdit(address: addressInterface) {
+   
     this.addressForm.patchValue(address);
     this.editingId = address.id!;
     this.editMode.set(true);
@@ -91,9 +96,13 @@ export class AddressSectionComponent implements OnInit {
 
   onDelete(address: addressInterface) {
     if (!address.id) return;
+    if (!window.confirm('Are you sure you want to delete this address?')) {
+      return;
+    }
     this.addressService.deleteAddressData(address.id).subscribe(() => {
-      
+      // Remove without resetting entire list
       this.mainAddress.update(list => list.filter(a => a.id !== address.id));
+      window.alert('Address deleted successfully.');
     });
   }
 
