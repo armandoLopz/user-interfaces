@@ -1,71 +1,104 @@
-<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+<div class="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-2xl border-2 border-gray-200 rounded-lg shadow-sm p-6">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <h2 class="text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+        Create your account
+      </h2>
+    </div>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="name" class="block text-sm/6 font-medium text-gray-900">Name</label>
+          <div class="mt-2">
+            <input type="text" id="name" placeholder="Enter your name" formControlName="name" required
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+            @if (getname().hasError('required') && (getname().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Name is required</p>
+            }
 
-  <h2>Create your account</h2>
-  <div>
-    <label for="name">Name</label>
-    <input type="text" id="name" placeholder="Enter your name" formControlName="name" required>
-    @if (getname().hasError('required') && (getname().touched || formSubmitted)) {
-    <p>Name is required</p>
-    }
+            @if (getname().hasError('customStringEmptyValidator') && (getname().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Name cannot be empty</p>
+            }
+          </div>
+        </div>
+        <div>
+          <label for="lastname" class="block text-sm/6 font-medium text-gray-900">Lastname</label>
+          <div class="mt-2">
+            <input type="text" id="lastname" placeholder="Enter your lastname" formControlName="lastname" required
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+            @if (getLastname().invalid && (getLastname().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Last name is required</p>
+            }
 
-    @if (getname().hasError('customStringEmptyValidator') && (getname().touched || formSubmitted)) {
-    <p>Name cannot be empty</p>
-    }
+            @if (getLastname().hasError('customStringEmptyValidator') && (getLastname().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Lastname cannot be empty</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="email" class="block text-sm/6 font-medium text-gray-900">Email</label>
+          <div class="mt-2">
+            <input type="email" id="email" placeholder="Enter your email" formControlName="email" required
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+            @if (getEmail().invalid && (getEmail().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Email is required</p>
+            @if (getEmail().errors?.['email']) {
+            <p class="text-red-500 text-sm mt-1">Invalid email address</p>
+            }
+            }
+          </div>
+        </div>
+
+        <div>
+          <label for="username" class="block text-sm/6 font-medium text-gray-900">Username</label>
+          <div class="mt-2">
+            <input type="text" id="username" placeholder="Enter your username" formControlName="username" required
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+            @if (getUsername().invalid && (getUsername().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Username is required</p>
+            }
+            @if (getUsername().hasError('customStringEmptyValidator') && (getUsername().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Username cannot be empty</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="cellphone" class="block text-sm/6 font-medium text-gray-900">Cellphone</label>
+          <div class="mt-2">
+            <input type="text" id="cellphone" placeholder="Enter your cellphone" formControlName="cellphone" required
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+            @if (getCellphone().invalid && (getCellphone().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Cellphone is required</p>
+            }
+            @if (getCellphone().hasError('customStringEmptyValidator') && (getCellphone().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Cellphone cannot be empty</p>
+            }
+          </div>
+        </div>
+        <div>
+          <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
+          <div class="mt-2">
+            <input type="password" id="password" placeholder="Enter your password" formControlName="password" required
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+            @if (getPassword().invalid && (getPassword().touched || formSubmitted)) {
+            <p class="text-red-500 text-sm mt-1">Password is required</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" [disabled]="userForm.invalid"
+          class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          Create account
+        </button>
+      </div>
+    </form>
   </div>
-
-  <div>
-    <label for="lastname">Lastname</label>
-    <input type="text" id="lastname" placeholder="Enter your lastname" formControlName="lastname" required>
-    @if (getLastname().invalid && (getLastname().touched || formSubmitted)) {
-    <p>Last name is required</p>
-    }
-
-    @if (getLastname().hasError('customStringEmptyValidator') && (getLastname().touched || formSubmitted)) {
-    <p>Lastname cannot be empty</p>
-    }
-  </div>
-
-  <div>
-    <label for="email">Email</label>
-    <input type="email" id="email" placeholder="Enter your email" formControlName="email" required>
-    @if (getEmail().invalid && (getEmail().touched || formSubmitted)) {
-    <p>Email is required</p>
-    @if (getEmail().errors?.['email']) {
-    <p>Invalid email address</p>
-    }
-    }
-  </div>
-
-  <div>
-    <label for="username">Username</label>
-    <input type="text" id="username" placeholder="Enter your username" formControlName="username" required>
-    @if (getUsername().invalid && (getUsername().touched || formSubmitted)) {
-    <p>Username is required</p>
-    }
-    @if (getUsername().hasError('customStringEmptyValidator') && (getUsername().touched || formSubmitted)) {
-    <p>Username cannot be empty</p>
-    }
-  </div>
-
-  <div>
-    <label for="cellphone">Cellphone</label>
-    <input type="text" id="cellphone" placeholder="Enter your cellphone" formControlName="cellphone" required>
-    @if (getCellphone().invalid && (getCellphone().touched || formSubmitted)) {
-    <p>Cellphone is required</p>
-    }
-    @if (getCellphone().hasError('customStringEmptyValidator') && (getCellphone().touched || formSubmitted)) {
-    <p>Cellphone cannot be empty</p>
-    }
-  </div>
-
-  <div>
-    <label for="password">Password</label>
-    <input type="password" id="password" placeholder="Enter your password" formControlName="password" required>
-    @if (getPassword().invalid && (getPassword().touched || formSubmitted)) {
-    <p>Password is required</p>
-    }
-  </div>
-
-  <button type="submit" [disabled]="userForm.invalid">Create account</button>
-
-</form>
+</div>

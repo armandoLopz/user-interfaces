@@ -19,7 +19,7 @@ export class RegisterReactiveFormComponent {
   private userService = inject(ApiUserService);
   private router = inject(Router)
   private loginURL: string = LOGIN_ROUTE
-  protected formSubmitted = false; // Inicializa formSubmitted en false
+  protected formSubmitted = false;
 
   private user: userInterface = {
 

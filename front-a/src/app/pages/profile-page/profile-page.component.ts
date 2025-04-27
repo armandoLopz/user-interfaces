@@ -6,12 +6,14 @@ import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { userInterface, LanguageInterface, skillsOrCompetenciesInterface, WorkExperienceInterface, educationInterface, addressInterface } from '../../interfaces/interfaces.models';
+import { AddressSectionComponent } from '../../components/address-section/address-section.component';
+
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
   standalone: true,
-  imports: [CommonModule, SideBarComponent]
+  imports: [CommonModule, SideBarComponent, AddressSectionComponent]
 })
 export class ProfilePageComponent implements OnInit {
 
