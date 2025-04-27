@@ -1,21 +1,19 @@
 import { Component, OnInit, signal, Signal } from '@angular/core';
-import { GenericService } from '../../services/generic/generic.service';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
-import { forkJoin, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { userInterface, LanguageInterface, skillsOrCompetenciesInterface, WorkExperienceInterface, educationInterface, addressInterface, UserDetailsInterface, ResultInterface } from '../../interfaces/interfaces.models';
+import { LanguageInterface, skillsOrCompetenciesInterface, WorkExperienceInterface, educationInterface, addressInterface, UserDetailsInterface, ResultInterface } from '../../interfaces/interfaces.models';
 import { AddressSectionComponent } from '../../components/address-section/address-section.component';
 import { WorkSectionComponent } from '../../components/work-section/work-section.component';
 import { ApiUserService } from '../../services/user/api.user.service';
+import { EducationSectionComponent } from '../../components/education-section/education-section.component';
 
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
   standalone: true,
-  imports: [CommonModule, SideBarComponent, AddressSectionComponent, WorkSectionComponent]
+  imports: [CommonModule, SideBarComponent, AddressSectionComponent, WorkSectionComponent, EducationSectionComponent]
 })
 export class ProfilePageComponent implements OnInit {
 
@@ -89,8 +87,6 @@ export class ProfilePageComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-
-    //this.userService.getAllUserDetails(userId).subscribe({})
 
     this.userService.getAllUserDetails(userId).subscribe({
       next: (data: UserDetailsInterface) => {
