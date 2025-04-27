@@ -80,7 +80,10 @@ class Competencies_serializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    
+    """
+    Serializer para mostrar el detalle de un usuario con todos sus datos
+    agrupados en un objeto 'user' y las colecciones al mismo nivel.
+    """
     addresses = serializers.SerializerMethodField()
     work_experiences = serializers.SerializerMethodField()
     educations = serializers.SerializerMethodField()
@@ -90,10 +93,12 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name',
-                  'cellphone', 'personal_description', 'personal_site', 'addresses',
-                  'work_experiences', 'educations', 'languages', 'skills',
-                  'competencies']
+        fields = [
+            'id', 'username', 'email', 'first_name', 'last_name',
+            'cellphone', 'personal_description', 'personal_site',
+            'addresses', 'work_experiences', 'educations',
+            'languages', 'skills', 'competencies'
+        ]
 
     def get_addresses(self, user):
         return Address_serializer(user.address_set.all(), many=True).data
@@ -112,3 +117,23 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     def get_competencies(self, user):
         return Competencies_serializer(user.competencies_set.all(), many=True).data
+
+    def to_representation(self, instance):
+        
+        data = super().to_representation(instance)
+        
+        user_data = {
+            'id':                   data.pop('id'),
+            'username':             data.pop('username'),
+            'email':                data.pop('email'),
+            'first_name':           data.pop('first_name'),
+            'last_name':            data.pop('last_name'),
+            'cellphone':            data.pop('cellphone'),
+            'personal_description': data.pop('personal_description'),
+            'personal_site':        data.pop('personal_site'),
+        }
+        # Construimos la respuesta final
+        return {
+            'user': user_data,
+            **data
+        }
