@@ -20,8 +20,9 @@ export class AddressService {
 
   getDataAddressByUserId(userId: number): Observable<addressInterface[]> {
 
-    const urlQueryParamUserId = `${this.url}?user=${userId}`;    
+    const urlQueryParamUserId = `${this.url}?user=${userId}`;
 
+  
     return this.http.get<addressInterface[]>(urlQueryParamUserId);
   }
 

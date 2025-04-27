@@ -30,10 +30,10 @@ export class AddressSectionComponent implements OnInit {
           },
           error: (error) => {
             console.error("Error al obtener las direcciones:", error);
-            this.mainAddress.set([]); // Maneja el error estableciendo la señal a un array vacío
+            this.mainAddress.set([]);
           }
         });
-    
+        
     }else{
 
       console.error("user id is null")
