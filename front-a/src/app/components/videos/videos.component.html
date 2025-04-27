@@ -32,7 +32,7 @@
     <div>
       <label for="videoFile" class="block text-gray-700 font-semibold mb-2">Video File (MP4/WebM, max. 50MB)</label>
       <input #videoFileInput id="videoFile" type="file" accept="video/mp4,video/webm" (change)="onVideoFileChange($event)"
-             class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border rounded-lg p-1">
+             class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white file:cursor-pointer">
       @if (currentVideoFile) {
         <div class="mt-4 flex items-center justify-center bg-gray-100 rounded-lg p-2 min-h-[200px] sm:min-h-[250px]">
           <video #videoPreview controls class="w-full max-w-2xl rounded-lg max-h-[400px] bg-black"></video>
@@ -43,13 +43,13 @@
     <div>
       <label for="subtitleEs" class="block text-gray-700 font-semibold mb-2">Spanish Subtitles (.vtt/.srt)</label>
       <input #subtitleEsInput id="subtitleEs" type="file" accept=".vtt,.srt" (change)="onSubtitleESChange($event)"
-             class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer border rounded-lg p-1">
+             class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white file:cursor-pointer">
     </div>
 
     <div>
       <label for="subtitleEn" class="block text-gray-700 font-semibold mb-2">English Subtitles (.vtt/.srt)</label>
       <input #subtitleEnInput id="subtitleEn" type="file" accept=".vtt,.srt" (change)="onSubtitleENChange($event)"
-             class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer border rounded-lg p-1">
+             class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white file:cursor-pointer">
     </div>
 
     @if (currentVideoFile && (subtitleENUrl || subtitleESUrl)) {
@@ -94,12 +94,11 @@
     <div class="pt-4">
         <button type="submit"
                 [disabled]="videoForm.invalid || !currentVideoFile || !subtitleENFile || !subtitleESFile || isLoading"
-                class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:bg-blue-300 disabled:opacity-75 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center text-base">
-
+                class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:bg-blue-300 disabled:opacity-70">
                 @if (isLoading) {
-                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824"></path>
                   </svg>
                   <span>Uploading...</span>
                 } @else {
