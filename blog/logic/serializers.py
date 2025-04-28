@@ -143,4 +143,4 @@ class UserDetailSerializer(serializers.ModelSerializer):
         }
         """
         data = super().to_representation(instance)
-        return { 'user': data }
+        return { 'result': data }

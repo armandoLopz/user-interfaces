@@ -62,28 +62,6 @@ class Configuration(models.Model):
     def __str__(self):
         return self.name
 
-"""        
-class User(models.Model):
-
-    #Add password
-    name = models.CharField(max_length=30)
-    lastname = models.CharField(max_length=45)
-    email = models.EmailField(max_length=50, unique=True)
-    cellphone = models.IntegerField()
-    personal_description = models.CharField(max_length=500)
-    personal_site = models.CharField(max_length=70)
-    
-    password = models.CharField(max_length=100)
-    username = models.CharField(unique= True, max_length= 35)
-
-    class Meta:
-        db_table = "user"
-
-    #Add picture field
-    def __str__(self):
-        return self.name + ' ' + self.lastname + ' ' + self.email 
-"""
-
 class Address(models.Model):
     country = models.CharField(max_length=25)
     city = models.CharField(max_length=55)
@@ -102,12 +80,12 @@ class Work_experience(models.Model):
     name_company = models.CharField(max_length=40)
     description_of_the_job = models.CharField(max_length=700)
     job_title = models.CharField(max_length=700)
-    start_work_date = models.DateField()
-    end_work_date = models.DateField()
+    start_work_date = models.IntegerField()
+    end_work_date = models.IntegerField()
 
     user = models.ManyToManyField(User)
 
-    currently_working = models.BooleanField(default=False)
+    currently_working = models.BooleanField(default=False, null= True)
 
     class Meta:
         db_table = "work_experience"
@@ -120,8 +98,8 @@ class Education(models.Model):
     name_institution = models.CharField(max_length=80)
     degree_studied = models.CharField(max_length=50)
 
-    start_studied_date = models.DateField()
-    end_studied_date = models.DateField()
+    start_studied_date = models.IntegerField()
+    end_studied_date = models.IntegerField()
 
     currently_studying = models.BooleanField(default= "False")
 
