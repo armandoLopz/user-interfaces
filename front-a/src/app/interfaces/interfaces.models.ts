@@ -92,8 +92,8 @@ export interface educationInterface {
     id?: number;
     name_institution: string;
     degree_studied: string;
-    start_studied_date: Date;
-    end_studied_date: Date;
+    start_studied_date: number;
+    end_studied_date: number;
     currently_studying: boolean;
     degree_level_other: string;
     degree_level: string;
@@ -104,8 +104,8 @@ export interface WorkExperienceInterface {
     id?: number;
     name_company: string;
     description_of_the_job: string;
-    start_work_date: Date;
-    end_work_date: Date;
+    start_work_date: number;
+    end_work_date: number;
     currently_working: boolean;
     job_title: string;
     user?: number[];

@@ -33,12 +33,12 @@ export class WorkService {
     deleteWorkData(WorkId: number): Observable<WorkExperienceInterface> {
   
       //PROBABLY CAN U¿I CHANGE THIS RETURN TYPE
-      return this.http.delete<WorkExperienceInterface>(`${this.url}/${WorkId}`)
+      return this.http.delete<WorkExperienceInterface>(`${this.url}${WorkId}/`)
     }
   
     updateWorkData(updateWorkData: any): Observable<WorkExperienceInterface> {
   
-      return this.http.put<WorkExperienceInterface>(`${this.url}/${updateWorkData.id}`, updateWorkData)
+      return this.http.put<WorkExperienceInterface>(`${this.url}${updateWorkData.id}/`, updateWorkData)
     }
   
 }

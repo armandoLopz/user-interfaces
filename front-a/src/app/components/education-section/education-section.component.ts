@@ -8,9 +8,9 @@ import { educationInterface } from '../../interfaces/interfaces.models';
   styleUrl: './education-section.component.css'
 })
 export class EducationSectionComponent {
-  
+
   @Input() latestEducation = signal<educationInterface[]>([]);
 
-  
+
 
 }
