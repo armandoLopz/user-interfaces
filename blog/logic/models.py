@@ -96,12 +96,12 @@ class Work_experience(models.Model):
 class Education(models.Model):
 
     name_institution = models.CharField(max_length=80)
-    degree_studied = models.CharField(max_length=50)
+    degree_studied = models.CharField(max_length=50, null=True)
 
     start_studied_date = models.IntegerField()
-    end_studied_date = models.IntegerField()
+    end_studied_date = models.IntegerField(null=True)
 
-    currently_studying = models.BooleanField(default= "False")
+    currently_studying = models.BooleanField(default= "False", null= True)
 
     user = models.ManyToManyField(User)
 
