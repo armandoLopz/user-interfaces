@@ -3,31 +3,32 @@ export interface UserDetailsInterface {
 }
 
 export interface ResultInterface {
-    id:                   number;
-    username:             string;
-    email:                string;
-    first_name:           string;
-    last_name:            string;
-    cellphone:            number;
+    id: number;
+    username: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    cellphone: number;
     personal_description: string;
-    personal_site:        string;
-    addresses:            addressInterface[];
-    work_experiences:     WorkExperienceInterface[];
-    educations:           educationInterface[];
-    languages:            LanguageInterface[];
-    skills:               skillsOrCompetenciesInterface[];
-    competencies:         skillsOrCompetenciesInterface[];
+    personal_site: string;
+    profile_picture?: string;
+    addresses: addressInterface[];
+    work_experiences: WorkExperienceInterface[];
+    educations: educationInterface[];
+    languages: LanguageInterface[];
+    skills: skillsOrCompetenciesInterface[];
+    competencies: skillsOrCompetenciesInterface[];
 }
 
 export interface UserDetailsInterface {
-    
+
     user: userInterface;
-    addresses:            addressInterface[];
-    work_experiences:     WorkExperienceInterface[];
-    educations:           educationInterface[];
-    languages:            LanguageInterface[];
-    skills:               skillsOrCompetenciesInterface[];
-    competencies:         skillsOrCompetenciesInterface[];
+    addresses: addressInterface[];
+    work_experiences: WorkExperienceInterface[];
+    educations: educationInterface[];
+    languages: LanguageInterface[];
+    skills: skillsOrCompetenciesInterface[];
+    competencies: skillsOrCompetenciesInterface[];
 }
 
 export interface userInterface {
@@ -60,17 +61,17 @@ export interface LanguageInterface {
 }
 
 export interface ImageInterface {
-    id?:    number;
+    id?: number;
     title: string;
     image: string;
 }
 
 export interface VideoInterface {
-    
-    id?:               number;
-    title:            string;
-    description:      string;
-    video_file:       string;
+
+    id?: number;
+    title: string;
+    description: string;
+    video_file: string;
     subtitle_english: string;
     subtitle_spanish: string;
 }

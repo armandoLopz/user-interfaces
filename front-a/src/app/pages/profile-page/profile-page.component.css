@@ -1,0 +1,7 @@
+
+
+.cv-print { display: none; }
+@media print {
+  .main-page { display: none !important; }
+  .cv-print { display: block !important; }
+}
