@@ -1,50 +1,119 @@
-<!-- Section: Education -->
-<div class="bg-white shadow-sm rounded-lg p-6 mb-6">
+<div class="relative bg-white shadow rounded-lg p-6 mb-6">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-bold text-indigo-700">
-      <i class="fas fa-graduation-cap text-indigo-500 mr-2"></i>Education
+    <h2 class="text-xl font-semibold text-indigo-700 flex items-center gap-2">
+      <i class="fas fa-graduation-cap text-indigo-500"></i> Education
     </h2>
-    <button class="px-3 py-1 bg-white border border-gray-300 rounded-md text-sm hover:bg-gray-50">
-      Add education
+    <button (click)="openAddModal()"
+      class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 flex items-center gap-1 text-base">
+      <i class="fas fa-plus"></i> Add Education
     </button>
   </div>
 
-  @if (!latestEducation) {
-  <div class="text-center py-4 text-gray-500">
-    No education added yet
+  <!-- Modal Form -->
+  <div *ngIf="showFormModal()" class="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">
+        {{ editMode() ? 'Edit Education' : 'Add Education' }}
+      </h3>
+      <form [formGroup]="eduForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Institution Name</label>
+          <input formControlName="name_institution" type="text" class="mt-2 p-2 w-full border rounded-md" />
+          <div *ngIf="eduForm.get('name_institution')?.invalid && eduForm.get('name_institution')?.touched"
+            class="text-red-600 text-xs mt-1">
+            Institution Name is required.
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Degree Studied</label>
+          <input formControlName="degree_studied" type="text" class="mt-2 p-2 w-full border rounded-md" />
+          <div *ngIf="eduForm.get('degree_studied')?.invalid && eduForm.get('degree_studied')?.touched"
+            class="text-red-600 text-xs mt-1">
+            Degree Studied is required.
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Degree Level</label>
+          <select formControlName="degree_level" class="mt-2 p-2 w-full border rounded-md">
+            <option value="">Select level</option>
+            <option value="BA">Bachelor</option>
+            <option value="MA">Master</option>
+            <option value="PhD">PhD</option>
+            <option value="OT">Other</option>
+          </select>
+          <input *ngIf="eduForm.get('degree_level')?.value === 'Other'"
+            formControlName="degree_level_other" placeholder="Specify other level"
+            class="mt-2 p-2 w-full border rounded-md" />
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Start Year</label>
+          <input formControlName="start_studied_date" type="number" min="1900" max="2099"
+            class="mt-2 p-2 w-full border rounded-md" />
+          <div *ngIf="eduForm.get('start_studied_date')?.invalid && eduForm.get('start_studied_date')?.touched"
+            class="text-red-600 text-xs mt-1">
+            Valid 4-digit year is required.
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">
+            <input type="checkbox" formControlName="currently_studying" class="mr-2" /> Currently Studying
+          </label>
+          <input *ngIf="!eduForm.get('currently_studying')?.value" formControlName="end_studied_date"
+            type="number" min="1900" max="2099" placeholder="End Year"
+            class="mt-2 p-2 w-full border rounded-md" />
+          <div *ngIf="eduForm.get('end_studied_date')?.invalid && eduForm.get('end_studied_date')?.touched"
+            class="text-red-600 text-xs mt-1">
+            Valid 4-digit year is required unless currently studying.
+          </div>
+        </div>
+
+        <div class="flex justify-between gap-4 mt-6">
+          <button type="button" (click)="closeModal()"
+            class="w-full bg-gray-300 text-gray-800 rounded-lg py-2 hover:bg-gray-400">
+            Cancel
+          </button>
+          <button type="submit" [disabled]="eduForm.invalid"
+            class="w-full bg-indigo-600 text-white rounded-lg py-2 hover:bg-indigo-700">
+            {{ editMode() ? 'Update' : 'Save' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-  } @else {
 
-  @for (education of latestEducation(); track education.id) {
-
-  <div class="border rounded-lg p-4">
-    <div class="flex justify-between">
+  <!-- List of Education Entries -->
+  <ng-container *ngIf="latestEducation().length > 0; else noEdu">
+    <div *ngFor="let edu of latestEducation()"
+      class="border rounded-lg p-4 flex justify-between items-start mb-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-        <div>
-          <p class="mb-1"><strong>Institution:</strong> {{ education.name_institution }}</p>
-        </div>
-        <div>
-          <p class="mb-1"><strong>Degree:</strong> {{ education.degree_studied }}</p>
-        </div>
-        <div>
-          <p class="mb-1"><strong>Level:</strong> {{ education.degree_level }}</p>
-        </div>
-        <div>
-          <p class="mb-1"><strong>Period:</strong>
-            {{ education.start_studied_date }} -
-            {{ education.currently_studying ? 'Present' : (education.end_studied_date) }}</p>
-        </div>
+        <p><strong>Institution:</strong> {{ edu.name_institution }}</p>
+        <p><strong>Degree:</strong> {{ edu.degree_studied }}</p>
+        <p>
+          <strong>Level:</strong>
+          {{ edu.degree_level }}
+          <span *ngIf="edu.degree_level === 'Other'">({{ edu.degree_level_other }})</span>
+        </p>
+        <p>
+          <strong>Period:</strong>
+          {{ edu.start_studied_date }} -
+          {{ edu.currently_studying ? 'Present' : edu.end_studied_date }}
+        </p>
       </div>
       <div class="flex gap-2 ml-4">
-        <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
-          <i class="fas fa-pencil-alt text-gray-500"></i>
+        <button (click)="openEditModal(edu)" class="p-2 border rounded hover:bg-gray-50" aria-label="Edit">
+          <i class="fas fa-pencil-alt text-gray-600"></i>
         </button>
-        <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
+        <button (click)="onDelete(edu)" class="p-2 border rounded hover:bg-gray-50" aria-label="Delete">
           <i class="fas fa-trash-alt text-red-500"></i>
         </button>
       </div>
-
     </div>
-  </div> <br>
-  }
-  }
+  </ng-container>
+  <ng-template #noEdu>
+    <p class="text-gray-500 text-center">No education added yet.</p>
+  </ng-template>
+</div>

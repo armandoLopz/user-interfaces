@@ -11,7 +11,7 @@ export class EducationService {
 
   constructor(private http: HttpClient) { }
   
-    private url = url + "/addresses/"
+    private url = url + "/educations/"
   
     getDataAddress(): Observable<educationInterface[]> {
   
@@ -20,7 +20,7 @@ export class EducationService {
   
     getDataAddressByUserId(userId: number): Observable<educationInterface[]> {
   
-      const urlQueryParamUserId = `${this.url}?user=${userId}`;
+      const urlQueryParamUserId = `${this.url}?user=${userId}/`;
   
     
       return this.http.get<educationInterface[]>(urlQueryParamUserId);
@@ -34,11 +34,11 @@ export class EducationService {
     deleteAddressData(addressId: number): Observable<educationInterface> {
   
       //PROBABLY CAN U¿I CHANGE THIS RETURN TYPE
-      return this.http.delete<educationInterface>(`${this.url}/${addressId}`)
+      return this.http.delete<educationInterface>(`${this.url}${addressId}/`)
     }
   
     updateAddressData(updateAddressData: any): Observable<educationInterface> {
   
-      return this.http.put<educationInterface>(`${this.url}/${updateAddressData.id}`, updateAddressData)
+      return this.http.put<educationInterface>(`${this.url}${updateAddressData.id}/`, updateAddressData)
     }
 }
