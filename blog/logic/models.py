@@ -10,6 +10,7 @@ class User(AbstractUser):
     cellphone = models.IntegerField(blank= False)
     personal_description = models.CharField(max_length=500, null=True)
     personal_site = models.CharField(max_length=70, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
 
 class Video(models.Model):
 

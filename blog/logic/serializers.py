@@ -97,7 +97,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
             'cellphone', 'personal_description', 'personal_site',
-            'addresses', 'work_experiences', 'educations',
+            'profile_picture', 'addresses', 'work_experiences', 'educations',
             'languages', 'skills', 'competencies'
         ]
 
