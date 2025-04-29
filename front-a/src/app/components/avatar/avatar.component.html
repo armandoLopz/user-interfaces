@@ -1,3 +1,24 @@
-<div id="avatar-div" class="grid place-items-center">
-    <img src="assets/profile-icon-design-free-vector.jpg" alt="user photo" width="110" height="30" class="rounded-2xl">
-</div>
+<div id="avatar-div" class="relative w-[110px] h-[110px] mx-auto">
+    <!-- Imagen del usuario -->
+    <img [src]="userImage() || defaultImage"
+         alt="user photo"
+         class="w-full h-full object-cover rounded-2xl border border-gray-300 shadow" />
+  
+    <!-- Botón de editar (ESQUINA SUPERIOR IZQUIERDA - FUERA DE LA IMG) -->
+    <button (click)="triggerImageUpload()"
+            class="absolute -top-3 -left-3 bg-white text-gray-700 p-1.5 rounded-full hover:bg-gray-200 shadow transition z-10"
+            title="Change image">
+      <i class="fas fa-pencil-alt text-sm"></i>
+    </button>
+  
+    <!-- Botón de eliminar (ESQUINA SUPERIOR DERECHA - FUERA DE LA IMG) -->
+    <button (click)="removeImage()"
+            class="absolute -top-3 -right-3 bg-white text-red-600 p-1.5 rounded-full hover:bg-red-100 shadow transition z-10"
+            title="Remove image">
+      <i class="fas fa-trash-alt text-sm"></i>
+    </button>
+  
+    <!-- Input oculto para subir archivo -->
+    <input type="file" accept="image/*" class="hidden" #fileInput (change)="onImageSelected($event)" />
+  </div>
+  
