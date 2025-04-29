@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { url } from '../../utils/constants';
-import { addressInterface, LanguageInterface } from '../../interfaces/interfaces.models';
+import { LanguageInterface } from '../../interfaces/interfaces.models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -23,14 +23,14 @@ export class LanguageService {
     return this.http.post<LanguageInterface>(this.url, newAddress)
   }
 
-  deleteLanguagesData(addressId: number): Observable<addressInterface> {
+  deleteLanguagesData(addressId: number): Observable<LanguageInterface> {
 
     //PROBABLY CAN U¿I CHANGE THIS RETURN TYPE
-    return this.http.delete<addressInterface>(`${this.url}/${addressId}`)
+    return this.http.delete<LanguageInterface>(`${this.url}${addressId}/`)
   }
 
-  updateLanguagesData(updateLanguagesData: any): Observable<addressInterface> {
+  updateLanguagesData(updateLanguagesData: any): Observable<LanguageInterface> {
 
-    return this.http.put<addressInterface>(`${this.url}/${updateLanguagesData.id}`, updateLanguagesData)
+    return this.http.put<LanguageInterface>(`${this.url}${updateLanguagesData.id}/`, updateLanguagesData)
   }
 }

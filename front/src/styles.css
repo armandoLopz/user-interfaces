@@ -1,8 +1,0 @@
-/* You can add global styles to this file, and also import other style files */
-/* src/styles.css */
-@import './app/css/style.css';
-@import './app/css/responsive.css';
-@import './app/css/owl.carousel.min.css';
-/* @import './app/css/jquery.mCustomScrollbar.min.css'; */
-@import url('https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css');

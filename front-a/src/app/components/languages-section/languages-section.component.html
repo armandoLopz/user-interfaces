@@ -1,28 +1,75 @@
-@if (languages().length) {
-
-    @for (language of languages(); track language.id) {
-
-        <div class="border rounded-lg p-4 mb-3">
-            <div class="flex justify-between items-center">
-                <div>
-                    <span class="font-semibold">{{ language.name }}</span> 
-                </div>
-                <div class="flex gap-2">
-                    <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
-                        <i class="fas fa-pencil-alt text-gray-500"></i>
-                    </button>
-                    <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
-                        <i class="fas fa-trash-alt text-red-500"></i>
-                    </button>
-                </div>
-            </div>
+<div class="relative bg-white shadow rounded-lg p-6 mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-indigo-700 flex items-center gap-2">
+        <i class="fas fa-language text-indigo-500"></i> Languages
+      </h2>
+      <button (click)="openAddModal()"
+        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 flex items-center gap-1 text-base">
+        <i class="fas fa-plus"></i> Add Language
+      </button>
+    </div>
+  
+    <!-- Modal Form -->
+    <div *ngIf="showFormModal()" class="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+          {{ editMode() ? 'Edit Language' : 'Add Language' }}
+        </h3>
+        <form [formGroup]="langForm" (ngSubmit)="onSubmit()">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Language</label>
+            <input formControlName="name" type="text" class="mt-2 p-2 w-full border rounded-md" />
+            <div *ngIf="langForm.get('name')?.invalid && langForm.get('name')?.touched"
+              class="text-red-600 text-xs mt-1">Name is required.</div>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Proficiency Level</label>
+            <select formControlName="language_level" class="mt-2 p-2 w-full border rounded-md">
+              <option value="">Select level</option>
+              <ng-container *ngFor="let lvl of languageLevels">
+                <option [value]="lvl.code">{{ lvl.label }}</option>
+              </ng-container>
+            </select>
+            <div *ngIf="langForm.get('language_level')?.invalid && langForm.get('language_level')?.touched"
+              class="text-red-600 text-xs mt-1">Level is required.</div>
+          </div>
+  
+          <div class="flex justify-between gap-4 mt-6">
+            <button type="button" (click)="closeModal()"
+              class="w-full bg-gray-300 text-gray-800 rounded-lg py-2 hover:bg-gray-400">Cancel</button>
+            <button type="submit" [disabled]="langForm.invalid"
+              class="w-full bg-indigo-600 text-white rounded-lg py-2 hover:bg-indigo-700">
+              {{ editMode() ? 'Update' : 'Save' }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- List of Languages -->
+    <ng-container *ngIf="languages().length > 0; else noLang">
+      <div *ngFor="let lang of languages()" class="border rounded-lg p-4 mb-3">
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-semibold">{{ lang.name }}</span> -
+            <span>{{ getLanguageLevelLabel(lang.language_level) }}</span>
+          </div>
+          <div class="flex gap-2">
+            <button (click)="openEditModal(lang)"
+              class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50"
+              aria-label="Edit">
+              <i class="fas fa-pencil-alt text-gray-500"></i>
+            </button>
+            <button (click)="onDelete(lang)"
+              class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50"
+              aria-label="Delete">
+              <i class="fas fa-trash-alt text-red-500"></i>
+            </button>
+          </div>
         </div>
-    }
-}
-
-@if (!languages().length) {
-
-<div class="text-center py-4 text-gray-500">
-    No languages added yet
-</div>
-}
+      </div>
+    </ng-container>
+    <ng-template #noLang>
+      <div class="text-center py-4 text-gray-500">No languages added yet.</div>
+    </ng-template>
+  </div>

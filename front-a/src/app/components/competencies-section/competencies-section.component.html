@@ -1,37 +1,81 @@
-<div class="flex justify-end mb-4">
-    <button
-        class="px-3 py-1 bg-white border border-gray-300 rounded-md text-sm hover:bg-gray-50 flex items-center gap-1">
-        <i class="fas fa-plus text-xs"></i> Add Competency
-    </button>
-</div>
-
-@if (competencies().length) {
-
-@for (comp of competencies(); track comp.id) {
-
-<div class="border rounded-lg p-4 mb-3">
-    <div class="flex justify-between items-center">
-        <div>
-            <span class="font-semibold">{{ comp.name }}</span> (Level: {{ comp.proficiency }})
-        </div>
-        <div class="flex gap-2">
-            <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
-                <i class="fas fa-pencil-alt text-gray-500"></i>
-            </button>
-            <button class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50">
-                <i class="fas fa-trash-alt text-red-500"></i>
-            </button>
-        </div>
+<div class="relative bg-white shadow rounded-lg p-6 mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold text-indigo-700 flex items-center gap-2">
+        <i class="fas fa-check-circle text-indigo-500"></i> Competencies
+      </h2>
+      <button (click)="openAddModal()"
+        class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 flex items-center gap-1 text-base">
+        <i class="fas fa-plus"></i> Add Competency
+      </button>
     </div>
-</div>
-
-}
-}
-
-@if (!competencies().length) {
-
-<div class="text-center py-4 text-gray-500" >
-    No competencies added yet
-</div>
-
-}
+  
+    <!-- Modal Form -->
+    <div *ngIf="showFormModal()" class="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+          {{ editMode() ? 'Edit Competency' : 'Add Competency' }}
+        </h3>
+        <form [formGroup]="compForm" (ngSubmit)="onSubmit()">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Name</label>
+            <input formControlName="name" type="text" class="mt-2 p-2 w-full border rounded-md" />
+            <div *ngIf="compForm.get('name')?.invalid && compForm.get('name')?.touched"
+                 class="text-red-600 text-xs mt-1">
+              Name is required.
+            </div>
+          </div>
+  
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Proficiency (1–5)</label>
+            <input type="range" formControlName="proficiency" min="1" max="5" step="1" class="w-full mt-2" />
+            <div class="text-sm text-gray-600 mt-1">
+              Level: {{ proficiencyControl?.value }}
+            </div>
+            <div *ngIf="proficiencyControl?.invalid && proficiencyControl?.touched"
+                 class="text-red-600 text-xs mt-1">
+              Enter a proficiency between 1 and 5.
+            </div>
+          </div>
+  
+          <div class="flex justify-between gap-4 mt-6">
+            <button type="button" (click)="closeModal()"
+                    class="w-full bg-gray-300 text-gray-800 rounded-lg py-2 hover:bg-gray-400">
+              Cancel
+            </button>
+            <button type="submit" [disabled]="compForm.invalid"
+                    class="w-full bg-indigo-600 text-white rounded-lg py-2 hover:bg-indigo-700">
+              {{ editMode() ? 'Update' : 'Save' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- List of Competencies -->
+    <ng-container *ngIf="competencies().length > 0; else noComp">
+      <div *ngFor="let comp of competencies()" class="border rounded-lg p-4 mb-3">
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-semibold">{{ comp.name }}</span> (Level: {{ comp.proficiency }})
+          </div>
+          <div class="flex gap-2">
+            <button (click)="openEditModal(comp)"
+                    class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50"
+                    aria-label="Edit">
+              <i class="fas fa-pencil-alt text-gray-500"></i>
+            </button>
+            <button (click)="onDelete(comp)"
+                    class="h-8 w-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-50"
+                    aria-label="Delete">
+              <i class="fas fa-trash-alt text-red-500"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  
+    <ng-template #noComp>
+      <div class="text-center py-4 text-gray-500">No competencies added yet.</div>
+    </ng-template>
+  </div>
+  

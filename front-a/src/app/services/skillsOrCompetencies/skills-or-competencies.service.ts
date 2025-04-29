@@ -11,7 +11,7 @@ export class SkillsOrCompetenciesService {
 
   constructor(private http: HttpClient) { }
 
-  private urlSkills: string = url+"/skills"
+  private urlSkills: string = url+"/skills/"
   private urlCompetencies: string = url+"/competencies/"
   
   //SKILLS SERVICE
@@ -28,12 +28,12 @@ export class SkillsOrCompetenciesService {
     deleteSkillData(skillId: number): Observable<skillsOrCompetenciesInterface> {
   
       //PROBABLY CAN U¿I CHANGE THIS RETURN TYPE
-      return this.http.delete<skillsOrCompetenciesInterface>(`${this.urlSkills}/${skillId}`)
+      return this.http.delete<skillsOrCompetenciesInterface>(`${this.urlSkills}${skillId}/`)
     }
   
     updateSkillData(updateSkillData: any): Observable<skillsOrCompetenciesInterface> {
   
-      return this.http.put<skillsOrCompetenciesInterface>(`${this.urlSkills}/${updateSkillData.id}`,updateSkillData)
+      return this.http.put<skillsOrCompetenciesInterface>(`${this.urlSkills}${updateSkillData.id}/`,updateSkillData)
     }
 
 
@@ -52,12 +52,12 @@ export class SkillsOrCompetenciesService {
       deleteCompetencieData(competencieId: number): Observable<skillsOrCompetenciesInterface> {
     
         //PROBABLY CAN U¿I CHANGE THIS RETURN TYPE
-        return this.http.delete<skillsOrCompetenciesInterface>(`${this.urlCompetencies}/${competencieId}`)
+        return this.http.delete<skillsOrCompetenciesInterface>(`${this.urlCompetencies}${competencieId}/`)
       }
     
       updateCompetencieData(updateCompetencieData: any): Observable<skillsOrCompetenciesInterface> {
     
-        return this.http.put<skillsOrCompetenciesInterface>(`${this.urlCompetencies}/${updateCompetencieData.id}`, updateCompetencieData)
+        return this.http.put<skillsOrCompetenciesInterface>(`${this.urlCompetencies}${updateCompetencieData.id}/`, updateCompetencieData)
       }
     
   
