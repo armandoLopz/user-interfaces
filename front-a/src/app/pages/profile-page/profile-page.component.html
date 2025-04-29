@@ -4,6 +4,26 @@
   </app-side-bar>
 
   <div class="flex-1 p-6">
+
+    <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-bold text-indigo-700 mb-4">
+        <i class="fas fa-user text-indigo-500 mr-2"></i>Personal Information
+      </h2>
+      <div class="grid grid-cols-2 gap-4">
+        <p class="mb-2"><strong>Email:</strong> {{ user()?.email }}</p>
+        <p class="mb-2"><strong>Phone:</strong> {{ user()?.cellphone }}</p>
+        <p class="mb-2">
+          <strong>Website:</strong>
+          <a [href]="user()?.personal_site" class="text-indigo-600 hover:underline" target="_blank"
+            rel="noopener noreferrer">
+            {{ user()?.personal_site }}
+          </a>
+        </p>
+        <p class="mb-2">
+          <strong>Description:</strong> {{ user()?.personal_description }}
+        </p>
+      </div>
+    </div>
     <app-address-section [mainAddress]="mainAddress"></app-address-section>
     <app-work-section [latestWork]="latestWork"></app-work-section>
     <app-education-section [latestEducation]="latestEducation"></app-education-section>
@@ -13,7 +33,6 @@
       [languages]="languages">
     </app-tab>
 
-    <!-- Print CV Button -->
     <div class="text-right mt-8">
       <button
         (click)="printCV()"
@@ -25,5 +44,8 @@
   </div>
 </div>
 
-<!-- CV Preview (only after clicking) -->
-<app-cv *ngIf="showCvPreview()" [user]="user()!" class="cv-print">
+<app-cv
+  *ngIf="showCvPreview()"
+  [user]="user()!"
+  class="cv-print">
+</app-cv>

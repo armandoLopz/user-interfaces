@@ -65,12 +65,26 @@ export class ProfilePageComponent implements OnInit {
         this.skills.set(data.result.skills);
         this.competencies.set(data.result.competencies);
       },
+
       error: console.error
     });
   }
 
   printCV() {
-    this.showCvPreview.set(true);
-    setTimeout(() => window.print(), 0);
+    // Asegúrate de que los datos de usuario estén cargados antes de intentar imprimir
+    if (this.user()) {
+        this.showCvPreview.set(true);
+        // Aumenta el retraso para dar tiempo al navegador a renderizar el CV
+        // antes de abrir el diálogo de impresión. Esto suele solucionar el problema del blanco.
+        setTimeout(() => {
+          window.print();
+          // Opcional: Puedes añadir lógica aquí para ocultar el CV preview
+          // después de que el diálogo de impresión se cierre, usando el evento afterprint.
+          // window.addEventListener('afterprint', () => this.showCvPreview.set(false), { once: true });
+        }, 50); // Puedes ajustar este valor (ej: 50, 100, 200) si 50ms no es suficiente
+    } else {
+        console.warn("Datos de usuario no cargados. No se puede imprimir el CV.");
+        // Opcional: Muestra un mensaje al usuario indicando que espere
+    }
   }
 }

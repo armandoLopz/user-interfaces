@@ -42,6 +42,7 @@ export interface userInterface {
     personal_site?: string,
     password: string,
     username: string,
+    profile_picture?: string;
     //photo: string
 }
 

@@ -10,6 +10,7 @@ import { ResultInterface } from '../../interfaces/interfaces.models';
   styleUrls: ['./cv.component.css'],
 })
 export class CvComponent {
+
   @Input() user!: ResultInterface;
 
   formatPeriod(start: number, end: number | null, currently: boolean): string {

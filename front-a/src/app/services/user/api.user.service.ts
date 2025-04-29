@@ -19,6 +19,11 @@ export class ApiUserService {
     return this.http.get<userInterface[]>(this.url);
   }
 
+  getDataUserById(idUser: number): Observable<userInterface> {
+
+    return this.http.get<userInterface>(`${this.url}${idUser}/`);
+  }
+
   getAllUserDetails(idUser: number): Observable<UserDetailsInterface> {
 
     const urlQueryIdParam = `${this.url}${idUser}/detail`
@@ -39,7 +44,7 @@ export class ApiUserService {
 
   updateUserData(updateUserData: any): Observable<userInterface> {
 
-    return this.http.put<userInterface>(`${this.url}/${updateUserData.id}`, updateUserData)
+    return this.http.put<userInterface>(`${this.url}${updateUserData.id}/`, updateUserData)
   }
 
 }
