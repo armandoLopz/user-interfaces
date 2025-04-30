@@ -43,5 +43,5 @@ Thumbs.db
 
 #Backend 
 blog/media
-blog/venv
+blog/venvg
 blog/db.sqlite3
