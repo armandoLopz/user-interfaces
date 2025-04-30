@@ -25,6 +25,7 @@ export class LoaderComponent implements AfterViewInit, OnDestroy {
     yellow: "#C8BE49",
   }
   
+  
   ngAfterViewInit(): void {
     const canvas = this.canvasRef.nativeElement
     this.ctx = canvas.getContext("2d")!

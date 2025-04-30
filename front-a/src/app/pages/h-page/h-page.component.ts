@@ -19,6 +19,6 @@ export class HPageComponent implements OnInit{
     // Simulate loading time
     setTimeout(() => {
       this.loading = false
-    }, 30000)
+    }, 6000)
   }
 }
