@@ -1,15 +1,15 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+front-a/dist
+front-a/tmp
+front-a/out-tsc
+front-a/bazel-out
 
 # Node
-/node_modules
-npm-debug.log
-yarn-error.log
+front-a/node_modules
+front-a/npm-debug.log
+front-a/yarn-error.log
 
 # IDEs and editors
 .idea/
@@ -29,7 +29,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+front-a/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
